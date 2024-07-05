@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 
 struct OrientationExplainationView: View {
+    @State private var currentOrientationIndex = 0
+    private let orientations: [AccessoryOrientation] = [.floor, .wall, .ceiling]
+    private let changeInterval = 4.0
+    
     var body: some View {
         VStack {
             Spacer()
@@ -28,10 +32,23 @@ struct OrientationExplainationView: View {
                 shouldLoop: true
             )
             
-            OrientationDescriptionView(orientation: .floor)
+            //OrientationDescriptionView(orientation: .floor)
+            OrientationDescriptionView(orientation: orientations[currentOrientationIndex])
+                .transition(.opacity)
             
             Spacer()
         }.padding()
+        .onAppear {
+            startTimer()
+        }
+    }
+    
+    private func startTimer() {
+        Timer.scheduledTimer(withTimeInterval: changeInterval, repeats: true) { _ in
+            withAnimation {
+                currentOrientationIndex = (currentOrientationIndex + 1) % orientations.count
+            }
+        }
     }
 }
 
@@ -47,6 +64,7 @@ struct OrientationDescriptionView: View {
         }
         .frame(maxWidth: 250)
         .multilineTextAlignment(.center)
+        .transition(.opacity)
     }
 }
 
