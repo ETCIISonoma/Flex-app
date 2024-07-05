@@ -17,6 +17,7 @@
 		6F378A152C37C2EE00A7D898 /* OrientationExplainationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */; };
 		6F378A172C37C34C00A7D898 /* AccessoryOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */; };
 		6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A1E2C37C84500A7D898 /* PlayerView.swift */; };
+		F08D37202C38AD1600633F53 /* ConfirmOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryOrientation.swift; sourceTree = "<group>"; };
 		6F378A1E2C37C84500A7D898 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6F647D982C3653B90083D69D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmOrientationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -41,18 +43,11 @@
 			);
 			target = 6F23606C2C361E4900AFC164 /* Flex */;
 		};
-		BBC140652C3879FD00B58F5D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Preview Assets.xcassets",
-			);
-			target = 6F23606C2C361E4900AFC164 /* Flex */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6F378A182C37C6E800A7D898 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (6F378A222C37CB4F00A7D898 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
-		BBC140622C3879D700B58F5D /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (BBC140652C3879FD00B58F5D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
+		F08D371D2C38AC9E00633F53 /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,9 +90,10 @@
 				6F378A122C37A3C500A7D898 /* PairedView.swift */,
 				6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */,
 				6F378A1E2C37C84500A7D898 /* PlayerView.swift */,
+				F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */,
 				6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */,
+				F08D371D2C38AC9E00633F53 /* Preview Content */,
 				6F2360742C361E4B00AFC164 /* Assets.xcassets */,
-				BBC140622C3879D700B58F5D /* Preview Content */,
 			);
 			path = Flex;
 			sourceTree = "<group>";
@@ -178,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */,
+				F08D37202C38AD1600633F53 /* ConfirmOrientationView.swift in Sources */,
 				6F378A112C37A35C00A7D898 /* AccessoryModel.swift in Sources */,
 				6F378A152C37C2EE00A7D898 /* OrientationExplainationView.swift in Sources */,
 				6F378A172C37C34C00A7D898 /* AccessoryOrientation.swift in Sources */,
