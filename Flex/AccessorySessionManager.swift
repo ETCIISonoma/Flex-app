@@ -2,8 +2,6 @@
 //  AccessoryConnection.swift
 //  Flex
 //
-//  Created by Collin Cameron on 7/4/24.
-//
 
 import Foundation
 import AccessorySetupKit
@@ -13,7 +11,7 @@ import SwiftUI
 @Observable
 class AccessorySessionManager: NSObject {
     var accesoryModel: AccessoryModel?
-    var ultrasonicDistance: String? = nil
+    var rangefinderDistance: String? = nil
     var peripheralConnected = false
     var pickerDismissed = true
 
@@ -21,10 +19,10 @@ class AccessorySessionManager: NSObject {
     private var session = ASAccessorySession()
     private var manager: CBCentralManager?
     private var peripheral: CBPeripheral?
-    private var ultrasonicDistanceCharacteristic: CBCharacteristic?
+    private var rangefinderDistanceCharacteristic: CBCharacteristic?
     private var relayCharacteristic: CBCharacteristic?
 
-    private static let ultrasonicCharacteristicUuid = "0xFF3F"
+    private static let rangefinderCharacteristicUuid = "0xFF3F"
     private static let relayCharacteristicUuid = "0xFF40"
 
     private static let flexF1: ASPickerDisplayItem = {
@@ -168,7 +166,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         }
 
         for service in services {
-            peripheral.discoverCharacteristics([CBUUID(string: Self.ultrasonicCharacteristicUuid), CBUUID(string: Self.relayCharacteristicUuid)], for: service)
+            peripheral.discoverCharacteristics([CBUUID(string: Self.rangefinderCharacteristicUuid), CBUUID(string: Self.relayCharacteristicUuid)], for: service)
         }
     }
 
@@ -180,8 +178,8 @@ extension AccessorySessionManager: CBPeripheralDelegate {
             return
         }
 
-        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.ultrasonicCharacteristicUuid) {
-            ultrasonicDistanceCharacteristic = characteristic
+        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.rangefinderCharacteristicUuid) {
+            rangefinderDistanceCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
             peripheral.readValue(for: characteristic)
         }
@@ -202,18 +200,18 @@ extension AccessorySessionManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?) {
         guard
             error == nil,
-            characteristic.uuid == CBUUID(string: Self.ultrasonicCharacteristicUuid),
+            characteristic.uuid == CBUUID(string: Self.rangefinderCharacteristicUuid),
             let data = characteristic.value,
-            let ultrasonicDistance = String(data: data, encoding: .utf8)
+            let rangefinderDistance = String(data: data, encoding: .utf8)
         else {
             return
         }
 
-        print("New distance value received: \(ultrasonicDistance)")
+        print("New distance value received: \(rangefinderDistance)")
 
         DispatchQueue.main.async {
             withAnimation {
-                self.ultrasonicDistance = ultrasonicDistance
+                self.rangefinderDistance = rangefinderDistance
             }
         }
     }

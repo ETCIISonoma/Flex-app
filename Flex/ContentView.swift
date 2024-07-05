@@ -2,8 +2,6 @@
 //  ContentView.swift
 //  Flex
 //
-//  Created by Collin Cameron on 7/3/24.
-//
 
 import SwiftUI
 import InterfaceOrientation

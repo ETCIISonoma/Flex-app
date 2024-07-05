@@ -2,8 +2,6 @@
 //  AccessoryModel.swift
 //  Flex
 //
-//  Created by Collin Cameron on 7/4/24.
-//
 
 import Foundation
 import CoreBluetooth

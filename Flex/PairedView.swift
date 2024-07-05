@@ -2,8 +2,6 @@
 //  PairedView.swift
 //  Flex
 //
-//  Created by Collin Cameron on 7/4/24.
-//
 
 import Foundation
 import SwiftUI
@@ -29,7 +27,7 @@ struct PairedView: View {
                     Text("Refresh whether connected")
                 }
                 Text("Distance:")
-                Text(accessorySessionManager.ultrasonicDistance ?? "nil")
+                Text(accessorySessionManager.rangefinderDistance ?? "nil")
                 
                 Button {
                     accessorySessionManager.connect()

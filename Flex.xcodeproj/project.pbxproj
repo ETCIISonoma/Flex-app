@@ -17,7 +17,6 @@
 		6F378A152C37C2EE00A7D898 /* OrientationExplainationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */; };
 		6F378A172C37C34C00A7D898 /* AccessoryOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */; };
 		6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A1E2C37C84500A7D898 /* PlayerView.swift */; };
-		6F647D9C2C3723A40083D69D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F647D9B2C3723A40083D69D /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +31,6 @@
 		6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryOrientation.swift; sourceTree = "<group>"; };
 		6F378A1E2C37C84500A7D898 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6F647D982C3653B90083D69D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		6F647D9B2C3723A40083D69D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,10 +41,18 @@
 			);
 			target = 6F23606C2C361E4900AFC164 /* Flex */;
 		};
+		BBC140652C3879FD00B58F5D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Assets.xcassets",
+			);
+			target = 6F23606C2C361E4900AFC164 /* Flex */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6F378A182C37C6E800A7D898 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (6F378A222C37CB4F00A7D898 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+		BBC140622C3879D700B58F5D /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (BBC140652C3879FD00B58F5D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,17 +97,9 @@
 				6F378A1E2C37C84500A7D898 /* PlayerView.swift */,
 				6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */,
 				6F2360742C361E4B00AFC164 /* Assets.xcassets */,
-				6F2360762C361E4B00AFC164 /* Preview Content */,
+				BBC140622C3879D700B58F5D /* Preview Content */,
 			);
 			path = Flex;
-			sourceTree = "<group>";
-		};
-		6F2360762C361E4B00AFC164 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				6F647D9B2C3723A40083D69D /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,7 +166,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F647D9C2C3723A40083D69D /* Preview Assets.xcassets in Resources */,
 				6F2360752C361E4B00AFC164 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,7 +318,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Flex/Preview Content\"";
-				DEVELOPMENT_TEAM = WK9ZJVHXYT;
+				DEVELOPMENT_TEAM = P455JX65K3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Flex/Info.plist;
@@ -337,7 +334,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = co.collincameron.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sonoma.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -353,7 +350,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Flex/Preview Content\"";
-				DEVELOPMENT_TEAM = WK9ZJVHXYT;
+				DEVELOPMENT_TEAM = P455JX65K3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Flex/Info.plist;
@@ -369,7 +366,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = co.collincameron.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sonoma.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -2,8 +2,6 @@
 //  AccessoryOrientation.swift
 //  Flex
 //
-//  Created by Collin Cameron on 7/4/24.
-//
 
 enum AccessoryOrientation: String {
     case floor
