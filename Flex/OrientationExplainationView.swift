@@ -22,7 +22,7 @@ struct OrientationExplainationView: View {
                 url: Bundle.main.url(
                     forResource: "Orientations",
                     withExtension: "mp4")!,
-                isTransparent: true,
+                isTransparent: false,
                 isStacked: false,
                 isInverted: false,
                 shouldLoop: true
