@@ -1,0 +1,15 @@
+{
+  "originHash" : "832266889b971e6d185d5a354c9f9bd22d36423058b4b64808fbb15164ec1e93",
+  "pins" : [
+    {
+      "identity" : "swiftui-interface-orientation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/wvteijlingen/swiftui-interface-orientation",
+      "state" : {
+        "revision" : "30054c7ad385821ec76a4654447b2ae1fd436f01",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
