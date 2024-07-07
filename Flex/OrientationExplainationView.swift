@@ -6,6 +6,41 @@
 import Foundation
 import SwiftUI
 
+struct OrientationFlowView: View {
+    let accessorySessionManager: AccessorySessionManager
+    
+    @State private var timerFinished = false
+    @State private var hasBeenClose = false
+    
+    var body: some View {
+        if timerFinished && hasBeenClose {
+            ConfirmOrientationView(accessorySessionManager: accessorySessionManager)
+        } else {
+            OrientationExplainationView()
+                .onAppear {
+                    startTimer()
+                }
+                .onChange(of: accessorySessionManager.distance) {
+                    if let distance = accessorySessionManager.distance {
+                        if distance < Measurement(value: 5, unit: .centimeters) {
+                            withAnimation {
+                                hasBeenClose = true
+                            }
+                        }
+                    }
+                }
+        }
+    }
+    
+    func startTimer() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+            withAnimation {
+                timerFinished = true
+            }
+        }
+    }
+}
+
 struct OrientationExplainationView: View {
     @State private var currentOrientationIndex = 0
     private let orientations: [AccessoryOrientation] = [.floor, .wall, .ceiling]
@@ -28,11 +63,11 @@ struct OrientationExplainationView: View {
                 isStacked: false,
                 isInverted: false,
                 shouldLoop: true
-            )
+            ).aspectRatio(1280/1080, contentMode: .fit)
             
-            //OrientationDescriptionView(orientation: .floor)
             OrientationDescriptionView(orientation: orientations[currentOrientationIndex])
                 .transition(.opacity)
+                .frame(minHeight: 100, alignment: .top)
             
             Spacer()
         }.padding()
@@ -55,7 +90,7 @@ struct OrientationDescriptionView: View {
     
     var body: some View {
         VStack {
-            Text(orientation.name)
+            Text(orientation.name.capitalized)
                 .font(.title2.bold())
             Text(orientation.excersiseExamples)
                 .foregroundStyle(.secondary)

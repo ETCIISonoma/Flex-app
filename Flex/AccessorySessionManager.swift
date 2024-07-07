@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 class AccessorySessionManager: NSObject {
     var accesoryModel: AccessoryModel?
-    var rangefinderDistance: String? = nil
+    var rawMeasurements: String? = nil
     var peripheralConnected = false
     var pickerDismissed = true
 
@@ -19,10 +19,10 @@ class AccessorySessionManager: NSObject {
     private var session = ASAccessorySession()
     private var manager: CBCentralManager?
     private var peripheral: CBPeripheral?
-    private var rangefinderDistanceCharacteristic: CBCharacteristic?
+    private var measurementsCharacteristic: CBCharacteristic?
     private var relayCharacteristic: CBCharacteristic?
 
-    private static let rangefinderCharacteristicUuid = "0xFF3F"
+    private static let measurementsCharacteristicUuid = "0xFF3F"
     private static let relayCharacteristicUuid = "0xFF40"
 
     private static let flexF1: ASPickerDisplayItem = {
@@ -117,6 +117,45 @@ class AccessorySessionManager: NSObject {
             print("Received event type \(event.eventType)")
         }
     }
+    
+    private func getMeasurementsComponent(index: Int) -> String? {
+        let components = rawMeasurements?.split(separator: ",")
+        let component = components?[index]
+        
+        guard component != nil, let component = component else {
+            return nil
+        }
+        
+        return String(component)
+    }
+    
+    var distance: Measurement<UnitLength>? {
+        let string = getMeasurementsComponent(index: 0)
+        
+        guard string != nil, let string = string else {
+            return nil
+        }
+        
+        if let number = Double(string) {
+            return Measurement(value: number, unit: .centimeters)
+        } else {
+            return nil
+        }
+    }
+    
+    var orientation: AccessoryOrientation? {
+        let string = getMeasurementsComponent(index: 1)
+        
+        guard string != nil, let string = string else {
+            return nil
+        }
+        
+        if let orientation = AccessoryOrientation(rawValue: string) {
+            return orientation
+        } else {
+            return nil
+        }
+    }
 }
 
 // MARK: - CBCentralManagerDelegate
@@ -166,7 +205,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         }
 
         for service in services {
-            peripheral.discoverCharacteristics([CBUUID(string: Self.rangefinderCharacteristicUuid), CBUUID(string: Self.relayCharacteristicUuid)], for: service)
+            peripheral.discoverCharacteristics([CBUUID(string: Self.measurementsCharacteristicUuid), CBUUID(string: Self.relayCharacteristicUuid)], for: service)
         }
     }
 
@@ -178,8 +217,8 @@ extension AccessorySessionManager: CBPeripheralDelegate {
             return
         }
 
-        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.rangefinderCharacteristicUuid) {
-            rangefinderDistanceCharacteristic = characteristic
+        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.measurementsCharacteristicUuid) {
+            measurementsCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
             peripheral.readValue(for: characteristic)
         }
@@ -200,18 +239,18 @@ extension AccessorySessionManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?) {
         guard
             error == nil,
-            characteristic.uuid == CBUUID(string: Self.rangefinderCharacteristicUuid),
+            characteristic.uuid == CBUUID(string: Self.measurementsCharacteristicUuid),
             let data = characteristic.value,
-            let rangefinderDistance = String(data: data, encoding: .utf8)
+            let rawMeasurements = String(data: data, encoding: .utf8)
         else {
             return
         }
 
-        print("New distance value received: \(rangefinderDistance)")
+        print("New measurements received: \(rawMeasurements)")
 
         DispatchQueue.main.async {
             withAnimation {
-                self.rangefinderDistance = rangefinderDistance
+                self.rawMeasurements = rawMeasurements
             }
         }
     }

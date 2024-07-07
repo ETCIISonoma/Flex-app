@@ -4,9 +4,9 @@
 //
 
 enum AccessoryOrientation: String {
-    case floor
-    case wall
-    case ceiling
+    case floor = "f"
+    case wall = "w"
+    case ceiling = "c"
     
     var excersiseExamples: String {
         switch self {
@@ -17,6 +17,14 @@ enum AccessoryOrientation: String {
     }
     
     var name: String {
-        return self.rawValue.capitalized
+        switch self {
+            case .floor: "floor"
+            case .wall: "wall"
+            case .ceiling: "ceiling"
+        }
+    }
+    
+    var imageName: String {
+        "\(self.name)_image"
     }
 }

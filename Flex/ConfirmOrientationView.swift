@@ -8,15 +8,8 @@
 import Foundation
 import SwiftUI
 
-enum OrientationType: String {
-    case floor = "f"
-    case wall = "w"
-    case ceiling = "c"
-    case unkown = "u"
-}
-
 struct ConfirmOrientationView: View {
-    @State private var orientation: OrientationType? = nil
+    @State private var orientation: AccessoryOrientation? = nil
     let accessorySessionManager: AccessorySessionManager
 
     var body: some View {
@@ -24,76 +17,36 @@ struct ConfirmOrientationView: View {
             Spacer()
             
             if let orientation = orientation {
-                if orientation == .floor {
-                    OrientationView(
-                        imageName: "floor_image",
-                        title: "Hold F1 firmly against the floor",
-                        subtitle: "Ensure surface is flat and clean"
-                    )
-                } else if orientation == .wall {
-                    OrientationView(
-                        imageName: "wall_image",
-                        title: "Hold F1 firmly against the wall",
-                        subtitle: "Ensure surface is flat and clean"
-                    )
-                } else if orientation == .ceiling {
-                    OrientationView(
-                        imageName: "ceiling_image",
-                        title: "Hold F1 firmly against the ceiling",
-                        subtitle: "Ensure surface is flat and clean"
-                    )
-                }
+                OrientationView(orientation: orientation)
             }
             Spacer()
         }
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear {
-            updateOrientation()
-        }
-    }
-    
-    func updateOrientation() {
-        let distanceString = accessorySessionManager.rangefinderDistance
-        let components = distanceString?.split(separator: ",")
-        guard components?.count == 2, let letter = components?.last else {
-            //orientation = .unknown
-            return
-        }
-
-        switch letter {
-        case "f":
-            orientation = .floor
-        case "w":
-            orientation = .wall
-        case "c":
-            orientation = .ceiling
-        default:
-            orientation = .floor //Need to change to unknown later
+            orientation = accessorySessionManager.orientation
         }
     }
 }
 
 struct OrientationView: View {
-    let imageName: String
-    let title: String
-    let subtitle: String
+    let orientation: AccessoryOrientation
 
     var body: some View {
         VStack {
-            Image(imageName)
+            Image(orientation.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity, maxHeight: 300)  // Adjust height as needed
                 .padding(.bottom, 20)
             
-            Text(title)
+            Text("Hold F1 firmly against the \(orientation.name)")
                 .font(.title)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 5)
             
-            Text(subtitle)
+            Text("Ensure surface is flat and clean")
                 .font(.body)
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)

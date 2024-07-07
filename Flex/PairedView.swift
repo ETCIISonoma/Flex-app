@@ -26,27 +26,38 @@ struct PairedView: View {
                 } label: {
                     Text("Refresh whether connected")
                 }
-                Text("Distance:")
-                Text(accessorySessionManager.rangefinderDistance ?? "nil")
                 
-                Button {
-                    accessorySessionManager.connect()
-                } label: {
-                    Text("Connect")
-                }.buttonStyle(.borderedProminent)
                 
-                Toggle("Relay is on", isOn: $isRelayOn)
-                    .onChange(of: isRelayOn) {
-                        accessorySessionManager.setRelayState(isOn: isRelayOn)
+                List {
+                    Button {
+                        accessorySessionManager.connect()
+                    } label: {
+                        Text("Connect")
                     }
-                
-                Spacer()
-                
-                NavigationLink {
-                    OrientationExplainationView()
-                } label: {
-                    Text("Show orientations")
-                }
+                    
+                    LabeledContent {
+                        Text(accessorySessionManager.distance?.formatted() ?? "nil")
+                    } label: {
+                        Text("Distance")
+                    }
+                    
+                    LabeledContent {
+                        Text(accessorySessionManager.orientation?.name.capitalized ?? "nil")
+                    } label: {
+                        Text("Orientation")
+                    }
+                    
+                    Toggle("Pump", isOn: $isRelayOn)
+                        .onChange(of: isRelayOn) {
+                            accessorySessionManager.setRelayState(isOn: isRelayOn)
+                        }
+                    
+                    NavigationLink {
+                        OrientationFlowView(accessorySessionManager: accessorySessionManager)
+                    } label: {
+                        Text("Orientation flow")
+                    }
+                }.scrollDisabled(true)
                 
                 Spacer()
                 Button {
