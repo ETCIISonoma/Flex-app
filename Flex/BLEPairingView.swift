@@ -6,7 +6,7 @@
 import SwiftUI
 import InterfaceOrientation
 
-struct ContentView: View {
+struct BLEPairingView: View {
     @State var accessorySessionManager = AccessorySessionManager()
     @AppStorage("accessoryPaired") private var accessoryPaired = false
     
@@ -53,5 +53,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    BLEPairingView()
 }

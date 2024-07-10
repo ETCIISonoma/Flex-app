@@ -14,9 +14,9 @@ struct OrientationFlowView: View {
     
     var body: some View {
         if timerFinished && hasBeenClose {
-            ConfirmOrientationView(accessorySessionManager: accessorySessionManager)
+            PlacementHoldView(accessorySessionManager: accessorySessionManager)
         } else {
-            OrientationExplanationView()
+            PlacementInstructionView()
                 .onAppear {
                     startTimer()
                 }
@@ -41,9 +41,9 @@ struct OrientationFlowView: View {
     }
 }
 
-struct OrientationExplanationView: View {
+struct PlacementInstructionView: View {
     @State private var currentOrientationIndex = 0
-    private let orientations: [AccessoryOrientation] = [.floor, .wall, .ceiling]
+    private let orientations: [AccessoryPosition] = [.floor, .wall, .ceiling]
     private let changeInterval = 4.0
     
     var body: some View {
@@ -86,7 +86,7 @@ struct OrientationExplanationView: View {
 }
 
 struct OrientationDescriptionView: View {
-    let orientation: AccessoryOrientation
+    let orientation: AccessoryPosition
     
     var body: some View {
         VStack {
@@ -102,5 +102,5 @@ struct OrientationDescriptionView: View {
 }
 
 #Preview {
-    OrientationExplanationView()
+    PlacementInstructionView()
 }

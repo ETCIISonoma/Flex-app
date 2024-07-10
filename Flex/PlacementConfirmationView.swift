@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SuctionFeedbackView: View {
+struct PlacementConfirmationView: View {
     var body: some View {
         NavigationView {
             VStack {
@@ -50,7 +50,7 @@ struct SuctionFeedbackView: View {
                  }
                  .padding(.horizontal, 32.5)*/
                 
-                NavigationLink(destination: ConfirmOrientationView(accessorySessionManager: AccessorySessionManager())) {
+                NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
                     Text("Try Again")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -66,5 +66,5 @@ struct SuctionFeedbackView: View {
 }
 
 #Preview {
-    SuctionFeedbackView()
+    PlacementConfirmationView()
 }

@@ -3,7 +3,7 @@
 //  Flex
 //
 
-enum AccessoryOrientation: String {
+enum AccessoryPosition: String {
     case floor = "f"
     case wall = "w"
     case ceiling = "c"

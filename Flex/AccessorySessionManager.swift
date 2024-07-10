@@ -143,14 +143,14 @@ class AccessorySessionManager: NSObject {
         }
     }
     
-    var orientation: AccessoryOrientation? {
+    var orientation: AccessoryPosition? {
         let string = getMeasurementsComponent(index: 1)
         
         guard string != nil, let string = string else {
             return nil
         }
         
-        if let orientation = AccessoryOrientation(rawValue: string) {
+        if let orientation = AccessoryPosition(rawValue: string) {
             return orientation
         } else {
             return nil

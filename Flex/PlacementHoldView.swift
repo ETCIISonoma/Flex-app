@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct ConfirmOrientationView: View {
-    @State private var orientation: AccessoryOrientation? = nil
+struct PlacementHoldView: View {
+    @State private var orientation: AccessoryPosition? = nil
     let accessorySessionManager: AccessorySessionManager
 
     var body: some View {
@@ -31,7 +31,7 @@ struct ConfirmOrientationView: View {
 }
 
 struct OrientationView: View {
-    let orientation: AccessoryOrientation
+    let orientation: AccessoryPosition
 
     var body: some View {
         VStack {
@@ -57,5 +57,5 @@ struct OrientationView: View {
 }
 
 #Preview {
-    ConfirmOrientationView(accessorySessionManager: AccessorySessionManager())
+    PlacementHoldView(accessorySessionManager: AccessorySessionManager())
 }

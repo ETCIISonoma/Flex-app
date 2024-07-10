@@ -12,7 +12,7 @@ struct FlexApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            BLEPairingView()
         }
     }
 }
