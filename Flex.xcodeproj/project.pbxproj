@@ -14,10 +14,16 @@
 		6F378A0F2C376CD900A7D898 /* AccessorySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A0E2C376CC200A7D898 /* AccessorySessionManager.swift */; };
 		6F378A112C37A35C00A7D898 /* AccessoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A102C37A35C00A7D898 /* AccessoryModel.swift */; };
 		6F378A132C37A3C500A7D898 /* PairedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A122C37A3C500A7D898 /* PairedView.swift */; };
-		6F378A152C37C2EE00A7D898 /* OrientationExplainationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */; };
+		6F378A152C37C2EE00A7D898 /* OrientationExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A142C37C2EE00A7D898 /* OrientationExplanationView.swift */; };
 		6F378A172C37C34C00A7D898 /* AccessoryOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */; };
 		6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A1E2C37C84500A7D898 /* PlayerView.swift */; };
 		F08D37202C38AD1600633F53 /* ConfirmOrientationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */; };
+		F08D37912C3DE32C00633F53 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37902C3DE32700633F53 /* SignInView.swift */; };
+		F08D37962C3DEF0900633F53 /* SuctionFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37952C3DEF0500633F53 /* SuctionFeedbackView.swift */; };
+		F08D37E02C3EF05200633F53 /* SelectWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37DF2C3EF04B00633F53 /* SelectWorkoutView.swift */; };
+		F08D37E22C3EF05900633F53 /* BeginWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37E12C3EF05600633F53 /* BeginWorkoutView.swift */; };
+		F08D37E42C3EF09400633F53 /* DuringWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37E32C3EF09200633F53 /* DuringWorkoutView.swift */; };
+		F08D37E62C3EF0D500633F53 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37E52C3EF0D300633F53 /* HomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,11 +34,17 @@
 		6F378A0E2C376CC200A7D898 /* AccessorySessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessorySessionManager.swift; sourceTree = "<group>"; };
 		6F378A102C37A35C00A7D898 /* AccessoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryModel.swift; sourceTree = "<group>"; };
 		6F378A122C37A3C500A7D898 /* PairedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairedView.swift; sourceTree = "<group>"; };
-		6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationExplainationView.swift; sourceTree = "<group>"; };
+		6F378A142C37C2EE00A7D898 /* OrientationExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationExplanationView.swift; sourceTree = "<group>"; };
 		6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryOrientation.swift; sourceTree = "<group>"; };
 		6F378A1E2C37C84500A7D898 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6F647D982C3653B90083D69D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmOrientationView.swift; sourceTree = "<group>"; };
+		F08D37902C3DE32700633F53 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		F08D37952C3DEF0500633F53 /* SuctionFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuctionFeedbackView.swift; sourceTree = "<group>"; };
+		F08D37DF2C3EF04B00633F53 /* SelectWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectWorkoutView.swift; sourceTree = "<group>"; };
+		F08D37E12C3EF05600633F53 /* BeginWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginWorkoutView.swift; sourceTree = "<group>"; };
+		F08D37E32C3EF09200633F53 /* DuringWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuringWorkoutView.swift; sourceTree = "<group>"; };
+		F08D37E52C3EF0D300633F53 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,10 +100,16 @@
 				6F378A102C37A35C00A7D898 /* AccessoryModel.swift */,
 				6F2360722C361E4900AFC164 /* ContentView.swift */,
 				6F378A122C37A3C500A7D898 /* PairedView.swift */,
-				6F378A142C37C2EE00A7D898 /* OrientationExplainationView.swift */,
+				6F378A142C37C2EE00A7D898 /* OrientationExplanationView.swift */,
 				6F378A1E2C37C84500A7D898 /* PlayerView.swift */,
+				F08D37952C3DEF0500633F53 /* SuctionFeedbackView.swift */,
 				F08D371F2C38AD1000633F53 /* ConfirmOrientationView.swift */,
+				F08D37902C3DE32700633F53 /* SignInView.swift */,
 				6F378A162C37C34600A7D898 /* AccessoryOrientation.swift */,
+				F08D37E52C3EF0D300633F53 /* HomeView.swift */,
+				F08D37DF2C3EF04B00633F53 /* SelectWorkoutView.swift */,
+				F08D37E12C3EF05600633F53 /* BeginWorkoutView.swift */,
+				F08D37E32C3EF09200633F53 /* DuringWorkoutView.swift */,
 				F08D371D2C38AC9E00633F53 /* Preview Content */,
 				6F2360742C361E4B00AFC164 /* Assets.xcassets */,
 			);
@@ -173,13 +191,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F08D37E22C3EF05900633F53 /* BeginWorkoutView.swift in Sources */,
 				6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */,
 				F08D37202C38AD1600633F53 /* ConfirmOrientationView.swift in Sources */,
+				F08D37E62C3EF0D500633F53 /* HomeView.swift in Sources */,
 				6F378A112C37A35C00A7D898 /* AccessoryModel.swift in Sources */,
-				6F378A152C37C2EE00A7D898 /* OrientationExplainationView.swift in Sources */,
+				F08D37962C3DEF0900633F53 /* SuctionFeedbackView.swift in Sources */,
+				6F378A152C37C2EE00A7D898 /* OrientationExplanationView.swift in Sources */,
 				6F378A172C37C34C00A7D898 /* AccessoryOrientation.swift in Sources */,
 				6F378A132C37A3C500A7D898 /* PairedView.swift in Sources */,
 				6F378A0F2C376CD900A7D898 /* AccessorySessionManager.swift in Sources */,
+				F08D37E02C3EF05200633F53 /* SelectWorkoutView.swift in Sources */,
+				F08D37912C3DE32C00633F53 /* SignInView.swift in Sources */,
+				F08D37E42C3EF09400633F53 /* DuringWorkoutView.swift in Sources */,
 				6F2360732C361E4900AFC164 /* ContentView.swift in Sources */,
 				6F2360712C361E4900AFC164 /* FlexApp.swift in Sources */,
 			);
