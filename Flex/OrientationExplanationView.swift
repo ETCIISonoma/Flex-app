@@ -16,7 +16,7 @@ struct OrientationFlowView: View {
         if timerFinished && hasBeenClose {
             ConfirmOrientationView(accessorySessionManager: accessorySessionManager)
         } else {
-            OrientationExplainationView()
+            OrientationExplanationView()
                 .onAppear {
                     startTimer()
                 }
@@ -41,7 +41,7 @@ struct OrientationFlowView: View {
     }
 }
 
-struct OrientationExplainationView: View {
+struct OrientationExplanationView: View {
     @State private var currentOrientationIndex = 0
     private let orientations: [AccessoryOrientation] = [.floor, .wall, .ceiling]
     private let changeInterval = 4.0
@@ -102,5 +102,5 @@ struct OrientationDescriptionView: View {
 }
 
 #Preview {
-    OrientationExplainationView()
+    OrientationExplanationView()
 }

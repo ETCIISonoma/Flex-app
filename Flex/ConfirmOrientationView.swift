@@ -26,6 +26,7 @@ struct ConfirmOrientationView: View {
         .onAppear {
             orientation = accessorySessionManager.orientation
         }
+        .navigationBarBackButtonHidden(true) // This just makes the back button visible once you click the try again button in SuctionFeedbackView. 
     }
 }
 

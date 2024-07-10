@@ -13,6 +13,7 @@ struct ContentView: View {
     var body: some View {
         if accessoryPaired {
             PairedView(accessorySessionManager: accessorySessionManager)
+            // this is for testing, should actually proceed to the sign in page. 
         } else {
             VStack {
                 VStack {
