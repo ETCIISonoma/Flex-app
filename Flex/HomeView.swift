@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("fullName") var fullName: String = ""
     @State private var selectedTab: Tab = .summary
+    @State private var selectedWorkout: Workout? = nil
 
     enum Tab {
         case summary
@@ -19,26 +20,38 @@ struct HomeView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Welcome back, \(fullName)!")
-                            .foregroundColor(.white)
-                        Text("Summary")
+                if selectedTab == .summary {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Welcome back, \(fullName)!")
+                                .foregroundColor(.white)
+                            Text("Summary")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.black)
+                } else if selectedTab == .workouts {
+                    HStack {
+                        Text("Workouts")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
+                        Spacer()
                     }
-                    Spacer()
+                    .padding()
+                    .background(Color.black)
                 }
-                .padding()
-                .background(Color.black)
                 
                 // Main Content
                 switch selectedTab {
                 case .summary:
                     SummaryView()
                 case .workouts:
-                    WorkoutsView()
+                    WorkoutsView(selectedWorkout: $selectedWorkout)
                 }
                 
                 Spacer()
@@ -76,6 +89,9 @@ struct HomeView: View {
             .background(Color.black)
         }
         .edgesIgnoringSafeArea(.bottom)
+        .fullScreenCover(item: $selectedWorkout) { workout in
+            PreWorkoutSummaryView(workout: workout)
+        }
     }
 }
 
@@ -83,7 +99,6 @@ struct SummaryView: View {
     @State private var legsProgress: CGFloat = 8
     @State private var armsProgress: CGFloat = 8
     @State private var coreProgress: CGFloat = 10
-    // These will need to be continuously updated.
 
     var body: some View {
         VStack {
@@ -202,13 +217,127 @@ struct SummaryView: View {
     }
 }
 
+struct Workout: Identifiable {
+    var id = UUID()
+    var title: String
+    var description: String
+    var iconName: String
+    var category: String
+}
+
 struct WorkoutsView: View {
+    @State private var selectedSegment = "Wall"
+    private let segments = ["Wall", "Floor"]
+    private let workouts = [
+        Workout(title: "Suggested Workout...", description: "Based on your trends", iconName: "sparkles", category: "Wall"),
+        Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit longer.", iconName: "flame.fill", category: "Wall"),
+        Workout(title: "Upper Body - Medium", description: "Description goes here, it’s a bit longer.", iconName: "figure.walk", category: "Wall"),
+        Workout(title: "Flexibility - Relaxed", description: "Description goes here, it’s a bit longer.", iconName: "person.badge.key.fill", category: "Wall"),
+        Workout(title: "Suggested Workout...", description: "Based on your trends", iconName: "sparkles", category: "Floor"),
+        Workout(title: "Lower Body - Intense", description: "Description goes here, it’s a bit longer.", iconName: "figure.wave", category: "Floor"),
+        Workout(title: "Core Strength - High", description: "Description goes here, it’s a bit longer.", iconName: "figure.stand.line.dotted.figure.stand", category: "Floor")
+    ]
+    
+    @Binding var selectedWorkout: Workout?
+
     var body: some View {
-        Text("Workouts View")
-            .foregroundColor(.white)
+        VStack {
+            TextField("Search", text: .constant(""))
+                .padding()
+                .background(Color(.tertiarySystemFill)) // Reduced opacity
+                .cornerRadius(10)
+                .padding(.horizontal)
+            
+            Picker("Select", selection: $selectedSegment) {
+                ForEach(segments, id: \.self) { segment in
+                    Text(segment).tag(segment)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            
+            ScrollView {
+                VStack(spacing: 0) {
+                    // "Suggested Workout..." button
+                    ForEach(workouts.filter { $0.category == selectedSegment && $0.title == "Suggested Workout..." }) { workout in
+                        Button(action: {
+                            selectedWorkout = workout
+                        }) {
+                            HStack {
+                                Image(systemName: workout.iconName)
+                                    .foregroundColor(.pink)
+                                VStack(alignment: .leading) {
+                                    Text(workout.title)
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 20)) // Increase font size
+                                    Text(workout.description)
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.vertical, 10) // Increase vertical padding
+                            .padding(.horizontal) // Add horizontal padding
+                            .frame(height: 70) // Set a fixed height for the button
+                            .background(Color(.tertiarySystemFill))
+                            .cornerRadius(10)
+                        }
+                        .padding(.bottom, 10) // Add padding after the button
+                    }
+                    
+                    // Other workout buttons
+                    ForEach(workouts.filter { $0.category == selectedSegment && $0.title != "Suggested Workout..." }) { workout in
+                        Button(action: {
+                            selectedWorkout = workout
+                        }) {
+                            HStack {
+                                Image(systemName: workout.iconName)
+                                    .foregroundColor(.pink)
+                                VStack(alignment: .leading) {
+                                    Text(workout.title)
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 20)) // Increase font size
+                                    Text(workout.description)
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.vertical, 10) // Increase vertical padding
+                            .padding(.horizontal) // Add horizontal padding
+                            .frame(height: 70) // Set a fixed height for the button
+                            .background(Color(.tertiarySystemFill))
+                            .cornerRadius(10)
+                        }
+                    }
+                    
+                    Divider()
+                        .background(Color.white)
+                        .padding(.top, 12)
+                    
+                    // Text at the bottom
+                    Text(selectedSegment == "Wall" ? "Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass." : "Only attach F1 to smooth tile or hardwood.\nNever attach F1 to glass.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 10) // Adjust top padding
+                        .padding(.bottom, 10) // Adjust bottom padding
+                }
+                .padding(.horizontal)
+            }
+            .background(Color.black)
+            .cornerRadius(10)
+            .padding(.bottom, 10) // Adjust bottom padding to ensure visibility of text
+        }
     }
 }
 
-#Preview {
-    HomeView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
 }
