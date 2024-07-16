@@ -7,9 +7,18 @@
 
 import SwiftUI
 
+class EnvironmentStore: ObservableObject {
+    @Published var targetAreas: [String]
+
+    init(targetAreas: [String]) {
+        self.targetAreas = targetAreas
+    }
+}
+
 struct PreWorkoutSummaryView: View {
     var workout: Workout
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject private var environmentStore:  EnvironmentStore
 
     var body: some View {
         VStack {
@@ -60,9 +69,9 @@ struct PreWorkoutSummaryView: View {
                         .padding(.bottom, 10)
                     
                     VStack(spacing: 15) {
-                        ExerciseRowView(exerciseName: "Chest Press", reps: "10 reps", targetArea: "Chest")
-                        ExerciseRowView(exerciseName: "Upward Woodchop", reps: "10 reps", targetArea: "High")
-                        ExerciseRowView(exerciseName: "Downward Woodchop", reps: "10 reps", targetArea: "Low")
+                        ExerciseRowView(exerciseName: "Chest Press", reps: "10 reps", targetIndex: environmentStore.targetAreas[0])
+                        ExerciseRowView(exerciseName: "Upward Woodchop", reps: "10 reps", targetIndex: environmentStore.targetAreas[1])
+                        ExerciseRowView(exerciseName: "Downward Woodchop", reps: "10 reps", targetIndex: environmentStore.targetAreas[2])
                     }
                 }
                 .padding()
@@ -82,13 +91,15 @@ struct PreWorkoutSummaryView: View {
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .foregroundColor(.white)
+        .environmentObject(environmentStore)
     }
 }
 
 struct ExerciseRowView: View {
     var exerciseName: String
     var reps: String
-    var targetArea: String
+    var targetIndex: String
+    @EnvironmentObject var environmentStore: EnvironmentStore
     
     var body: some View {
         HStack {
@@ -99,7 +110,7 @@ struct ExerciseRowView: View {
             VStack(alignment: .leading) {
                 Text(exerciseName)
                     .foregroundColor(.white)
-                Text("\(reps) | \(targetArea)")
+                Text("\(reps) | \(targetIndex)")
                     .font(.caption)
                     .foregroundColor(.gray)
             }
@@ -116,5 +127,6 @@ struct ExerciseRowView: View {
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
         PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit longer.", iconName: "flame.fill", category: "Wall"))
+            .environmentObject(EnvironmentStore(targetAreas: ["Chest", "High", "Low"]))
     }
 }

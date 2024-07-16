@@ -3,7 +3,7 @@
 //  Flex
 //
 
-import Foundation
+/*import Foundation
 import SwiftUI
 
 struct OrientationFlowView: View {
@@ -98,6 +98,120 @@ struct OrientationDescriptionView: View {
         .frame(maxWidth: 250)
         .multilineTextAlignment(.center)
         .transition(.opacity)
+    }
+}
+
+#Preview {
+    PlacementInstructionView()
+}*/
+
+import Foundation
+import SwiftUI
+
+struct PlacementInstructionView: View {
+    var body: some View {
+        VStack {
+            // Option 1: High on the wall
+            //if selectedWorkout == "high" {
+                Group {
+                    Text("Place your ")
+                        .font(.largeTitle)
+                        .foregroundColor(.white) +
+                    Text("F1")
+                        .font(.largeTitle)
+                        .foregroundColor(.pink) +
+                    Text("\nhigh on the wall")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                }
+                .padding(.top, 121)
+                .multilineTextAlignment(.center)
+                
+                Image("high_wall_unplaced")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+                
+                Spacer()
+                
+                Divider()
+                    .background(Color.gray)
+                
+                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .multilineTextAlignment(.center)
+            //}
+            
+            // Option 2: Middle (at chest height)
+            /*else if selectedWorkout == "middle" {
+                 Group {
+                     Text("Place your ")
+                         .font(.largeTitle)
+                         .foregroundColor(.white) +
+                     Text("F1")
+                         .font(.largeTitle)
+                         .foregroundColor(.pink) +
+                     Text(" at \nchest height")
+                         .font(.largeTitle)
+                         .foregroundColor(.white)
+                 }
+                 .padding(.top, 121)
+                 .multilineTextAlignment(.center)
+                
+                Image("mid_wall_unplaced")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+                
+                Spacer()
+                
+                Divider()
+                    .background(Color.gray)
+                
+                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .multilineTextAlignment(.center)
+            //}
+            
+            // Option 3: Low (at chest height)
+            //else if selectedWorkout == "low" {
+                 Group {
+                     Text("Place your ")
+                         .font(.largeTitle)
+                         .foregroundColor(.white) +
+                     Text("F1")
+                         .font(.largeTitle)
+                         .foregroundColor(.pink) +
+                     Text("\nlow on the wall")
+                         .font(.largeTitle)
+                         .foregroundColor(.white)
+                 }
+                 .padding(.top, 121)
+                 .multilineTextAlignment(.center)
+                
+                Image("low_wall_unplaced")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+                
+                Spacer()
+                
+                Divider()
+                    .background(Color.gray)
+                
+                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .multilineTextAlignment(.center)
+            //}*/
+        }
+        .background(Color.black)
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
