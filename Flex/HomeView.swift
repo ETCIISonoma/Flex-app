@@ -346,19 +346,19 @@ struct Workout: Identifiable {
 
 struct HomeView: View {
     var body: some View {
-            TabView {
-                Tab("Summary", systemImage: "house") {
-                    SummaryView()
-                }
-                
-                Tab("Workouts", systemImage: "figure.strengthtraining.functional") {
-                    Text("Home")
-                }
-                
-                Tab("Leaderboard", systemImage: "trophy") {
-                    Text("Leaderboard")
-                }
+        TabView {
+            Tab("Summary", systemImage: "house") {
+                SummaryView()
             }
+            
+            Tab("Workouts", systemImage: "figure.strengthtraining.functional") {
+                Text("Home")
+            }
+            
+            Tab("Leaderboard", systemImage: "trophy") {
+                Text("Leaderboard")
+            }
+        }
     }
 }
 

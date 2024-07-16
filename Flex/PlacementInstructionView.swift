@@ -109,112 +109,126 @@ import Foundation
 import SwiftUI
 
 struct PlacementInstructionView: View {
+    
+    @EnvironmentObject var es: EnvironmentStore
+    let accessorySessionManager: AccessorySessionManager
+    
     var body: some View {
-        VStack {
-            // Option 1: High on the wall
-            //if selectedWorkout == "high" {
-                Group {
-                    Text("Place your ")
-                        .font(.largeTitle)
-                        .foregroundColor(.white) +
-                    Text("F1")
-                        .font(.largeTitle)
-                        .foregroundColor(.pink) +
-                    Text("\nhigh on the wall")
-                        .font(.largeTitle)
-                        .foregroundColor(.white)
+        NavigationView {
+            VStack {
+                if accessorySessionManager.onWall {
+                    NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
+                        EmptyView()
+                    }
+                    .hidden()
                 }
-                .padding(.top, 121)
-                .multilineTextAlignment(.center)
                 
-                Image("high_wall_unplaced")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding()
-                
-                Spacer()
-                
-                Divider()
-                    .background(Color.gray)
-                
-                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .padding()
+                // Option 1: High on the wall
+                if(es.targetAreas[0] == "High") {
+                    Group {
+                        Text("Place your ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text("\nhigh on the wall")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 121)
                     .multilineTextAlignment(.center)
-            //}
-            
-            // Option 2: Middle (at chest height)
-            /*else if selectedWorkout == "middle" {
-                 Group {
-                     Text("Place your ")
-                         .font(.largeTitle)
-                         .foregroundColor(.white) +
-                     Text("F1")
-                         .font(.largeTitle)
-                         .foregroundColor(.pink) +
-                     Text(" at \nchest height")
-                         .font(.largeTitle)
-                         .foregroundColor(.white)
-                 }
-                 .padding(.top, 121)
-                 .multilineTextAlignment(.center)
+                    
+                    Image("high_wall_unplaced")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Divider()
+                        .background(Color.gray)
+                    
+                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .multilineTextAlignment(.center)
+                }
+                //}
                 
-                Image("mid_wall_unplaced")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding()
-                
-                Spacer()
-                
-                Divider()
-                    .background(Color.gray)
-                
-                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .padding()
+                // Option 2: Middle (at chest height)
+                else if(es.targetAreas[0] == "Low") {
+                    Group {
+                        Text("Place your ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text(" at \nchest height")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 121)
                     .multilineTextAlignment(.center)
-            //}
-            
-            // Option 3: Low (at chest height)
-            //else if selectedWorkout == "low" {
-                 Group {
-                     Text("Place your ")
-                         .font(.largeTitle)
-                         .foregroundColor(.white) +
-                     Text("F1")
-                         .font(.largeTitle)
-                         .foregroundColor(.pink) +
-                     Text("\nlow on the wall")
-                         .font(.largeTitle)
-                         .foregroundColor(.white)
-                 }
-                 .padding(.top, 121)
-                 .multilineTextAlignment(.center)
+                    
+                    Image("mid_wall_unplaced")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Divider()
+                        .background(Color.gray)
+                    
+                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .multilineTextAlignment(.center)
+                }
                 
-                Image("low_wall_unplaced")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding()
-                
-                Spacer()
-                
-                Divider()
-                    .background(Color.gray)
-                
-                Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .padding()
+                // Option 3: Low (at chest height)
+                else if(es.targetAreas[0] == "Chest") {
+                    Group {
+                        Text("Place your ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text("\nlow on the wall")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 121)
                     .multilineTextAlignment(.center)
-            //}*/
+                    
+                    Image("low_wall_unplaced")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Divider()
+                        .background(Color.gray)
+                    
+                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .background(Color.black)
+            .edgesIgnoringSafeArea(.all)
         }
-        .background(Color.black)
-        .edgesIgnoringSafeArea(.all)
     }
 }
 
 #Preview {
-    PlacementInstructionView()
+    PlacementInstructionView(accessorySessionManager: AccessorySessionManager()).environmentObject(EnvironmentStore(targetAreas: ["High", "Low", "Chest"]))
 }

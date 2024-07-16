@@ -18,6 +18,8 @@ struct PlacementConfirmationView: View {
                  .font(.custom("SFProDisplay-Light", size: 70))
                  .foregroundColor(.pink)*/
                 
+                // Need to add code so that it automatically moved to the workout page within a couple seconds. 
+                
                 // Option 3 - unable to attach
                 Image(systemName: "viewfinder.trianglebadge.exclamationmark")
                     .resizable()
@@ -37,18 +39,6 @@ struct PlacementConfirmationView: View {
                 }
                 
                 Spacer()
-                
-                /*Button(action: {
-                 // Your action here
-                 }) {
-                 Text("Try Again")
-                 .foregroundColor(.white)
-                 .frame(maxWidth: .infinity)
-                 .padding()
-                 .background(Color.pink)
-                 .cornerRadius(12)
-                 }
-                 .padding(.horizontal, 32.5)*/
                 
                 NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
                     Text("Try Again")

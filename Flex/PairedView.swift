@@ -53,7 +53,7 @@ struct PairedView: View {
                         }
                     
                     NavigationLink {
-                        PlacementInstructionView()
+                        PlacementInstructionView(accessorySessionManager: AccessorySessionManager())
                     } label: {
                         Text("Orientation flow")
                     }
