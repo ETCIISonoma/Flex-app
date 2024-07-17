@@ -7,18 +7,25 @@
 
 import SwiftUI
 
-class EnvironmentStore: ObservableObject {
+class TargetAreaStore: ObservableObject {
     @Published var targetAreas: [String]
 
     init(targetAreas: [String]) {
         self.targetAreas = targetAreas
     }
 }
+class Counter: ObservableObject {
+    @Published var counter: Int
+
+    init(counter: Int) {
+        self.counter = counter
+    }
+}
 
 struct PreWorkoutSummaryView: View {
     var workout: Workout
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject private var environmentStore:  EnvironmentStore
+    @EnvironmentObject private var environmentStore:  TargetAreaStore
 
     var body: some View {
         VStack {
@@ -99,7 +106,7 @@ struct ExerciseRowView: View {
     var exerciseName: String
     var reps: String
     var targetIndex: String
-    @EnvironmentObject var environmentStore: EnvironmentStore
+    @EnvironmentObject var environmentStore: TargetAreaStore
     
     var body: some View {
         HStack {
@@ -127,6 +134,6 @@ struct ExerciseRowView: View {
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
         PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit longer.", iconName: "flame.fill", category: "Wall"))
-            .environmentObject(EnvironmentStore(targetAreas: ["Chest", "High", "Low"]))
+            .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low"]))
     }
 }

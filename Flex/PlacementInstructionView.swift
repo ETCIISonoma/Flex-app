@@ -110,7 +110,8 @@ import SwiftUI
 
 struct PlacementInstructionView: View {
     
-    @EnvironmentObject var es: EnvironmentStore
+    @EnvironmentObject var es: TargetAreaStore
+    @EnvironmentObject var c: Counter
     let accessorySessionManager: AccessorySessionManager
     
     var body: some View {
@@ -124,7 +125,7 @@ struct PlacementInstructionView: View {
                 }
                 
                 // Option 1: High on the wall
-                if(es.targetAreas[0] == "High") {
+                if(es.targetAreas[c.counter] == "High") {
                     Group {
                         Text("Place your ")
                             .font(.largeTitle)
@@ -155,43 +156,9 @@ struct PlacementInstructionView: View {
                         .padding()
                         .multilineTextAlignment(.center)
                 }
-                //}
                 
-                // Option 2: Middle (at chest height)
-                else if(es.targetAreas[0] == "Low") {
-                    Group {
-                        Text("Place your ")
-                            .font(.largeTitle)
-                            .foregroundColor(.white) +
-                        Text("F1")
-                            .font(.largeTitle)
-                            .foregroundColor(.pink) +
-                        Text(" at \nchest height")
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 121)
-                    .multilineTextAlignment(.center)
-                    
-                    Image("mid_wall_unplaced")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Divider()
-                        .background(Color.gray)
-                    
-                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                        .font(.body)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .multilineTextAlignment(.center)
-                }
-                
-                // Option 3: Low (at chest height)
-                else if(es.targetAreas[0] == "Chest") {
+                // Option 2: Low on the Wall
+                else if(es.targetAreas[c.counter] == "Low") {
                     Group {
                         Text("Place your ")
                             .font(.largeTitle)
@@ -222,6 +189,39 @@ struct PlacementInstructionView: View {
                         .padding()
                         .multilineTextAlignment(.center)
                 }
+                
+                // Option 3: Middle (at chest height)
+                else if(es.targetAreas[c.counter] == "Chest") {
+                    Group {
+                        Text("Place your ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text(" at \nchest height")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 121)
+                    .multilineTextAlignment(.center)
+                    
+                    Image("mid_wall_unplaced")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Divider()
+                        .background(Color.gray)
+                    
+                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .multilineTextAlignment(.center)
+                }
             }
             .background(Color.black)
             .edgesIgnoringSafeArea(.all)
@@ -230,5 +230,6 @@ struct PlacementInstructionView: View {
 }
 
 #Preview {
-    PlacementInstructionView(accessorySessionManager: AccessorySessionManager()).environmentObject(EnvironmentStore(targetAreas: ["High", "Low", "Chest"]))
+    PlacementInstructionView(accessorySessionManager: AccessorySessionManager()).environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
+        .environmentObject(Counter(counter: 0))
 }

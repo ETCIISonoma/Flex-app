@@ -19,6 +19,8 @@ struct WorkoutActiveView: View {
     @State private var selectedExerciseInfo = ""
     @State private var navigateToHome = false
     
+    @EnvironmentObject var c: Counter
+    
     let totalSets = 3
     let totalRepsPerSet = 10
     let totalExercises = 3
@@ -188,6 +190,16 @@ struct WorkoutActiveView: View {
             .background(Color.black.edgesIgnoringSafeArea(.all))
             .onAppear {
                 startTimer()
+            }
+            .onChange(of: currentRep) {
+                if(currentRep == 10) {
+                    if(c.counter == 2) {
+                        c.counter = 0
+                    }
+                    else {
+                        c.counter += 1
+                    }
+                }
             }
             .navigationDestination(isPresented: $navigateToHome) {
                 HomeView()

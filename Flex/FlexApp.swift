@@ -10,9 +10,14 @@ import InterfaceOrientation
 struct FlexApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
+    let counter = Counter(counter: 0)
+    let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest"]) // change later.
+    
     var body: some Scene {
         WindowGroup {
             BLEPairingView()
+                .environmentObject(counter)
+                .environmentObject(targetAreas)
         }
     }
 }
