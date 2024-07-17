@@ -5,7 +5,7 @@
 //  Created by Vaughn Khouri on 7/10/24.
 //
 
-import Foundation
+/*import Foundation
 import SwiftUI
 
 struct WorkoutRePlaceView: View {
@@ -83,6 +83,73 @@ enum Destination: Hashable {
 }
 
 
+
+struct WorkoutRePlaceView_Previews: PreviewProvider {
+    static var previews: some View {
+        WorkoutRePlaceView()
+    }
+}*/
+
+import SwiftUI
+
+struct WorkoutRePlaceView: View {
+    @State private var showPlacementInstruction = false
+    @State private var showHomeView = false
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                Spacer()
+
+                VStack(spacing: 10) {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.pink)
+
+                    Text("Time to re-place \nF1")
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+
+                    Text("Press the red button to release \nF1. Then tap continue.")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                }
+
+                Spacer()
+
+                VStack(spacing: 20) {
+                    NavigationLink(
+                        destination: PlacementInstructionView(accessorySessionManager: AccessorySessionManager())) {
+                        Text("Continue")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.pink)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 50)
+
+                    NavigationLink(
+                        destination: HomeView()) {
+                        Text("End Workout")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.pink.opacity(0.15))
+                            .foregroundColor(.pink)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 50)
+                }
+                .padding(.bottom, 50)
+            }
+            .background(Color.black.edgesIgnoringSafeArea(.all))
+            .foregroundColor(.white)
+        }
+    }
+}
 
 struct WorkoutRePlaceView_Previews: PreviewProvider {
     static var previews: some View {

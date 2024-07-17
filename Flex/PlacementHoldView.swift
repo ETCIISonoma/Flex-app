@@ -9,45 +9,25 @@ import Foundation
 import SwiftUI
 
 struct PlacementHoldView: View {
-    @State private var path = NavigationPath()
     @State private var orientation: AccessoryPosition? = nil
     let accessorySessionManager: AccessorySessionManager
 
     var body: some View {
-        NavigationStack(path: $path) {
-            VStack {
-                Spacer()
-                
-                if let orientation = orientation {
-                    OrientationView(orientation: orientation)
-                }
-                Spacer()
+        VStack {
+            Spacer()
+            
+            if let orientation = orientation {
+                OrientationView(orientation: orientation)
             }
-            .background(Color.black)
-            .edgesIgnoringSafeArea(.all)
-            .onAppear {
-                orientation = accessorySessionManager.orientation
-                
-                // Check condition and navigate if necessary
-                if accessorySessionManager.faultRecieved || accessorySessionManager.isAttached {
-                    path.append(PlacementHoldDestination.placementConfirmation)
-                }
-            }
-            .navigationDestination(for: PlacementHoldDestination.self) { destination in
-                switch destination {
-                case .placementConfirmation:
-                    PlacementConfirmationView()
-                }
-            }
-            .navigationBarHidden(true)
+            Spacer()
+        }
+        .background(Color.black)
+        .edgesIgnoringSafeArea(.all)
+        .onAppear {
+            orientation = accessorySessionManager.orientation
         }
     }
 }
-
-enum PlacementHoldDestination: Hashable {
-    case placementConfirmation
-}
-
 
 struct OrientationView: View {
     let orientation: AccessoryPosition
