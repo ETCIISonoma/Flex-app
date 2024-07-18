@@ -195,9 +195,11 @@ struct WorkoutActiveView: View {
                 if(currentRep == 10) {
                     if(c.counter == 2) {
                         c.counter = 0
+                        // transition: add code to go to set break view. 
                     }
                     else {
                         c.counter += 1
+                        // transition: add code to go to replace view
                     }
                 }
             }

@@ -95,6 +95,8 @@ import SwiftUI
 struct WorkoutRePlaceView: View {
     @State private var showPlacementInstruction = false
     @State private var showHomeView = false
+    @EnvironmentObject var targetAreas: TargetAreaStore
+    @EnvironmentObject var c: Counter
 
     var body: some View {
         NavigationStack {
@@ -122,7 +124,11 @@ struct WorkoutRePlaceView: View {
 
                 VStack(spacing: 20) {
                     NavigationLink(
-                        destination: PlacementInstructionView(accessorySessionManager: AccessorySessionManager())) {
+                        destination: PlacementInstructionView(accessorySessionManager: AccessorySessionManager()) .environmentObject(targetAreas)
+                            .environmentObject(c)
+                    )
+                   
+                    {
                         Text("Continue")
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -154,5 +160,7 @@ struct WorkoutRePlaceView: View {
 struct WorkoutRePlaceView_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutRePlaceView()
+            .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
+            .environmentObject(Counter(counter: 0))
     }
 }

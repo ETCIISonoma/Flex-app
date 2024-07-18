@@ -11,8 +11,11 @@ import SwiftUI
 struct WorkoutSetBreakView: View {
     @State private var timeRemaining: Int = 30
     @State private var timer: Timer?
-    @State private var navigateToActiveView = false
+    @State private var navigateToRePlaceView = false
     @State private var navigateToHomeView = false
+    
+    @EnvironmentObject var targetAreas: TargetAreaStore
+    @EnvironmentObject var c: Counter
 
     var body: some View {
         NavigationStack {
@@ -66,8 +69,9 @@ struct WorkoutSetBreakView: View {
             .navigationDestination(isPresented: $navigateToHomeView) {
                 HomeView()
             }
-            .navigationDestination(isPresented: $navigateToActiveView) {
-                WorkoutRePlaceView()
+            .navigationDestination(isPresented: $navigateToRePlaceView) {
+                WorkoutRePlaceView().environmentObject(targetAreas)
+                    .environmentObject(c)
             }
             .onAppear {
                 startTimer()
@@ -84,7 +88,7 @@ struct WorkoutSetBreakView: View {
                 timeRemaining -= 1
             } else {
                 timer?.invalidate()
-                navigateToActiveView = true
+                navigateToRePlaceView = true
             }
         }
     }
@@ -93,5 +97,7 @@ struct WorkoutSetBreakView: View {
 struct WorkoutSetBreakView_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutSetBreakView()
+            .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
+            .environmentObject(Counter(counter: 0))
     }
 }
