@@ -21,29 +21,30 @@ class Counter: ObservableObject {
         self.counter = counter
     }
 }
+class numSets: ObservableObject {
+    @Published var selectedSets: Int
+    
+    init(selectedSets: Int) {
+        self.selectedSets = selectedSets
+    }
+}
 
 struct PreWorkoutSummaryView: View {
     var workout: Workout
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var environmentStore:  TargetAreaStore
+    @EnvironmentObject private var sets: numSets
+    
+    @State private var totalTime = 20.0
+    
+    let exercises = [
+        "Chest Press",
+        "Upward Woodchop",
+        "Downward Woodchop"
+    ]
 
     var body: some View {
         VStack {
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.pink)
-                }
-                Text("Workouts")
-                    .foregroundColor(.pink)
-                    .padding(.leading, 10)
-                Spacer()
-            }
-            .padding()
-            .background(Color.black)
-            
             ScrollView {
                 VStack(alignment: .leading) {
                     Text(workout.title)
@@ -51,34 +52,69 @@ struct PreWorkoutSummaryView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(.bottom, 5)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     
-                    Text(workout.description)
-                        .foregroundColor(.gray)
-                        .padding(.bottom, 10)
-                    
-                    HStack {
-                        Text("20 min")
+                    HStack(alignment: .top) {
+                        Text(workout.description)
                             .foregroundColor(.white)
+                            .padding(.bottom, 10)
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                        
                         Spacer()
-                        Text(workout.category)
-                            .foregroundColor(.white)
+                        
+                        VStack(alignment: .trailing, spacing: 5) {
+                            HStack {
+                                Image(systemName: "timer").foregroundColor(.white)
+                                Text("\(String(format: "%.1f", totalTime)) min")
+                                    .foregroundColor(.white)
+                            }
+                            HStack {
+                                Image(systemName: "rectangle.portrait.rotate").foregroundColor(.white)
+                                Text(workout.category)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(.bottom, 10)
                     }
-                    .padding(.bottom, 10)
+
+                    Divider()
+                        .background(Color.white)
                     
                     Text("Circuit")
-                        .font(.title2)
+                        .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(.bottom, 5)
                     
-                    Text("3 sets")
-                        .foregroundColor(.gray)
-                        .padding(.bottom, 10)
+                    Menu {
+                        ForEach(1..<6) { number in
+                            Button(action: {
+                                sets.selectedSets = number
+                                totalTime = 20.0 / 3.0 * Double(sets.selectedSets)
+                            }) {
+                                Text("\(number) sets")
+                            }
+                        }
+                    } label: {
+                        Text("\(sets.selectedSets) sets")
+                        .foregroundColor(.pink)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.gray.opacity(0.2))
+                            .cornerRadius(10)
+                            .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.white, lineWidth: 0))
+                                .background(.pink.opacity(0.15))
+                    }
+                    .padding(.bottom, 10)
                     
                     VStack(spacing: 15) {
-                        ExerciseRowView(exerciseName: "Chest Press", reps: "10 reps", targetIndex: environmentStore.targetAreas[0])
-                        ExerciseRowView(exerciseName: "Upward Woodchop", reps: "10 reps", targetIndex: environmentStore.targetAreas[1])
-                        ExerciseRowView(exerciseName: "Downward Woodchop", reps: "10 reps", targetIndex: environmentStore.targetAreas[2])
+                        ExerciseRowView(exerciseName: exercises[0], reps: "10 reps", targetIndex: environmentStore.targetAreas[0])
+                        ExerciseRowView(exerciseName: exercises[1], reps: "10 reps", targetIndex: environmentStore.targetAreas[1])
+                        ExerciseRowView(exerciseName: exercises[2], reps: "10 reps", targetIndex: environmentStore.targetAreas[2])
                     }
                 }
                 .padding()
@@ -126,14 +162,15 @@ struct ExerciseRowView: View {
                 .foregroundColor(.gray)
         }
         .padding()
-        .background(Color(.systemGray6).opacity(0.2)) // Reduced opacity
+        .background(Color.gray.opacity(0.25)) // Reduced opacity
         .cornerRadius(10)
     }
 }
 
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit longer.", iconName: "flame.fill", category: "Wall"))
+        PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall"))
             .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low"]))
+            .environmentObject(numSets(selectedSets: 3))
     }
 }

@@ -12,12 +12,14 @@ struct FlexApp: App {
     
     let counter = Counter(counter: 0)
     let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest"]) // change later.
+    let selectedSets = numSets(selectedSets: 3)
     
     var body: some Scene {
         WindowGroup {
             BLEPairingView()
                 .environmentObject(counter)
                 .environmentObject(targetAreas)
+                .environmentObject(selectedSets)
         }
     }
 }

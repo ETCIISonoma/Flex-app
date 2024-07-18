@@ -16,7 +16,7 @@ class AccessorySessionManager: NSObject {
     var pickerDismissed = true
     var onWall = false //whether it is in contact with wall to move between place F1 to hold F1 views
     var faultRecieved = false // indicates if true that hold has been attempted but not successful so move to try again screen.
-    var isAttached = false // indicates if true that hold has been attempted and successful so move to success screen. 
+    var isAttached = false // indicates if true that hold has been attempted and successful so move to success screen.
     
     private var currentAccessory: ASAccessory?
     private var session = ASAccessorySession()
