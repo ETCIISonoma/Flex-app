@@ -9,54 +9,139 @@ import Foundation
 import SwiftUI
 
 struct PlacementHoldView: View {
-    @State private var orientation: AccessoryPosition? = nil
+    @EnvironmentObject var es: TargetAreaStore
+    @EnvironmentObject var c: Counter
     let accessorySessionManager: AccessorySessionManager
+    
+    @State private var navigateToConfirmation = false
 
     var body: some View {
-        VStack {
-            Spacer()
-            
-            if let orientation = orientation {
-                OrientationView(orientation: orientation)
+        NavigationStack {
+            VStack {
+                if(es.targetAreas[c.counter] == "High") {
+                    Spacer()
+                    
+                    Image("high_wall_placed")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 281, height: 568)
+                        .padding(.bottom, 11)
+                        .offset(x: -25)
+                    
+                    HStack {
+                        Text("Hold ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text(" firmly \nagainst the wall")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 12)
+                    
+                    Text("Ensure surface is flat and clean")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 20)
+                    
+                    Spacer()
+                }
+                
+                // Option 2: Low on the Wall
+                else if(es.targetAreas[c.counter] == "Low") {
+                    Spacer()
+                    
+                    Image("low_wall_placed")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 281, height: 568)
+                        .padding(.bottom, 11)
+                        .offset(x: -25)
+                    
+                    HStack {
+                        Text("Hold ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text(" firmly \nagainst the wall")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 12)
+                    
+                    Text("Ensure surface is flat and clean")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 20)
+                    
+                    Spacer()
+                }
+                
+                // Option 3: Middle (at chest height)
+                else if(es.targetAreas[c.counter] == "Chest") {
+                    Spacer()
+                    
+                    Image("mid_wall_placed")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 281, height: 568)
+                        .padding(.bottom, 11)
+                        .offset(x: -25)
+                    
+                    HStack {
+                        Text("Hold ")
+                            .font(.largeTitle)
+                            .foregroundColor(.white) +
+                        Text("F1")
+                            .font(.largeTitle)
+                            .foregroundColor(.pink) +
+                        Text(" firmly \nagainst the wall")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 12)
+                    
+                    Text("Ensure surface is flat and clean")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 20)
+                    
+                    Spacer()
+                }
             }
-            Spacer()
+            .navigationDestination(isPresented: $navigateToConfirmation) {
+                PlacementConfirmationView(accessorySessionManager: AccessorySessionManager())
+            }
         }
+        
+        
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
+        
         .onAppear {
-            // orientation = accessorySessionManager.orientation
+            accessorySessionManager.writeState(state: 2)
         }
-    }
-}
-
-struct OrientationView: View {
-    let orientation: AccessoryPosition
-
-    var body: some View {
-        VStack {
-            Image(orientation.imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity, maxHeight: 300)  // Adjust height as needed
-                .padding(.bottom, 20)
-            
-            Text("Hold F1 firmly against the \(orientation.name)")
-                .font(.title)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 5)
-            
-            Text("Ensure surface is flat and clean")
-                .font(.body)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
+        .onChange(of: accessorySessionManager.globalState) {
+            if(accessorySessionManager.readState()==3 || accessorySessionManager.readState() == 6) {
+                navigateToConfirmation = true
+            }
         }
-        .padding(.horizontal)
     }
 }
 
 struct PlacementHoldView_Previews: PreviewProvider {
     static var previews: some View {
-        PlacementHoldView(accessorySessionManager: AccessorySessionManager())
+        PlacementHoldView(accessorySessionManager: AccessorySessionManager())    .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
+            .environmentObject(Counter(counter: 0))
     }
 }

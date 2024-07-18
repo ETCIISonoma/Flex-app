@@ -70,7 +70,7 @@ struct WorkoutSetBreakView: View {
                 HomeView()
             }
             .navigationDestination(isPresented: $navigateToRePlaceView) {
-                WorkoutRePlaceView().environmentObject(targetAreas)
+                WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager()).environmentObject(targetAreas)
                     .environmentObject(c)
             }
             .onAppear {

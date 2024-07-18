@@ -18,6 +18,8 @@ struct WorkoutActiveView: View {
     @State private var showInfo = false
     @State private var selectedExerciseInfo = ""
     @State private var navigateToHome = false
+    @State private var navigateToSetBreak = false
+    @State private var navigateToRePlace = false
     
     @EnvironmentObject var c: Counter
     
@@ -195,16 +197,22 @@ struct WorkoutActiveView: View {
                 if(currentRep == 10) {
                     if(c.counter == 2) {
                         c.counter = 0
-                        // transition: add code to go to set break view. 
+                        navigateToSetBreak = true
                     }
                     else {
                         c.counter += 1
-                        // transition: add code to go to replace view
+                        navigateToRePlace = true
                     }
                 }
             }
             .navigationDestination(isPresented: $navigateToHome) {
                 HomeView()
+            }
+            .navigationDestination(isPresented: $navigateToSetBreak) {
+                WorkoutSetBreakView()
+            }
+            .navigationDestination(isPresented: $navigateToRePlace) {
+                WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager())
             }
         }
     }

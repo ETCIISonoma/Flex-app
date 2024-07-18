@@ -97,6 +97,8 @@ struct WorkoutRePlaceView: View {
     @State private var showHomeView = false
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
+    
+    let accessorySessionManager: AccessorySessionManager
 
     var body: some View {
         NavigationStack {
@@ -153,13 +155,26 @@ struct WorkoutRePlaceView: View {
             }
             .background(Color.black.edgesIgnoringSafeArea(.all))
             .foregroundColor(.white)
+            
+            .navigationDestination(isPresented: $showPlacementInstruction) {
+                PlacementInstructionView(accessorySessionManager: AccessorySessionManager())
+            }
+        }
+        
+        .onAppear {
+            accessorySessionManager.writeState(state: 4)
+        }
+        .onChange(of: accessorySessionManager.globalState) {
+            if(accessorySessionManager.readState()==0) {
+                showPlacementInstruction = true
+            }
         }
     }
 }
 
 struct WorkoutRePlaceView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRePlaceView()
+        WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager())
             .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
             .environmentObject(Counter(counter: 0))
     }
