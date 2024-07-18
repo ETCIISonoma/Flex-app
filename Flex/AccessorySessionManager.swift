@@ -11,22 +11,26 @@ import SwiftUI
 @Observable
 class AccessorySessionManager: NSObject {
     var accesoryModel: AccessoryModel?
-    var rawMeasurements: String? = nil
+    var globalState: UInt? = nil
+    var motorTorqueSetpoint: Float? = nil
+    var batteryVoltage: Float? = nil
+    var motorPower: Float? = nil
     var peripheralConnected = false
     var pickerDismissed = true
-    var onWall = false //whether it is in contact with wall to move between place F1 to hold F1 views
-    var faultRecieved = false // indicates if true that hold has been attempted but not successful so move to try again screen.
-    var isAttached = false // indicates if true that hold has been attempted and successful so move to success screen.
-    
+
     private var currentAccessory: ASAccessory?
     private var session = ASAccessorySession()
     private var manager: CBCentralManager?
     private var peripheral: CBPeripheral?
-    private var measurementsCharacteristic: CBCharacteristic?
-    private var relayCharacteristic: CBCharacteristic?
-
-    private static let measurementsCharacteristicUuid = "0xFF3F"
-    private static let relayCharacteristicUuid = "0xFF40"
+    private var w_motorTorqueSetpointCharacteristic: CBCharacteristic?
+    private var r_w_globalStateCharacteristic: CBCharacteristic?
+    private var r_batteryVoltageCharacteristic: CBCharacteristic?
+    private var r_motorPowerCharacteristic: CBCharacteristic?
+    
+    private static let w_motorTorqueSetpointCharacteristicUUID = "0xFF3F"
+    private static let r_w_globalStateCharacteristicUUID = "0xFF40"
+    private static let r_batteryVoltageCharacteristicUUID = "0xFF41"
+    private static let r_motorPowerCharacteristicUUID = "0xFF42"
 
     private static let flexF1: ASPickerDisplayItem = {
         let descriptor = ASDiscoveryDescriptor()
@@ -120,43 +124,30 @@ class AccessorySessionManager: NSObject {
             print("Received event type \(event.eventType)")
         }
     }
-    
-    private func getMeasurementsComponent(index: Int) -> String? {
-        let components = rawMeasurements?.split(separator: ",")
-        let component = components?[index]
-        
-        guard component != nil, let component = component else {
-            return nil
-        }
-        
-        return String(component)
+
+    func readVoltage() -> Float? {
+        return batteryVoltage
     }
     
-    var distance: Measurement<UnitLength>? {
-        let string = getMeasurementsComponent(index: 0)
-        
-        guard string != nil, let string = string else {
-            return nil
-        }
-        
-        if let number = Double(string) {
-            return Measurement(value: number, unit: .centimeters)
-        } else {
-            return nil
+    func readState() -> UInt? {
+        return globalState
+    }
+    
+    func writeState(state: UInt) {
+        Task {
+            if let globalStateCharacteristic = r_w_globalStateCharacteristic {
+                let data = Data([UInt8(state)])
+                peripheral?.writeValue(data, for: globalStateCharacteristic, type: .withResponse)
+            }
         }
     }
     
-    var orientation: AccessoryPosition? {
-        let string = getMeasurementsComponent(index: 1)
-        
-        guard string != nil, let string = string else {
-            return nil
-        }
-        
-        if let orientation = AccessoryPosition(rawValue: string) {
-            return orientation
-        } else {
-            return nil
+    func writeTorque(torque: UInt) {
+        Task {
+            if let motorTorqueCharacteristic = w_motorTorqueSetpointCharacteristic {
+                let data = Data([UInt8(torque)])
+                peripheral?.writeValue(data, for: motorTorqueCharacteristic, type: .withResponse)
+            }
         }
     }
 }
@@ -206,12 +197,12 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         else {
             return
         }
-
+        
         for service in services {
-            peripheral.discoverCharacteristics([CBUUID(string: Self.measurementsCharacteristicUuid), CBUUID(string: Self.relayCharacteristicUuid)], for: service)
+            peripheral.discoverCharacteristics([CBUUID(string: Self.w_motorTorqueSetpointCharacteristicUUID), CBUUID(string: Self.r_w_globalStateCharacteristicUUID), CBUUID(string: Self.r_batteryVoltageCharacteristicUUID), CBUUID(string: Self.r_motorPowerCharacteristicUUID)], for: service)
         }
     }
-
+    
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: (any Error)?) {
         guard
             error == nil,
@@ -219,41 +210,59 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         else {
             return
         }
-
-        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.measurementsCharacteristicUuid) {
-            measurementsCharacteristic = characteristic
-            peripheral.setNotifyValue(true, for: characteristic)
-            peripheral.readValue(for: characteristic)
-        }
         
-        for characteristic in characteristics where characteristic.uuid == CBUUID(string: Self.relayCharacteristicUuid) {
-            relayCharacteristic = characteristic
-        }
-    }
-    
-    func setRelayState(isOn: Bool) {
-        Task {
-            if relayCharacteristic != nil {
-                peripheral?.writeValue(Data([isOn ? 0x01 : 0x00]), for: relayCharacteristic!, type: .withResponse)
+        for characteristic in characteristics {
+            if characteristic.uuid == CBUUID(string: Self.r_batteryVoltageCharacteristicUUID) {
+                r_batteryVoltageCharacteristic = characteristic
+                peripheral.setNotifyValue(true, for: characteristic)
+                peripheral.readValue(for: characteristic)
+            }
+            if characteristic.uuid == CBUUID(string: Self.r_motorPowerCharacteristicUUID) {
+                r_motorPowerCharacteristic = characteristic
+                peripheral.setNotifyValue(true, for: characteristic)
+                peripheral.readValue(for: characteristic)
+            }
+            if characteristic.uuid == CBUUID(string: Self.r_w_globalStateCharacteristicUUID) {
+                r_w_globalStateCharacteristic = characteristic
+                peripheral.setNotifyValue(true, for: characteristic)
+                peripheral.readValue(for: characteristic)
+            }
+            if characteristic.uuid == CBUUID(string: Self.w_motorTorqueSetpointCharacteristicUUID) {
+                w_motorTorqueSetpointCharacteristic = characteristic
             }
         }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?) {
-        guard
-            error == nil,
-            characteristic.uuid == CBUUID(string: Self.measurementsCharacteristicUuid),
-            let data = characteristic.value,
-            let rawMeasurements = String(data: data, encoding: .utf8)
-        else {
-            return
+        guard error == nil, let data = characteristic.value else { return }
+
+        if characteristic.uuid == CBUUID(string: Self.r_motorPowerCharacteristicUUID) {
+            let motorPower = data.withUnsafeBytes { $0.load(as: Float.self) }
+            print("New power received: \(motorPower)")
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.motorPower = motorPower
+                }
+            }
         }
 
-        print("New measurements received: \(rawMeasurements)")
+        if characteristic.uuid == CBUUID(string: Self.r_batteryVoltageCharacteristicUUID) {
+            let batteryVoltage = data.withUnsafeBytes { $0.load(as: Float.self) }
+            print("New battery voltage received: \(batteryVoltage)")
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.batteryVoltage = batteryVoltage
+                }
+            }
+        }
 
-        DispatchQueue.main.async {
-            withAnimation {
-                self.rawMeasurements = rawMeasurements
+        if characteristic.uuid == CBUUID(string: Self.r_w_globalStateCharacteristicUUID) {
+            let globalState = data.withUnsafeBytes { $0.load(as: UInt.self) }
+            print("New global state received: \(globalState)")
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.globalState = globalState
+                }
             }
         }
     }

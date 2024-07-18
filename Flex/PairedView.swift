@@ -12,8 +12,8 @@ struct PairedView: View {
     @AppStorage("accessoryPaired") private var accessoryPaired = false
     
     @State var isConnected = false
-    
-    @State var isRelayOn = false
+    @State var newState: UInt = 0
+    @State var newTorque: UInt = 0
     
     var body: some View {
         NavigationStack {
@@ -27,7 +27,6 @@ struct PairedView: View {
                     Text("Refresh whether connected")
                 }
                 
-                
                 List {
                     Button {
                         accessorySessionManager.connect()
@@ -36,26 +35,37 @@ struct PairedView: View {
                     }
                     
                     LabeledContent {
-                        Text(accessorySessionManager.distance?.formatted() ?? "nil")
+                        Text(accessorySessionManager.readVoltage()?.description ?? "nil")
                     } label: {
-                        Text("Distance")
+                        Text("Battery Voltage")
                     }
                     
                     LabeledContent {
-                        Text(accessorySessionManager.orientation?.name.capitalized ?? "nil")
+                        Text(accessorySessionManager.motorPower?.description ?? "nil")
                     } label: {
-                        Text("Orientation")
+                        Text("Motor Power")
                     }
                     
-                    Toggle("Pump", isOn: $isRelayOn)
-                        .onChange(of: isRelayOn) {
-                            accessorySessionManager.setRelayState(isOn: isRelayOn)
-                        }
-                    
-                    NavigationLink {
-                        PlacementInstructionView(accessorySessionManager: AccessorySessionManager())
+                    LabeledContent {
+                        Text(accessorySessionManager.readState()?.description ?? "nil")
                     } label: {
-                        Text("Orientation flow")
+                        Text("Global State")
+                    }
+                    
+                    TextField("Enter new state", value: $newState, formatter: NumberFormatter())
+                        .textFieldStyle(.roundedBorder)
+                    Button {
+                        accessorySessionManager.writeState(state: newState)
+                    } label: {
+                        Text("Write State")
+                    }
+                    
+                    TextField("Enter motor torque setpoint", value: $newTorque, formatter: NumberFormatter())
+                        .textFieldStyle(.roundedBorder)
+                    Button {
+                        accessorySessionManager.writeTorque(torque: newTorque)
+                    } label: {
+                        Text("Write Torque Setpoint")
                     }
                 }.scrollDisabled(true)
                 
@@ -74,7 +84,7 @@ struct PairedView: View {
                     Task {
                         while !accessorySessionManager.peripheralConnected {
                             accessorySessionManager.connect()
-                            try await Task.sleep(nanoseconds: 200000000)
+                            try await Task.sleep(nanoseconds: 200_000_000)
                         }
                         
                         isConnected = accessorySessionManager.peripheralConnected

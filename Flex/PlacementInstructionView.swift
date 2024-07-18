@@ -117,7 +117,7 @@ struct PlacementInstructionView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if accessorySessionManager.onWall {
+                if accessorySessionManager.globalState == 1 {
                     NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
                         EmptyView()
                     }

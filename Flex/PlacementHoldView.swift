@@ -24,7 +24,7 @@ struct PlacementHoldView: View {
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear {
-            orientation = accessorySessionManager.orientation
+            // orientation = accessorySessionManager.orientation
         }
     }
 }
