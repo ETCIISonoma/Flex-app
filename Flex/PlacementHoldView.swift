@@ -11,7 +11,7 @@ import SwiftUI
 struct PlacementHoldView: View {
     @EnvironmentObject var es: TargetAreaStore
     @EnvironmentObject var c: Counter
-    let accessorySessionManager: AccessorySessionManager
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     @State private var navigateToConfirmation = false
 
@@ -120,7 +120,7 @@ struct PlacementHoldView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToConfirmation) {
-                PlacementConfirmationView(accessorySessionManager: AccessorySessionManager())
+                PlacementConfirmationView(accessorySessionManager: accessorySessionManager)
             }
         }
         
@@ -134,6 +134,7 @@ struct PlacementHoldView: View {
         .onChange(of: accessorySessionManager.globalState) {
             if(accessorySessionManager.readState()==3 || accessorySessionManager.readState() == 6) {
                 navigateToConfirmation = true
+                Color.pink
             }
         }
     }
@@ -141,7 +142,7 @@ struct PlacementHoldView: View {
 
 struct PlacementHoldView_Previews: PreviewProvider {
     static var previews: some View {
-        PlacementHoldView(accessorySessionManager: AccessorySessionManager())    .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
+        PlacementHoldView(accessorySessionManager: AccessorySessionManager.shared)    .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
             .environmentObject(Counter(counter: 0))
     }
 }

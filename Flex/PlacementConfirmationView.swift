@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlacementConfirmationView: View {
     
-    let accessorySessionManager: AccessorySessionManager
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
     @State private var navigateToWorkoutActiveView = false
     
     var body: some View {
@@ -52,7 +52,7 @@ struct PlacementConfirmationView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
+                    NavigationLink(destination: PlacementHoldView(accessorySessionManager: accessorySessionManager)) {
                         Text("Try Again")
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -72,5 +72,5 @@ struct PlacementConfirmationView: View {
 }
 
 #Preview {
-    PlacementConfirmationView(accessorySessionManager: AccessorySessionManager())
+    PlacementConfirmationView(accessorySessionManager: AccessorySessionManager.shared)
 }

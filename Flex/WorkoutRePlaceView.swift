@@ -98,7 +98,7 @@ struct WorkoutRePlaceView: View {
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
     
-    let accessorySessionManager: AccessorySessionManager
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
 
     var body: some View {
         NavigationStack {
@@ -126,7 +126,7 @@ struct WorkoutRePlaceView: View {
 
                 VStack(spacing: 20) {
                     NavigationLink(
-                        destination: PlacementInstructionView(accessorySessionManager: AccessorySessionManager()) .environmentObject(targetAreas)
+                        destination: PlacementInstructionView(accessorySessionManager: accessorySessionManager) .environmentObject(targetAreas)
                             .environmentObject(c)
                     )
                    
@@ -157,7 +157,7 @@ struct WorkoutRePlaceView: View {
             .foregroundColor(.white)
             
             .navigationDestination(isPresented: $showPlacementInstruction) {
-                PlacementInstructionView(accessorySessionManager: AccessorySessionManager())
+                PlacementInstructionView(accessorySessionManager: accessorySessionManager)
             }
         }
         
@@ -174,7 +174,7 @@ struct WorkoutRePlaceView: View {
 
 struct WorkoutRePlaceView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager())
+        WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager.shared)
             .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
             .environmentObject(Counter(counter: 0))
     }

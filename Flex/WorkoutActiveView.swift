@@ -33,6 +33,8 @@ struct WorkoutActiveView: View {
         ("Cable Squat", "10 reps")
     ]
     
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -212,7 +214,7 @@ struct WorkoutActiveView: View {
                 WorkoutSetBreakView()
             }
             .navigationDestination(isPresented: $navigateToRePlace) {
-                WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager())
+                WorkoutRePlaceView(accessorySessionManager: accessorySessionManager)
             }
         }
     }

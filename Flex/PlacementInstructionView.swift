@@ -105,131 +105,141 @@ struct OrientationDescriptionView: View {
     PlacementInstructionView()
 }*/
 
-import Foundation
 import SwiftUI
+import Foundation
 
 struct PlacementInstructionView: View {
-    
     @EnvironmentObject var es: TargetAreaStore
     @EnvironmentObject var c: Counter
-    let accessorySessionManager: AccessorySessionManager
-    
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
+
     var body: some View {
         NavigationView {
             VStack {
+                Text("lol \(accessorySessionManager.readState() ?? 0)")
                 if accessorySessionManager.globalState == 1 {
-                    NavigationLink(destination: PlacementHoldView(accessorySessionManager: AccessorySessionManager())) {
-                        EmptyView()
-                    }
-                    .hidden()
+                    Text("lol \(accessorySessionManager.globalState ?? 0)")
+                    PlacementHoldView(accessorySessionManager: accessorySessionManager)
+                    
+                } else {
+                    s()
                 }
                 
-                // Option 1: High on the wall
-                if(es.targetAreas[c.counter] == "High") {
-                    Group {
-                        Text("Place your ")
-                            .font(.largeTitle)
-                            .foregroundColor(.white) +
-                        Text("F1")
-                            .font(.largeTitle)
-                            .foregroundColor(.pink) +
-                        Text("\nhigh on the wall")
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 121)
-                    .multilineTextAlignment(.center)
-                    
-                    Image("high_wall_unplaced")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Divider()
-                        .background(Color.gray)
-                    
-                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                        .font(.body)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .multilineTextAlignment(.center)
-                }
-                
-                // Option 2: Low on the Wall
-                else if(es.targetAreas[c.counter] == "Low") {
-                    Group {
-                        Text("Place your ")
-                            .font(.largeTitle)
-                            .foregroundColor(.white) +
-                        Text("F1")
-                            .font(.largeTitle)
-                            .foregroundColor(.pink) +
-                        Text("\nlow on the wall")
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 121)
-                    .multilineTextAlignment(.center)
-                    
-                    Image("low_wall_unplaced")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Divider()
-                        .background(Color.gray)
-                    
-                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                        .font(.body)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .multilineTextAlignment(.center)
-                }
-                
-                // Option 3: Middle (at chest height)
-                else if(es.targetAreas[c.counter] == "Chest") {
-                    Group {
-                        Text("Place your ")
-                            .font(.largeTitle)
-                            .foregroundColor(.white) +
-                        Text("F1")
-                            .font(.largeTitle)
-                            .foregroundColor(.pink) +
-                        Text(" at \nchest height")
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 121)
-                    .multilineTextAlignment(.center)
-                    
-                    Image("mid_wall_unplaced")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Divider()
-                        .background(Color.gray)
-                    
-                    Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
-                        .font(.body)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .multilineTextAlignment(.center)
-                }
             }
-            .background(Color.black)
-            .edgesIgnoringSafeArea(.all)
         }
     }
 }
 
+struct s: View {
+    @EnvironmentObject var es: TargetAreaStore
+    @EnvironmentObject var c: Counter
+    
+    var body: some View {
+        // Option 1: High on the wall
+        if es.targetAreas[c.counter] == "High" {
+            Group {
+                Text("Place your ")
+                    .font(.largeTitle)
+                    .foregroundColor(.white) +
+                Text("F1")
+                    .font(.largeTitle)
+                    .foregroundColor(.pink) +
+                Text("\nhigh on the wall")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+            }
+            .padding(.top, 121)
+            .multilineTextAlignment(.center)
+
+            Image("high_wall_unplaced")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding()
+
+            Spacer()
+
+            Divider()
+                .background(Color.gray)
+
+            Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                .font(.body)
+                .foregroundColor(.gray)
+                .padding()
+                .multilineTextAlignment(.center)
+        }
+
+        // Option 2: Low on the Wall
+        else if es.targetAreas[c.counter] == "Low" {
+            Group {
+                Text("Place your ")
+                    .font(.largeTitle)
+                    .foregroundColor(.white) +
+                Text("F1")
+                    .font(.largeTitle)
+                    .foregroundColor(.pink) +
+                Text("\nlow on the wall")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+            }
+            .padding(.top, 121)
+            .multilineTextAlignment(.center)
+
+            Image("low_wall_unplaced")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding()
+
+            Spacer()
+
+            Divider()
+                .background(Color.gray)
+
+            Text("Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass.")
+                .font(.body)
+                .foregroundColor(.gray)
+                .padding()
+                .multilineTextAlignment(.center)
+        }
+
+        // Option 3: Middle (at chest height)
+        else if es.targetAreas[c.counter] == "Chest" {
+            Group {
+                Text("Place your ")
+                    .font(.largeTitle)
+                    .foregroundColor(.white) +
+                Text("F1")
+                    .font(.largeTitle)
+                    .foregroundColor(.pink) +
+                Text(" at \nchest height")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+            }
+            .padding(.top, 121)
+            .multilineTextAlignment(.center)
+
+            Image("mid_wall_unplaced")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding()
+
+            Spacer()
+
+            Divider()
+                .background(Color.gray)
+
+            Text("Only attach F1 to smooth hardwood.\nNever attach F1 to glass.")
+                .font(.body)
+                .foregroundColor(.gray)
+                .padding()
+                .multilineTextAlignment(.center)
+        }
+        //.background(Color.black)
+        //.edgesIgnoringSafeArea(.all)
+
+    }
+}
+
 #Preview {
-    PlacementInstructionView(accessorySessionManager: AccessorySessionManager()).environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
+    PlacementInstructionView(accessorySessionManager: AccessorySessionManager.shared).environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Chest"]))
         .environmentObject(Counter(counter: 0))
 }

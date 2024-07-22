@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 struct PairedView: View {
-    let accessorySessionManager: AccessorySessionManager
+    @ObservedObject var accessorySessionManager = AccessorySessionManager.shared
     
     @AppStorage("accessoryPaired") private var accessoryPaired = false
     
@@ -55,7 +55,7 @@ struct PairedView: View {
                     TextField("Enter new state", value: $newState, formatter: NumberFormatter())
                         .textFieldStyle(.roundedBorder)
                     Button {
-                        accessorySessionManager.writeState(state: newState)
+                        accessorySessionManager.writeState(state: UInt8(newState))
                     } label: {
                         Text("Write State")
                     }
@@ -63,7 +63,7 @@ struct PairedView: View {
                     TextField("Enter motor torque setpoint", value: $newTorque, formatter: NumberFormatter())
                         .textFieldStyle(.roundedBorder)
                     Button {
-                        accessorySessionManager.writeTorque(torque: newTorque)
+                        accessorySessionManager.writeTorque(torque: UInt8(newTorque))
                     } label: {
                         Text("Write Torque Setpoint")
                     }
@@ -90,10 +90,43 @@ struct PairedView: View {
                         isConnected = accessorySessionManager.peripheralConnected
                     }
                 }
+            
+            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom"))) {
+                                Text("Go to Pre-Workout Confirmation")
+                                    .font(.headline)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                            .padding()
+                            
+                            Button {
+                                accessorySessionManager.removeAccessory()
+                                withAnimation {
+                                    accessoryPaired = false
+                                }
+                            } label: {
+                                Text("Reset app")
+                            }.buttonStyle(.bordered)
+                            .controlSize(.large)
+                        }.padding()
+                            .onAppear {
+                                Task {
+                                    while !accessorySessionManager.peripheralConnected {
+                                        accessorySessionManager.connect()
+                                        try await Task.sleep(nanoseconds: 200_000_000)
+                                    }
+                                    
+                                    isConnected = accessorySessionManager.peripheralConnected
+                                }
+                            }
+
         }
     }
-}
+
 
 #Preview {
-    PairedView(accessorySessionManager: AccessorySessionManager())
+    PairedView(accessorySessionManager: AccessorySessionManager.shared)
 }

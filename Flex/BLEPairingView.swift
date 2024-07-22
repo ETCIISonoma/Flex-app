@@ -7,13 +7,13 @@ import SwiftUI
 import InterfaceOrientation
 
 struct BLEPairingView: View {
-    @State var accessorySessionManager = AccessorySessionManager()
+    @ObservedObject var accessorySessionManager = AccessorySessionManager.shared
     @AppStorage("accessoryPaired") private var accessoryPaired = false
     
     var body: some View {
         if accessoryPaired {
-            //PairedView(accessorySessionManager: accessorySessionManager)
-            PreWorkoutSummaryView(workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom"))
+            PairedView(accessorySessionManager: accessorySessionManager)
+            //PreWorkoutSummaryView(workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom"))
             // this is for testing, should actually proceed to the sign in page.
         } else {
             VStack {

@@ -16,6 +16,8 @@ struct WorkoutSetBreakView: View {
     
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
+    
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
 
     var body: some View {
         NavigationStack {
@@ -70,7 +72,7 @@ struct WorkoutSetBreakView: View {
                 HomeView()
             }
             .navigationDestination(isPresented: $navigateToRePlaceView) {
-                WorkoutRePlaceView(accessorySessionManager: AccessorySessionManager()).environmentObject(targetAreas)
+                WorkoutRePlaceView(accessorySessionManager: accessorySessionManager).environmentObject(targetAreas)
                     .environmentObject(c)
             }
             .onAppear {

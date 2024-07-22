@@ -38,6 +38,8 @@ struct PreWorkoutSummaryView: View {
     @State private var totalTime = 20.0
     @State var navigate: Bool = false
     
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
+    
     let exercises = [
         "Chest Press",
         "Upward Woodchop",
@@ -136,7 +138,7 @@ struct PreWorkoutSummaryView: View {
                 .padding()
             }
             .navigationDestination(isPresented: $navigate) {
-                PlacementInstructionView(accessorySessionManager: AccessorySessionManager())
+                PlacementInstructionView(accessorySessionManager: accessorySessionManager)
             }
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -153,10 +155,10 @@ struct ExerciseRowView: View {
     
     var body: some View {
         HStack {
-            Image("exercise_placeholder") // Replace with your exercise image
+            /*Image("exercise_placeholder") // Replace with your exercise image
                 .resizable()
                 .frame(width: 60, height: 60)
-                .cornerRadius(10)
+                .cornerRadius(10)*/
             VStack(alignment: .leading) {
                 Text(exerciseName)
                     .foregroundColor(.white)

@@ -1,22 +1,25 @@
-//
-//  AccessoryConnection.swift
-//  Flex
-//
-
+import Combine
 import Foundation
 import AccessorySetupKit
 import CoreBluetooth
 import SwiftUI
 
-@Observable
-class AccessorySessionManager: NSObject {
-    var accesoryModel: AccessoryModel?
-    var globalState: UInt? = nil
-    var motorTorqueSetpoint: Float? = nil
-    var batteryVoltage: Float? = nil
-    var motorPower: Float? = nil
-    var peripheralConnected = false
-    var pickerDismissed = true
+class AccessorySessionManager: NSObject, ObservableObject {
+    
+    static let shared = AccessorySessionManager()
+    
+    @Published var accessoryModel: AccessoryModel?
+    {
+        didSet {
+            print("got here")
+        }
+    }
+    @Published var globalState: UInt8? = nil
+    @Published var motorTorqueSetpoint: Float? = nil
+    @Published var batteryVoltage: Float? = nil
+    @Published var motorPower: Float? = nil
+    @Published var peripheralConnected = false
+    @Published var pickerDismissed = true
 
     private var currentAccessory: ASAccessory?
     private var session = ASAccessorySession()
@@ -26,7 +29,7 @@ class AccessorySessionManager: NSObject {
     private var r_w_globalStateCharacteristic: CBCharacteristic?
     private var r_batteryVoltageCharacteristic: CBCharacteristic?
     private var r_motorPowerCharacteristic: CBCharacteristic?
-    
+
     private static let w_motorTorqueSetpointCharacteristicUUID = "0xFF3F"
     private static let r_w_globalStateCharacteristicUUID = "0xFF40"
     private static let r_batteryVoltageCharacteristicUUID = "0xFF41"
@@ -42,8 +45,10 @@ class AccessorySessionManager: NSObject {
             descriptor: descriptor
         )
     }()
+    
+    //private init() {}
 
-    override init() {
+    private override init() {
         super.init()
         self.session.activate(on: DispatchQueue.main, eventHandler: handleSessionEvent(event:))
     }
@@ -66,7 +71,7 @@ class AccessorySessionManager: NSObject {
         }
 
         session.removeAccessory(currentAccessory) { _ in
-            self.accesoryModel = nil
+            self.accessoryModel = nil
             self.currentAccessory = nil
             self.manager = nil
         }
@@ -92,15 +97,15 @@ class AccessorySessionManager: NSObject {
 
     private func saveAccessory(accessory: ASAccessory) {
         UserDefaults.standard.set(true, forKey: "accessoryPaired")
-        
+
         currentAccessory = accessory
 
         if manager == nil {
             manager = CBCentralManager(delegate: self, queue: nil)
         }
-        
+
         if accessory.displayName == AccessoryModel.flexF1.displayName {
-            accesoryModel = .flexF1
+            accessoryModel = .flexF1
         }
     }
 
@@ -113,7 +118,7 @@ class AccessorySessionManager: NSObject {
             guard let accessory = session.accessories.first else { return }
             saveAccessory(accessory: accessory)
         case .accessoryRemoved:
-            self.accesoryModel = nil
+            self.accessoryModel = nil
             self.currentAccessory = nil
             self.manager = nil
         case .pickerDidPresent:
@@ -128,24 +133,24 @@ class AccessorySessionManager: NSObject {
     func readVoltage() -> Float? {
         return batteryVoltage
     }
-    
-    func readState() -> UInt? {
+
+    func readState() -> UInt8? {
         return globalState
     }
-    
-    func writeState(state: UInt) {
+
+    func writeState(state: UInt8) {
         Task {
             if let globalStateCharacteristic = r_w_globalStateCharacteristic {
-                let data = Data([UInt8(state)])
+                let data = Data([state])
                 peripheral?.writeValue(data, for: globalStateCharacteristic, type: .withResponse)
             }
         }
     }
-    
-    func writeTorque(torque: UInt) {
+
+    func writeTorque(torque: UInt8) {
         Task {
             if let motorTorqueCharacteristic = w_motorTorqueSetpointCharacteristic {
-                let data = Data([UInt8(torque)])
+                let data = Data([torque])
                 peripheral?.writeValue(data, for: motorTorqueCharacteristic, type: .withResponse)
             }
         }
@@ -170,9 +175,9 @@ extension AccessorySessionManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected to peripheral: \(peripheral)")
-        guard let accesoryModel else { return }
+        guard let accessoryModel else { return }
         peripheral.delegate = self
-        peripheral.discoverServices([accesoryModel.serviceUUID])
+        peripheral.discoverServices([accessoryModel.serviceUUID])
 
         peripheralConnected = true
     }
@@ -197,12 +202,12 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         else {
             return
         }
-        
+
         for service in services {
             peripheral.discoverCharacteristics([CBUUID(string: Self.w_motorTorqueSetpointCharacteristicUUID), CBUUID(string: Self.r_w_globalStateCharacteristicUUID), CBUUID(string: Self.r_batteryVoltageCharacteristicUUID), CBUUID(string: Self.r_motorPowerCharacteristicUUID)], for: service)
         }
     }
-    
+
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: (any Error)?) {
         guard
             error == nil,
@@ -210,7 +215,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         else {
             return
         }
-        
+
         for characteristic in characteristics {
             if characteristic.uuid == CBUUID(string: Self.r_batteryVoltageCharacteristicUUID) {
                 r_batteryVoltageCharacteristic = characteristic
@@ -257,7 +262,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         }
 
         if characteristic.uuid == CBUUID(string: Self.r_w_globalStateCharacteristicUUID) {
-            let globalState = data.withUnsafeBytes { $0.load(as: UInt.self) }
+            let globalState = data.withUnsafeBytes { $0.load(as: UInt8.self) }
             print("New global state received: \(globalState)")
             DispatchQueue.main.async {
                 withAnimation {
