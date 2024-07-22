@@ -30,7 +30,7 @@ struct PlacementConfirmationView: View {
                     }
                 }
                 
-                if(accessorySessionManager.globalState == 6) {
+                else if(accessorySessionManager.globalState == 6) {
                     Spacer()
                     
                     Image(systemName: "viewfinder.trianglebadge.exclamationmark")
