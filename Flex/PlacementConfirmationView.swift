@@ -15,9 +15,7 @@ struct PlacementConfirmationView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Spacer()
-                
-                if(accessorySessionManager.readState() == 3) {
+                if(accessorySessionManager.globalState == 3) {
                     Image(systemName: "checkmark.circle")
                         .font(.custom("SFProDisplay-Light", size: 70))
                         .foregroundColor(.pink)
@@ -28,11 +26,13 @@ struct PlacementConfirmationView: View {
                         }
                     
                     .navigationDestination(isPresented: $navigateToWorkoutActiveView) {
-                        WorkoutActiveView()
+                        WorkoutActiveView(accessorySessionManager: accessorySessionManager)
                     }
                 }
                 
-                if(accessorySessionManager.readState() == 6) {
+                if(accessorySessionManager.globalState == 6) {
+                    Spacer()
+                    
                     Image(systemName: "viewfinder.trianglebadge.exclamationmark")
                         .resizable()
                         .scaledToFit()

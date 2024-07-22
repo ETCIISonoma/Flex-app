@@ -211,7 +211,7 @@ struct WorkoutActiveView: View {
                 HomeView()
             }
             .navigationDestination(isPresented: $navigateToSetBreak) {
-                WorkoutSetBreakView()
+                WorkoutSetBreakView(accessorySessionManager: accessorySessionManager)
             }
             .navigationDestination(isPresented: $navigateToRePlace) {
                 WorkoutRePlaceView(accessorySessionManager: accessorySessionManager)

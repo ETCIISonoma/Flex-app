@@ -14,6 +14,7 @@ struct PlacementHoldView: View {
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     @State private var navigateToConfirmation = false
+    @State private var backgroundColor = Color.black
 
     var body: some View {
         NavigationStack {
@@ -125,16 +126,16 @@ struct PlacementHoldView: View {
         }
         
         
-        .background(Color.black)
+        .background(backgroundColor)
         .edgesIgnoringSafeArea(.all)
         
         .onAppear {
             accessorySessionManager.writeState(state: 2)
         }
         .onChange(of: accessorySessionManager.globalState) {
-            if(accessorySessionManager.readState()==3 || accessorySessionManager.readState() == 6) {
+            if(accessorySessionManager.globalState == 3 || accessorySessionManager.globalState == 6) {
                 navigateToConfirmation = true
-                Color.pink
+                backgroundColor = Color.pink
             }
         }
     }
