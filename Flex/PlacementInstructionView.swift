@@ -120,9 +120,13 @@ struct PlacementInstructionView: View {
                 if accessorySessionManager.globalState == 1 {
                     //Text("lol \(accessorySessionManager.globalState ?? 0)")
                     PlacementHoldView(accessorySessionManager: accessorySessionManager)
+                        .environmentObject(es)
+                        .environmentObject(c)
                     
                 } else {
                     s()
+                        .environmentObject(es)
+                        .environmentObject(c)
                 }
             }
         }
