@@ -4,6 +4,25 @@ import AccessorySetupKit
 import CoreBluetooth
 import SwiftUI
 
+enum GlobalState: UInt8 {
+    case notAttached = 0
+    case touchedASurface = 1
+    case activatingPump = 2
+    case transitioningSuccessfully = 3
+    case home = 4
+    case tryAgain = 5
+    case failure = 6
+}
+
+enum ViewState {
+    case instruction
+    case hold
+    case confirmation
+    case activeWorkout
+    case home
+    case tryAgain
+}
+
 class AccessorySessionManager: NSObject, ObservableObject {
     
     static let shared = AccessorySessionManager()
@@ -14,7 +33,45 @@ class AccessorySessionManager: NSObject, ObservableObject {
             print("got here")
         }
     }
-    @Published var globalState: UInt8? = nil
+    @Published var globalState: GlobalState
+    {
+        willSet {
+            let oldValue = globalState
+            let newValue = newValue
+
+            switch newValue {
+            case .notAttached:
+                self.viewState = .instruction
+            case .touchedASurface, .activatingPump:
+                self.viewState = .hold
+            case .transitioningSuccessfully:
+                if oldValue == .activatingPump {
+                    self.viewState = .confirmation
+                } else if self.previousViewStates.contains(.confirmation) {
+                    self.viewState = .activeWorkout
+                }
+            case .home:
+                self.viewState = .home
+                self.previousViewStates = []
+            case .tryAgain:
+                self.viewState = .tryAgain
+            case .failure:
+                if oldValue == .activatingPump {
+                    self.viewState = .confirmation
+                } else if self.previousViewStates.contains(.confirmation) {
+                    self.viewState = .hold
+                }
+            }
+        }
+    }
+    
+    @Published var viewState: ViewState {
+        didSet {
+          self.previousViewStates.append(viewState)
+        }
+    }
+    var previousViewStates: [ViewState]
+    
     @Published var motorTorqueSetpoint: Float? = nil
     @Published var batteryVoltage: Float? = nil
     @Published var motorPower: Float? = nil
@@ -49,7 +106,12 @@ class AccessorySessionManager: NSObject, ObservableObject {
     //private init() {}
 
     private override init() {
+        globalState = .notAttached
+        viewState = .home
+        previousViewStates = []
+        
         super.init()
+        
         self.session.activate(on: DispatchQueue.main, eventHandler: handleSessionEvent(event:))
     }
 
@@ -135,7 +197,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
     }
 
     func readState() -> UInt8? {
-        return globalState
+        return globalState.rawValue
     }
 
     func writeState(state: UInt8) {
@@ -266,7 +328,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
             print("New global state received: \(globalState)")
             DispatchQueue.main.async {
                 withAnimation {
-                    self.globalState = globalState
+                    self.globalState = GlobalState(rawValue: globalState) ?? .notAttached
                 }
             }
         }

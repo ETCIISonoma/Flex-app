@@ -18,11 +18,11 @@ struct PlacementHoldView: View {
 
     var body: some View {
         NavigationStack {
-            if(accessorySessionManager.globalState == 3 || accessorySessionManager.globalState == 6) {
+            /* TEST if(accessorySessionManager.globalState == 3 || accessorySessionManager.globalState == 6) {
                 //backgroundColor = Color.pink
                 PlacementConfirmationView(accessorySessionManager: accessorySessionManager)
-            }
-            else {
+            }*/
+            // TEST else {
                 VStack {
                     if(es.targetAreas[c.counter] == "High") {
                         Spacer()
@@ -127,7 +127,7 @@ struct PlacementHoldView: View {
                 }
                 .background(backgroundColor)
                 .edgesIgnoringSafeArea(.all)
-            }
+            //}
             /*.navigationDestination(isPresented: $navigateToConfirmation) {
                 PlacementConfirmationView(accessorySessionManager: accessorySessionManager)
             }*/

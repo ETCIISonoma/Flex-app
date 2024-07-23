@@ -114,20 +114,40 @@ struct PlacementInstructionView: View {
     @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
 
     var body: some View {
+        
+        switch accessorySessionManager.viewState {
+            case .instruction:
+              PlacementInstructionView()
+            case .hold:
+              PlacementHoldView()
+            case .confirmation:
+              PlacementConfirmationView()
+            case .activeWorkout:
+              WorkoutActiveView()
+            case .home:
+              HomeView()
+            case .tryAgain:
+              PlacementHoldView()
+        }
+        
         NavigationView {
             VStack {
+                // TEST
                 //Text("lol \(accessorySessionManager.readState() ?? 0)")
-                if accessorySessionManager.globalState == 1 {
+                
+                /*if accessorySessionManager.globalState == 1 {
+                 
                     //Text("lol \(accessorySessionManager.globalState ?? 0)")
+                 
                     PlacementHoldView(accessorySessionManager: accessorySessionManager)
                         .environmentObject(es)
-                        .environmentObject(c)
+                        .environmentObject(c)*/
                     
-                } else {
+                //} TEST else {
                     s()
                         .environmentObject(es)
                         .environmentObject(c)
-                }
+                // TEST }
             }
         }
     }

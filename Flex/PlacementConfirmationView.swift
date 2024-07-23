@@ -15,7 +15,7 @@ struct PlacementConfirmationView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if(accessorySessionManager.globalState == 3) {
+                if(accessorySessionManager.globalState.rawValue == 3) {
                     Image(systemName: "checkmark.circle")
                         .font(.custom("SFProDisplay-Light", size: 70))
                         .foregroundColor(.pink)
@@ -30,7 +30,7 @@ struct PlacementConfirmationView: View {
                     }
                 }
                 
-                else if(accessorySessionManager.globalState == 6) {
+                else if(accessorySessionManager.globalState.rawValue == 6) {
                     Spacer()
                     
                     Image(systemName: "viewfinder.trianglebadge.exclamationmark")

@@ -156,19 +156,19 @@ struct WorkoutRePlaceView: View {
             .background(Color.black.edgesIgnoringSafeArea(.all))
             .foregroundColor(.white)
             
-            .navigationDestination(isPresented: $showPlacementInstruction) {
+            /* TEST .navigationDestination(isPresented: $showPlacementInstruction) {
                 PlacementInstructionView(accessorySessionManager: accessorySessionManager)
-            }
+            }*/
         }
         
         .onAppear {
             accessorySessionManager.writeState(state: 4)
         }
-        .onChange(of: accessorySessionManager.globalState) {
+        /* TEST .onChange(of: accessorySessionManager.globalState) {
             if(accessorySessionManager.globalState == 0) {
                 showPlacementInstruction = true
             }
-        }
+        }*/
     }
 }
 
