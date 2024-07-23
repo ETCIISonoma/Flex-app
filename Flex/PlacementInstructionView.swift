@@ -117,21 +117,23 @@ struct PlacementInstructionView: View {
         
         switch accessorySessionManager.viewState {
             case .instruction:
-              PlacementInstructionView()
+                s()
+                    .environmentObject(es)
+                    .environmentObject(c)
             case .hold:
-              PlacementHoldView()
+                PlacementHoldView()
             case .confirmation:
-              PlacementConfirmationView()
+                PlacementConfirmationView()
             case .activeWorkout:
-              WorkoutActiveView()
+                WorkoutActiveView()
             case .home:
-              HomeView()
+                HomeView()
             case .tryAgain:
-              PlacementHoldView()
+                PlacementHoldView()
         }
         
-        NavigationView {
-            VStack {
+        //NavigationView {
+            //VStack {
                 // TEST
                 //Text("lol \(accessorySessionManager.readState() ?? 0)")
                 
@@ -144,12 +146,12 @@ struct PlacementInstructionView: View {
                         .environmentObject(c)*/
                     
                 //} TEST else {
-                    s()
+                    /*s()
                         .environmentObject(es)
-                        .environmentObject(c)
+                        .environmentObject(c)*/
                 // TEST }
-            }
-        }
+            //}
+        //}
     }
 }
 

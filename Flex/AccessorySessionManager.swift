@@ -50,9 +50,13 @@ class AccessorySessionManager: NSObject, ObservableObject {
                 } else if self.previousViewStates.contains(.confirmation) {
                     self.viewState = .activeWorkout
                 }
-            case .home:
-                self.viewState = .home
-                self.previousViewStates = []
+            case .home: // Need to fix this. can read 4 in two cases. if workout over/someone clicked end workout itll take you to the remove from surface view. else it will take you instruction view assuming set break. 
+                if oldValue == .transitioningSuccessfully {
+                    self.viewState = .instruction
+                } else {
+                    self.viewState = .home
+                    self.previousViewStates = []
+                }
             case .tryAgain:
                 self.viewState = .tryAgain
             case .failure:
@@ -107,7 +111,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
 
     private override init() {
         globalState = .notAttached
-        viewState = .home
+        viewState = .instruction
         previousViewStates = []
         
         super.init()
