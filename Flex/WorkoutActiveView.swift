@@ -17,13 +17,14 @@ struct WorkoutActiveView: View {
     @State private var timer: Timer?
     @State private var showInfo = false
     @State private var selectedExerciseInfo = ""
-    @State private var navigateToHome = false
+    /*@State private var navigateToHome = false
     @State private var navigateToSetBreak = false
-    @State private var navigateToRePlace = false
+    @State private var navigateToRePlace = false*/
     
     @EnvironmentObject var c: Counter
+    @EnvironmentObject var wf: workoutFlag
     
-    let totalSets = 3
+    let totalSets = 3 //change later to take into account numSets
     let totalRepsPerSet = 10
     let totalExercises = 3
     
@@ -179,7 +180,8 @@ struct WorkoutActiveView: View {
                 Button(action: {
                     // End workout action
                     stopTimer()
-                    navigateToHome = true
+                    accessorySessionManager.writeState(state: 4)
+                    wf.navigateToHome = true
                 }) {
                     Text("End Workout")
                         .frame(maxWidth: .infinity)
@@ -199,23 +201,25 @@ struct WorkoutActiveView: View {
                 if(currentRep == 10) {
                     if(c.counter == 2) {
                         c.counter = 0
-                        navigateToSetBreak = true
+                        accessorySessionManager.writeState(state: 4)
+                        wf.navigateToSetBreak = true
                     }
                     else {
                         c.counter += 1
-                        navigateToRePlace = true
+                        accessorySessionManager.writeState(state: 4)
+                        wf.navigateToRePlace = true
                     }
                 }
             }
-            .navigationDestination(isPresented: $navigateToHome) {
+            /*.navigationDestination(isPresented: $wf.navigateToHome) {
                 HomeView()
             }
-            .navigationDestination(isPresented: $navigateToSetBreak) {
+            .navigationDestination(isPresented: $wf.navigateToSetBreak) {
                 WorkoutSetBreakView(accessorySessionManager: accessorySessionManager)
             }
-            .navigationDestination(isPresented: $navigateToRePlace) {
+            .navigationDestination(isPresented: $wf.navigateToRePlace) {
                 WorkoutRePlaceView(accessorySessionManager: accessorySessionManager)
-            }
+            }*/
         }
     }
     
@@ -229,6 +233,9 @@ struct WorkoutActiveView: View {
                 currentRep = 0
                 currentSet += 1
                 if currentSet > totalSets {
+                    wf.navigateToHome = true
+                    wf.workoutFinished = true
+                    accessorySessionManager.writeState(state: 4)
                     stopTimer()
                 }
             }
@@ -250,5 +257,6 @@ struct WorkoutActiveView: View {
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutActiveView()
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
     }
 }

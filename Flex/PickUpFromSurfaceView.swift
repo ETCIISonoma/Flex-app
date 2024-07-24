@@ -1,35 +1,34 @@
 //
-//  RemoveFromSurfaceView.swift
+//  PickUpFromSurfaceView.swift
 //  Flex
 //
-//  Created by Aadharsh Rajkumar on 7/22/24.
+//  Created by Aadharsh Rajkumar on 7/23/24.
 //
 
 import SwiftUI
 import Foundation
 
-struct RemoveFromSurfaceView: View {
+struct PickUpFromSurfaceView: View {
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
-    @EnvironmentObject var wf: workoutFlag
-    
     var body: some View {
+        // 4 Need to add code to move from this to instruction view on pick up.
         VStack {
             Spacer()
             
-            Image(systemName: "rectangle.portrait.and.arrow.right")
+            Image(systemName: "square.and.arrow.up")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 50, height: 50)
                 .foregroundColor(.pink)
             
             VStack(spacing: 10) {
-                Text("Remove F1 From Surface")
+                Text("Pick Up F1")
                     .font(.system(size: 40))
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)
-                Text("Press and hold the red button until \nall pressure is released")
+                Text("Ensure that the F1 does not contact any surface until instructed to do so")
                     .font(.body)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
@@ -37,14 +36,9 @@ struct RemoveFromSurfaceView: View {
             
             Spacer()
         }
-        
-        .onAppear {
-            accessorySessionManager.writeState(state: 4)
-        }
     }
 }
 
 #Preview {
-    RemoveFromSurfaceView(accessorySessionManager: AccessorySessionManager.shared)
-        .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+    PickUpFromSurfaceView(accessorySessionManager: AccessorySessionManager.shared)
 }

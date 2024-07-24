@@ -52,6 +52,7 @@ struct PlacementConfirmationView: View {
                     
                     Spacer()
                     
+                    // Need to change this later to no longer be navigating, just a button. 
                     NavigationLink(destination: PlacementHoldView(accessorySessionManager: accessorySessionManager)) {
                         Text("Try Again")
                             .foregroundColor(.white)

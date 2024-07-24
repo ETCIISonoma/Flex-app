@@ -21,11 +21,16 @@ enum ViewState {
     case activeWorkout
     case home
     case tryAgain
+    case replace
+    case setBreak
+    case remove
+    case pickUp
 }
 
 class AccessorySessionManager: NSObject, ObservableObject {
     
     static let shared = AccessorySessionManager()
+    @EnvironmentObject var wf: workoutFlag
     
     @Published var accessoryModel: AccessoryModel?
     {
@@ -41,21 +46,36 @@ class AccessorySessionManager: NSObject, ObservableObject {
 
             switch newValue {
             case .notAttached:
-                self.viewState = .instruction
+                if(wf.workoutFinished) {
+                    wf.initialPickUp = false
+                    self.viewState = .home
+                } else {
+                    self.viewState = .instruction
+                }
+                wf.navigateToRePlace = false
+                wf.navigateToSetBreak = false
+                wf.setBreakFinished = false
             case .touchedASurface, .activatingPump:
-                self.viewState = .hold
+                if(!wf.initialPickUp) {
+                    self.viewState = .pickUp
+                    wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout
+                }
+                else {
+                    self.viewState = .hold
+                }
             case .transitioningSuccessfully:
                 if oldValue == .activatingPump {
                     self.viewState = .confirmation
                 } else if self.previousViewStates.contains(.confirmation) {
                     self.viewState = .activeWorkout
                 }
-            case .home: // Need to fix this. can read 4 in two cases. if workout over/someone clicked end workout itll take you to the remove from surface view. else it will take you instruction view assuming set break. 
-                if oldValue == .transitioningSuccessfully {
-                    self.viewState = .instruction
-                } else {
-                    self.viewState = .home
-                    self.previousViewStates = []
+            case .home:
+                if wf.navigateToRePlace || wf.setBreakFinished {
+                    self.viewState = .replace
+                } else if wf.navigateToSetBreak {
+                    self.viewState = .setBreak
+                } else if wf.navigateToHome { // 2) Need to add condition also for workout is over and also ensure it stays on home till new workout started.
+                    self.viewState = .remove
                 }
             case .tryAgain:
                 self.viewState = .tryAgain

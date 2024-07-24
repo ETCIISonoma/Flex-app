@@ -28,15 +28,33 @@ class numSets: ObservableObject {
         self.selectedSets = selectedSets
     }
 }
+class workoutFlag: ObservableObject {
+    @Published var navigateToRePlace: Bool
+    @Published var navigateToSetBreak: Bool
+    @Published var navigateToHome: Bool
+    @Published var setBreakFinished: Bool
+    @Published var initialPickUp: Bool
+    @Published var workoutFinished: Bool
+    
+    init(navigateToRePlace: Bool, navigateToSetBreak: Bool, navigateToHome: Bool, setBreakFinished: Bool, initialPickUp: Bool, workoutFinished: Bool) {
+        self.navigateToRePlace = navigateToRePlace
+        self.navigateToSetBreak = navigateToSetBreak
+        self.navigateToHome = navigateToHome
+        self.setBreakFinished = setBreakFinished
+        self.initialPickUp = initialPickUp
+        self.workoutFinished = workoutFinished
+    }
+}
 
 struct PreWorkoutSummaryView: View {
     var workout: Workout
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var environmentStore:  TargetAreaStore
     @EnvironmentObject private var sets: numSets
+    @EnvironmentObject var wf: workoutFlag
     
     @State private var totalTime = 20.0
-    @State var navigate: Bool = false
+    //@State var navigate: Bool = false
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
@@ -125,7 +143,8 @@ struct PreWorkoutSummaryView: View {
                 }
                 
                 Button(action: {
-                    navigate = true
+                    //navigate = true
+                    wf.workoutFinished = false
                     // Begin workout action
                 }) {
                     Text("Begin Workout")
@@ -137,9 +156,13 @@ struct PreWorkoutSummaryView: View {
                 }
                 .padding()
             }
-            .navigationDestination(isPresented: $navigate) {
-                PlacementInstructionView(accessorySessionManager: accessorySessionManager)
-            }
+            /*.navigationDestination(isPresented: $navigate) {
+                if(accessorySessionManager.globalState.rawValue == 0) { PlacementInstructionView(accessorySessionManager: accessorySessionManager)
+                }
+                else{
+                    PickUpFromSurfaceView(accessorySessionManager: accessorySessionManager)
+                }
+            }*/
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .foregroundColor(.white)
@@ -182,5 +205,6 @@ struct PreWorkoutSummaryView_Previews: PreviewProvider {
             .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low"]))
             .environmentObject(numSets(selectedSets: 3))
             .environmentObject(Counter(counter: 0))
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
     }
 }

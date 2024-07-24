@@ -161,9 +161,10 @@ struct WorkoutRePlaceView: View {
             }*/
         }
         
-        .onAppear {
+        /*.onAppear {
             accessorySessionManager.writeState(state: 4)
-        }
+        }*/
+        
         /* TEST .onChange(of: accessorySessionManager.globalState) {
             if(accessorySessionManager.globalState == 0) {
                 showPlacementInstruction = true

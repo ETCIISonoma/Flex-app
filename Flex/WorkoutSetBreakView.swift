@@ -11,11 +11,11 @@ import SwiftUI
 struct WorkoutSetBreakView: View {
     @State private var timeRemaining: Int = 30
     @State private var timer: Timer?
-    @State private var navigateToRePlaceView = false
     @State private var navigateToHomeView = false
     
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
+    @EnvironmentObject var wf: workoutFlag
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
 
@@ -71,10 +71,10 @@ struct WorkoutSetBreakView: View {
             .navigationDestination(isPresented: $navigateToHomeView) {
                 HomeView()
             }
-            .navigationDestination(isPresented: $navigateToRePlaceView) {
+            /*.navigationDestination(isPresented: $navigateToRePlaceView) {
                 WorkoutRePlaceView(accessorySessionManager: accessorySessionManager).environmentObject(targetAreas)
                     .environmentObject(c)
-            }
+            }*/
             .onAppear {
                 startTimer()
             }
@@ -90,7 +90,7 @@ struct WorkoutSetBreakView: View {
                 timeRemaining -= 1
             } else {
                 timer?.invalidate()
-                navigateToRePlaceView = true
+                wf.setBreakFinished = true
             }
         }
     }
@@ -101,5 +101,6 @@ struct WorkoutSetBreakView_Previews: PreviewProvider {
         WorkoutSetBreakView()
             .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
             .environmentObject(Counter(counter: 0))
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
     }
 }

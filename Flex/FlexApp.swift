@@ -13,6 +13,7 @@ struct FlexApp: App {
     let counter = Counter(counter: 0)
     let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest"]) // change later.
     let selectedSets = numSets(selectedSets: 3)
+    let wf = workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false)
     
     var body: some Scene {
         WindowGroup {
@@ -20,6 +21,7 @@ struct FlexApp: App {
                 .environmentObject(counter)
                 .environmentObject(targetAreas)
                 .environmentObject(selectedSets)
+                .environmentObject(wf)
         }
     }
 }
