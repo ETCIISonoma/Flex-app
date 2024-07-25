@@ -97,6 +97,7 @@ struct WorkoutRePlaceView: View {
     @State private var showHomeView = false
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
+    @EnvironmentObject var wf: workoutFlag
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
 
@@ -140,8 +141,14 @@ struct WorkoutRePlaceView: View {
                     }
                     .padding(.horizontal, 50)
 
-                    NavigationLink(
-                        destination: HomeView()) {
+                    Button(action: {
+                        wf.navigateToHome = true
+                        wf.workoutFinished = true
+                        wf.navigateToRePlace = false
+                        wf.navigateToSetBreak = false
+                        wf.setBreakFinished = false
+                        accessorySessionManager.writeState(state: 4)
+                    }) {
                         Text("End Workout")
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -150,6 +157,18 @@ struct WorkoutRePlaceView: View {
                             .cornerRadius(12)
                     }
                     .padding(.horizontal, 50)
+                    
+                    /*NavigationLink(
+                        destination: HomeView()) {
+                        Text("End Workout")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.pink.opacity(0.15))
+                            .foregroundColor(.pink)
+                            .cornerRadius(12)
+                    
+                    }
+                    .padding(.horizontal, 50)*/
                 }
                 .padding(.bottom, 50)
             }

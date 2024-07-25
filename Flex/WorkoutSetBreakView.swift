@@ -11,7 +11,7 @@ import SwiftUI
 struct WorkoutSetBreakView: View {
     @State private var timeRemaining: Int = 30
     @State private var timer: Timer?
-    @State private var navigateToHomeView = false
+    //@State private var navigateToHomeView = false
     
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
@@ -55,7 +55,12 @@ struct WorkoutSetBreakView: View {
                 Spacer()
 
                 Button(action: {
-                    navigateToHomeView = true
+                    wf.navigateToHome = true
+                    wf.workoutFinished = true
+                    wf.navigateToRePlace = false
+                    wf.navigateToSetBreak = false
+                    wf.setBreakFinished = false
+                    accessorySessionManager.writeState(state: 4)
                 }) {
                     Text("End Workout")
                         .frame(maxWidth: .infinity)
@@ -68,9 +73,9 @@ struct WorkoutSetBreakView: View {
             }
             .background(Color.black.edgesIgnoringSafeArea(.all))
             .foregroundColor(.white)
-            .navigationDestination(isPresented: $navigateToHomeView) {
+            /*.navigationDestination(isPresented: $navigateToHomeView) {
                 HomeView()
-            }
+            }*/
             /*.navigationDestination(isPresented: $navigateToRePlaceView) {
                 WorkoutRePlaceView(accessorySessionManager: accessorySessionManager).environmentObject(targetAreas)
                     .environmentObject(c)

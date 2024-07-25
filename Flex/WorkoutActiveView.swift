@@ -20,6 +20,7 @@ struct WorkoutActiveView: View {
     /*@State private var navigateToHome = false
     @State private var navigateToSetBreak = false
     @State private var navigateToRePlace = false*/
+    @State private var intensity: Double = 50
     
     @EnvironmentObject var c: Counter
     @EnvironmentObject var wf: workoutFlag
@@ -103,7 +104,7 @@ struct WorkoutActiveView: View {
                 HStack {
                     ForEach(0..<totalSets, id: \.self) { index in
                         Rectangle()
-                            .fill(index < currentSet ? Color.pink : Color.gray.opacity(0.40))
+                            .fill(index < currentSet-1 ? Color.pink : Color.gray.opacity(0.40))
                             .frame(height: 10)
                             .cornerRadius(5)
                     }
@@ -121,6 +122,41 @@ struct WorkoutActiveView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 10)
+                
+                Text("Intensity")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 30)
+                    .padding(.horizontal)
+                
+                HStack {
+                    VStack {
+                        Image(systemName: "minus.circle")
+                            .foregroundColor(.white)
+                        Text("0")
+                            .foregroundColor(.gray)
+                            .font(.subheadline)
+                    }
+                    .padding(.horizontal, 10)
+                    .offset(y: 8)
+                    Slider(value: $intensity, in: 0...100)
+                        .accentColor(.pink)
+                    VStack {
+                        Image(systemName: "plus.circle")
+                            .foregroundColor(.white)
+                        Text("100")
+                            .foregroundColor(.gray)
+                            .font(.subheadline)
+                    }
+                    .padding(.horizontal, 10)
+                    .offset(y: 8)
+                }
+                .padding(.horizontal)
+                .onChange(of: intensity) {
+                    accessorySessionManager.writeTorque(torque: UInt8(intensity))
+                }
                 
                 Text("Circuit")
                     .font(.title)
@@ -180,8 +216,12 @@ struct WorkoutActiveView: View {
                 Button(action: {
                     // End workout action
                     stopTimer()
-                    accessorySessionManager.writeState(state: 4)
                     wf.navigateToHome = true
+                    wf.workoutFinished = true
+                    wf.navigateToRePlace = false
+                    wf.navigateToSetBreak = false
+                    wf.setBreakFinished = false
+                    accessorySessionManager.writeState(state: 4)
                 }) {
                     Text("End Workout")
                         .frame(maxWidth: .infinity)

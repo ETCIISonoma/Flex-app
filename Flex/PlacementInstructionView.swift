@@ -114,59 +114,6 @@ struct PlacementInstructionView: View {
     @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
 
     var body: some View {
-        switch accessorySessionManager.viewState {
-            case .instruction:
-                s()
-                    .environmentObject(es)
-                    .environmentObject(c)
-            case .hold:
-                PlacementHoldView()
-            case .confirmation:
-                PlacementConfirmationView()
-            case .activeWorkout:
-                WorkoutActiveView()
-            case .home:
-                HomeView()
-            case .tryAgain:
-                PlacementHoldView()
-            case .replace:
-                WorkoutRePlaceView()
-            case .setBreak:
-                WorkoutSetBreakView()
-            case .remove:
-                RemoveFromSurfaceView() // 3) Need to implement functionality
-            case .pickUp:
-                PickUpFromSurfaceView()
-        }
-        
-        //NavigationView {
-            //VStack {
-                // TEST
-                //Text("lol \(accessorySessionManager.readState() ?? 0)")
-                
-                /*if accessorySessionManager.globalState == 1 {
-                 
-                    //Text("lol \(accessorySessionManager.globalState ?? 0)")
-                 
-                    PlacementHoldView(accessorySessionManager: accessorySessionManager)
-                        .environmentObject(es)
-                        .environmentObject(c)*/
-                    
-                //} TEST else {
-                    /*s()
-                        .environmentObject(es)
-                        .environmentObject(c)*/
-                // TEST }
-            //}
-        //}
-    }
-}
-
-struct s: View {
-    @EnvironmentObject var es: TargetAreaStore
-    @EnvironmentObject var c: Counter
-    
-    var body: some View {
         GeometryReader { geometry in
             VStack {
                 // Option 1: High on the wall
@@ -278,6 +225,27 @@ struct s: View {
             .background(Color.black)
             .edgesIgnoringSafeArea(.all)
         }
+        
+        //NavigationView {
+            //VStack {
+                // TEST
+                //Text("lol \(accessorySessionManager.readState() ?? 0)")
+                
+                /*if accessorySessionManager.globalState == 1 {
+                 
+                    //Text("lol \(accessorySessionManager.globalState ?? 0)")
+                 
+                    PlacementHoldView(accessorySessionManager: accessorySessionManager)
+                        .environmentObject(es)
+                        .environmentObject(c)*/
+                    
+                //} TEST else {
+                    /*s()
+                        .environmentObject(es)
+                        .environmentObject(c)*/
+                // TEST }
+            //}
+        //}
     }
 }
 

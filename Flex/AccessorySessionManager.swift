@@ -4,7 +4,7 @@ import AccessorySetupKit
 import CoreBluetooth
 import SwiftUI
 
-enum GlobalState: UInt8 {
+enum GlobalState: UInt8, CaseIterable {
     case notAttached = 0
     case touchedASurface = 1
     case activatingPump = 2
@@ -25,12 +25,13 @@ enum ViewState {
     case setBreak
     case remove
     case pickUp
+    case notStarted
 }
 
 class AccessorySessionManager: NSObject, ObservableObject {
     
     static let shared = AccessorySessionManager()
-    @EnvironmentObject var wf: workoutFlag
+    @Published var wf: workoutFlag
     
     @Published var accessoryModel: AccessoryModel?
     {
@@ -50,6 +51,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
                     wf.initialPickUp = false
                     self.viewState = .home
                 } else {
+                    wf.initialPickUp = true
                     self.viewState = .instruction
                 }
                 wf.navigateToRePlace = false
@@ -115,6 +117,9 @@ class AccessorySessionManager: NSObject, ObservableObject {
     private static let r_w_globalStateCharacteristicUUID = "0xFF40"
     private static let r_batteryVoltageCharacteristicUUID = "0xFF41"
     private static let r_motorPowerCharacteristicUUID = "0xFF42"
+    
+    //private let sequence: [ViewState]
+    private var counterSeq = 0
 
     private static let flexF1: ASPickerDisplayItem = {
         let descriptor = ASDiscoveryDescriptor()
@@ -131,12 +136,24 @@ class AccessorySessionManager: NSObject, ObservableObject {
 
     private override init() {
         globalState = .notAttached
-        viewState = .instruction
+        viewState = .notStarted
         previousViewStates = []
         
-        super.init()
+        self.wf = .init(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false)
         
+        //self.sequence = [.pickUp, .instruction, .hold, .confirmation, .notStarted]
+        super.init()
+
         self.session.activate(on: DispatchQueue.main, eventHandler: handleSessionEvent(event:))
+        
+        /*let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            self.viewState = self.sequence[self.counterSeq]
+            self.counterSeq += 1
+        }
+        
+        self.wf.$workoutFinished.sink { newValue in
+            print(newValue)
+        }*/
     }
 
     // MARK: - AccessorySessionManager actions
