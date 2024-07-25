@@ -10,7 +10,8 @@ import SwiftUI
 struct PlacementConfirmationView: View {
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
-    @State private var navigateToWorkoutActiveView = false
+    //@State private var navigateToWorkoutActiveView = false
+    //@EnvironmentObject var wf: workoutFlag
     
     var body: some View {
         NavigationStack {
@@ -21,13 +22,14 @@ struct PlacementConfirmationView: View {
                         .foregroundColor(.pink)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                navigateToWorkoutActiveView = true
+                                //navigateToWorkoutActiveView = true
+                                //wf.success = true
                             }
                         }
                     
-                    .navigationDestination(isPresented: $navigateToWorkoutActiveView) {
+                    /*.navigationDestination(isPresented: $navigateToWorkoutActiveView) {
                         WorkoutActiveView(accessorySessionManager: accessorySessionManager)
-                    }
+                    }*/
                 }
                 
                 else if(accessorySessionManager.globalState.rawValue == 6) {

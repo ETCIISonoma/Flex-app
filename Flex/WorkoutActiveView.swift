@@ -34,6 +34,7 @@ struct WorkoutActiveView: View {
         ("Side Bend", "10 reps"),
         ("Cable Squat", "10 reps")
     ]
+    var workout: Workout
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
@@ -170,24 +171,24 @@ struct WorkoutActiveView: View {
                     VStack {
                         ForEach(0..<totalExercises, id: \.self) { index in
                             HStack {
-                                Image(exercises[index].0) // Load the corresponding image
+                                Image(workout.exercises[index]) // Load the corresponding image
                                     .resizable()
                                     .frame(width: 127, height: 90)
                                     .scaledToFit()
                                     .padding(.trailing, 10) // Add space between image and text
 
                                 VStack(alignment: .leading) {
-                                    Text(exercises[index].0)
+                                    Text(workout.exercises[index])
                                         .font(.title3)
                                         .foregroundColor(.white)
-                                    Text(exercises[index].1)
+                                    Text("10 Reps")
                                         .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
                                 
                                 Button(action: {
-                                    selectedExerciseInfo = "\(exercises[index].0): \(exercises[index].1)"
+                                    selectedExerciseInfo = "\(workout.exercises[index]): \(workout.exercises[index])"
                                     showInfo.toggle()
                                 }) {
                                     Image(systemName: "info.circle")
@@ -296,7 +297,7 @@ struct WorkoutActiveView: View {
 
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutActiveView()
+        WorkoutActiveView(workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: "Upper Body", exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
             .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
     }
 }

@@ -35,6 +35,7 @@ class workoutFlag: ObservableObject {
     @Published var setBreakFinished: Bool
     @Published var initialPickUp: Bool
     @Published var workoutFinished: Bool
+    //@Published var success: Bool
     
     init(navigateToRePlace: Bool, navigateToSetBreak: Bool, navigateToHome: Bool, setBreakFinished: Bool, initialPickUp: Bool, workoutFinished: Bool) {
         self.navigateToRePlace = navigateToRePlace
@@ -59,10 +60,17 @@ struct PreWorkoutSummaryView: View {
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
-    let exercises = [
-        "Chest Press",
-        "Upward Woodchop",
-        "Downward Woodchop"
+    let workoutOrientations: [String: String] = [
+        "Triceps Pull-Down": "High",
+        "Bicep Curls": "Chest",
+        "Seated Row": "Chest",
+        "Chest Press": "Chest",
+        "Shoulder Press": "Floor",
+        "Arm Raises": "Floor",
+        "Squat": "Floor",
+        "Seated Leg Curl": "Low",
+        "Seated Leg Extension": "Low",
+        "Crunches": "Low"
     ]
 
     var body: some View {
@@ -77,7 +85,7 @@ struct PreWorkoutSummaryView: View {
                 case .confirmation:
                     PlacementConfirmationView()
                 case .activeWorkout:
-                    WorkoutActiveView()
+                    WorkoutActiveView(workout: workout)
                 case .home:
                     HomeView()
                 case .tryAgain:
@@ -159,9 +167,9 @@ struct PreWorkoutSummaryView: View {
                             .padding(.bottom, 10)
                             
                             VStack(spacing: 15) {
-                                ExerciseRowView(exerciseName: exercises[0], reps: "10 reps", targetIndex: environmentStore.targetAreas[0])
-                                ExerciseRowView(exerciseName: exercises[1], reps: "10 reps", targetIndex: environmentStore.targetAreas[1])
-                                ExerciseRowView(exerciseName: exercises[2], reps: "10 reps", targetIndex: environmentStore.targetAreas[2])
+                                ForEach(Array(zip(workout.exercises.indices, workout.exercises)), id: \.0) { index, exercise in
+                                    returnExerciseRowView(index: index)
+                                }
                             }
                         }
                         .padding()
@@ -194,7 +202,17 @@ struct PreWorkoutSummaryView: View {
         .foregroundColor(.white)
         .environmentObject(environmentStore)
     }
+    func returnExerciseRowView(index: Int) -> some View  {
+        environmentStore.targetAreas[index] = workoutOrientations[workout.exercises[index]]!
+        return ExerciseRowView(
+                exerciseName: workout.exercises[index],
+                reps: "10 reps",
+                targetIndex: environmentStore.targetAreas[index]
+        )
+    }
 }
+
+
 
 struct ExerciseRowView: View {
     var exerciseName: String
@@ -227,8 +245,8 @@ struct ExerciseRowView: View {
 
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall"))
-            .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low"]))
+        PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))
+            .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low", "High"]))
             .environmentObject(numSets(selectedSets: 3))
             .environmentObject(Counter(counter: 0))
             .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
