@@ -16,7 +16,7 @@ import SwiftUI
 //        case summary
 //        case workouts
 //    }
-//    
+//
 //    var body: some View {
 //        ZStack(alignment: .bottom) {
 //            VStack {
@@ -45,7 +45,7 @@ import SwiftUI
 //                    .padding()
 //                    .background(Color.black)
 //                }
-//                
+//
 //                // Main Content
 //                switch selectedTab {
 //                case .summary:
@@ -53,10 +53,10 @@ import SwiftUI
 //                case .workouts:
 //                    WorkoutsView(selectedWorkout: $selectedWorkout)
 //                }
-//                
+//
 //                Spacer()
 //            }
-//            
+//
 //            HStack(spacing: 50) {
 //                Button(action: {
 //                    selectedTab = .summary
@@ -109,7 +109,7 @@ import SwiftUI
 //                    .fontWeight(.bold)
 //                    .foregroundColor(.white)
 //                    .padding(.bottom, 10)
-//                
+//
 //                HStack(spacing: 30) {
 //                    VStack {
 //                        ZStack {
@@ -170,7 +170,7 @@ import SwiftUI
 //            .background(Color.black)
 //            .cornerRadius(10)
 //            .padding(.horizontal)
-//            
+//
 //            VStack(alignment: .leading) {
 //                // Your daily calories goal section
 //                Text("Your daily calories goal")
@@ -178,7 +178,7 @@ import SwiftUI
 //                    .fontWeight(.bold)
 //                    .foregroundColor(.white)
 //                    .padding(.bottom, 10)
-//                
+//
 //                HStack {
 //                    Image(systemName: "flame.fill")
 //                        .foregroundColor(.pink)
@@ -192,7 +192,7 @@ import SwiftUI
 //            .background(Color.black)
 //            .cornerRadius(10)
 //            .padding(.horizontal)
-//            
+//
 //            // Suggested workout section
 //            HStack {
 //                Image(systemName: "sparkles")
@@ -240,7 +240,7 @@ struct Workout: Identifiable {
 //        Workout(title: "Lower Body - Intense", description: "Description goes here, it’s a bit longer.", iconName: "figure.wave", category: "Floor"),
 //        Workout(title: "Core Strength - High", description: "Description goes here, it’s a bit longer.", iconName: "figure.stand.line.dotted.figure.stand", category: "Floor")
 //    ]
-//    
+//
 //    @Binding var selectedWorkout: Workout?
 //
 //    var body: some View {
@@ -250,7 +250,7 @@ struct Workout: Identifiable {
 //                .background(Color(.tertiarySystemFill)) // Reduced opacity
 //                .cornerRadius(10)
 //                .padding(.horizontal)
-//            
+//
 //            Picker("Select", selection: $selectedSegment) {
 //                ForEach(segments, id: \.self) { segment in
 //                    Text(segment).tag(segment)
@@ -258,7 +258,7 @@ struct Workout: Identifiable {
 //            }
 //            .pickerStyle(SegmentedPickerStyle())
 //            .padding(.horizontal)
-//            
+//
 //            ScrollView {
 //                VStack(spacing: 0) {
 //                    // "Suggested Workout..." button
@@ -289,7 +289,7 @@ struct Workout: Identifiable {
 //                        }
 //                        .padding(.bottom, 10) // Add padding after the button
 //                    }
-//                    
+//
 //                    // Other workout buttons
 //                    ForEach(workouts.filter { $0.category == selectedSegment && $0.title != "Suggested Workout..." }) { workout in
 //                        Button(action: {
@@ -317,11 +317,11 @@ struct Workout: Identifiable {
 //                            .cornerRadius(10)
 //                        }
 //                    }
-//                    
+//
 //                    Divider()
 //                        .background(Color.white)
 //                        .padding(.top, 12)
-//                    
+//
 //                    // Text at the bottom
 //                    Text(selectedSegment == "Wall" ? "Only attach F1 to smooth walls or hardwood.\nNever attach F1 to glass." : "Only attach F1 to smooth tile or hardwood.\nNever attach F1 to glass.")
 //                        .font(.body)
@@ -346,6 +346,8 @@ struct Workout: Identifiable {
 //}
 
 struct HomeView: View {
+    @StateObject var vm = WorkoutDataViewModel()
+    
     var body: some View {
         TabView {
             Tab("Summary", systemImage: "house") {
@@ -356,10 +358,12 @@ struct HomeView: View {
                 WorkoutsView()
             }
             
-            Tab("Leaderboard", systemImage: "trophy") {
-                Text("Leaderboard")
+            Tab("History", systemImage: "trophy") {
+                HistoryView(vm: vm)
             }
+            
         }
+        .onAppear(perform: vm.fetchItems)
     }
 }
 
@@ -428,6 +432,44 @@ struct MinutesGoals: View {
         }
     }
 }
+
+struct HistoryView: View {
+    var vm: WorkoutDataViewModel
+    
+    var body: some View {
+        VStack {
+            Text("Recent Workouts")
+                .font(.headline)
+            
+            
+            
+            List {
+                ForEach(vm.pastWorkouts, id: \.self) { workout in
+                    HStack {
+                        Text(workout.workoutType)
+                        
+                        // Code for optional image parsing to represent workouts
+                        
+                 /*       if let url = workout.imageURL, let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                        } */
+                    }
+                    .onTapGesture {
+                        // Insert any more detailed subviews of workouts
+                    }
+                }
+// Can be enabled if you want to delete recent workouts
+//                .onDelete(perform: vm.deleteItem)
+            }
+            .listStyle(PlainListStyle())
+            
+            
+        }
+    }
+}
+
 
 struct MinutesGoal: View {
     let name: String

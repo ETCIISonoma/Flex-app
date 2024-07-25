@@ -134,9 +134,67 @@ struct SignInView_Previews: PreviewProvider {
 
 import SwiftUI
 import AuthenticationServices
+import CloudKit
+import Combine
+
+
+class UserPermissionsViewModel: ObservableObject {
+    
+    @Published var permissionStatus: Bool = false
+    @Published var isSignedInToiCloud: Bool = false
+    @Published var error: String = ""
+    @Published var userName: String = ""
+    var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        getiCloudStatus()
+    }
+    
+    private func getiCloudStatus() {
+        CloudKitUtility.getiCloudStatus()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self?.error = error.localizedDescription
+                }
+            } receiveValue: { [weak self] success in
+                self?.isSignedInToiCloud = success
+            }
+            .store(in: &cancellables)
+    }
+    
+    func requestPermission() {
+        CloudKitUtility.requestApplicationPermission()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                
+            } receiveValue: { [weak self] success in
+                self?.permissionStatus = success
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getCurrentUserName() {
+        CloudKitUtility.discoverUserIdentity()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                
+            } receiveValue: { [weak self] returnedName in
+                self?.userName = returnedName
+            }
+            .store(in: &cancellables)
+    }
+    
+    
+}
 
 struct SignInView: View {
     @AppStorage("fullName") var fullName: String = "Hello"
+    @EnvironmentObject var wf: workoutFlag
+    @StateObject private var vm = UserPermissionsViewModel()
 
     var body: some View {
         VStack {
@@ -159,7 +217,35 @@ struct SignInView: View {
             }
 
             Spacer()
+            
+            Button(action: {
+                // Handle passkey login
+                vm.requestPermission()
+                // Insert delayed updating logic to check if vm.permissionStatus
+                
+                if vm.permissionStatus {
+                    wf.navigateToHome = true
+                    wf.workoutFinished = false
+                    wf.navigateToRePlace = false
+                    wf.navigateToSetBreak = false
+                    wf.setBreakFinished = false
+                }
+            }) {
+                HStack {
+                    Image(systemName: "icloud.fill").foregroundColor(.pink)
+                    Text("Sign in with iCloud").foregroundStyle(.pink)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.pink.opacity(0.15))
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                
+            }
+            .padding(.horizontal, 32.5)
+            .padding(.bottom, 50)
 
+            /*
             VStack(spacing: 15) {
                 SignInWithAppleButton(
                     .signIn,
@@ -190,6 +276,8 @@ struct SignInView: View {
                 .padding(.horizontal, 32.5)
             }
             .padding(.bottom, 50)
+            
+            */
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .foregroundColor(.white)

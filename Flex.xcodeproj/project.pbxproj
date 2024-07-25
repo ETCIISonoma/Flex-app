@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		327126482C53FBEE00B6CE37 /* CKUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327126472C53FBE900B6CE37 /* CKUtility.swift */; };
+		3271264A2C53FC0400B6CE37 /* CKWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327126492C53FBFC00B6CE37 /* CKWorkoutModel.swift */; };
+		3271264C2C53FC3A00B6CE37 /* CKUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3271264B2C53FC3000B6CE37 /* CKUserModel.swift */; };
 		6F2360712C361E4900AFC164 /* FlexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2360702C361E4900AFC164 /* FlexApp.swift */; };
 		6F2360732C361E4900AFC164 /* BLEPairingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2360722C361E4900AFC164 /* BLEPairingView.swift */; };
 		6F2360752C361E4B00AFC164 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F2360742C361E4B00AFC164 /* Assets.xcassets */; };
@@ -30,6 +33,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		327126472C53FBE900B6CE37 /* CKUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUtility.swift; sourceTree = "<group>"; };
+		327126492C53FBFC00B6CE37 /* CKWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKWorkoutModel.swift; sourceTree = "<group>"; };
+		3271264B2C53FC3000B6CE37 /* CKUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserModel.swift; sourceTree = "<group>"; };
 		6F23606D2C361E4900AFC164 /* Flex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F2360702C361E4900AFC164 /* FlexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexApp.swift; sourceTree = "<group>"; };
 		6F2360722C361E4900AFC164 /* BLEPairingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairingView.swift; sourceTree = "<group>"; };
@@ -104,6 +110,9 @@
 				6F378A0E2C376CC200A7D898 /* AccessorySessionManager.swift */,
 				6F378A162C37C34600A7D898 /* AccessoryPosition.swift */,
 				6F378A102C37A35C00A7D898 /* AccessoryModel.swift */,
+				327126472C53FBE900B6CE37 /* CKUtility.swift */,
+				327126492C53FBFC00B6CE37 /* CKWorkoutModel.swift */,
+				3271264B2C53FC3000B6CE37 /* CKUserModel.swift */,
 				6F2360722C361E4900AFC164 /* BLEPairingView.swift */,
 				F08D37902C3DE32700633F53 /* SignInView.swift */,
 				F08D37E52C3EF0D300633F53 /* HomeView.swift */,
@@ -198,6 +207,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				327126482C53FBEE00B6CE37 /* CKUtility.swift in Sources */,
+				3271264C2C53FC3A00B6CE37 /* CKUserModel.swift in Sources */,
 				6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */,
 				F08D37202C38AD1600633F53 /* PlacementHoldView.swift in Sources */,
 				F08D37E62C3EF0D500633F53 /* HomeView.swift in Sources */,
@@ -214,6 +225,7 @@
 				6F378A132C37A3C500A7D898 /* PairedView.swift in Sources */,
 				6F378A0F2C376CD900A7D898 /* AccessorySessionManager.swift in Sources */,
 				F08D37912C3DE32C00633F53 /* SignInView.swift in Sources */,
+				3271264A2C53FC0400B6CE37 /* CKWorkoutModel.swift in Sources */,
 				6F2360732C361E4900AFC164 /* BLEPairingView.swift in Sources */,
 				6F2360712C361E4900AFC164 /* FlexApp.swift in Sources */,
 			);

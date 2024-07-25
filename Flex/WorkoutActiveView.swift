@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
+import Combine
 
 struct WorkoutActiveView: View {
     @State private var timerRunning = true
@@ -17,6 +19,8 @@ struct WorkoutActiveView: View {
     @State private var timer: Timer?
     @State private var showInfo = false
     @State private var selectedExerciseInfo = ""
+    // Category hardcoded currently
+    @State private var selectedExerciseCategory = "Full Body & Core"
     /*@State private var navigateToHome = false
     @State private var navigateToSetBreak = false
     @State private var navigateToRePlace = false*/
@@ -24,6 +28,8 @@ struct WorkoutActiveView: View {
     
     @EnvironmentObject var c: Counter
     @EnvironmentObject var wf: workoutFlag
+    
+    @StateObject var vm = WorkoutDataViewModel()
     
     let totalSets = 3 //change later to take into account numSets
     let totalRepsPerSet = 10
@@ -43,7 +49,7 @@ struct WorkoutActiveView: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Full Body & Core")
+                        Text(selectedExerciseCategory)
                             .font(.headline)
                             .foregroundColor(.white)
                         Text("20 min - Floor")
@@ -217,6 +223,9 @@ struct WorkoutActiveView: View {
                 Button(action: {
                     // End workout action
                     stopTimer()
+                    // CloudKit: add item to workout history
+                    vm.addItem(workoutType: selectedExerciseCategory)
+                    // State machine
                     wf.navigateToHome = true
                     wf.workoutFinished = true
                     wf.navigateToRePlace = false
