@@ -91,7 +91,7 @@ struct PairedView: View {
                     }
                 }
             
-            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom", exercises: []))) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom", exercises: []))) {
                                 Text("Go to Pre-Workout Confirmation")
                                     .font(.headline)
                                     .padding()

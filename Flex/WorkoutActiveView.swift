@@ -26,8 +26,9 @@ struct WorkoutActiveView: View {
     @EnvironmentObject var wf: workoutFlag
     
     let totalSets = 3 //change later to take into account numSets
-    let totalRepsPerSet = 10
-    let totalExercises = 3
+    let totalRepsPerExercise = 10
+    //let totalExercises = 3
+    var totalExercises: Int
     
     let exercises = [
         ("Cable Pull-Down", "10 reps"),
@@ -114,9 +115,9 @@ struct WorkoutActiveView: View {
                 .padding(.top, 10)
                 
                 HStack {
-                    ForEach(0..<totalRepsPerSet, id: \.self) { index in
+                    ForEach(0..<totalRepsPerExercise, id: \.self) { index in
                         Rectangle()
-                            .fill(index < (currentRep % totalRepsPerSet) ? Color.pink : Color.gray.opacity(0.40))
+                            .fill(index < (currentRep % totalRepsPerExercise) ? Color.pink : Color.gray.opacity(0.40))
                             .frame(height: 10)
                             .cornerRadius(5)
                     }
@@ -239,16 +240,24 @@ struct WorkoutActiveView: View {
                 startTimer()
             }
             .onChange(of: currentRep) {
-                if(currentRep == 10) {
-                    if(c.counter == 2) {
-                        c.counter = 0
+                if(currentRep == 10 && c.counter != totalExercises-1) {
+                    c.counter += 1
+                    accessorySessionManager.writeState(state: 4)
+                    wf.navigateToRePlace = true
+                }
+                else if (currentRep == 10 && c.counter == totalExercises-1) {
+                    c.counter = 0
+                    currentSet += 1
+                    if currentSet > totalSets {
+                        wf.navigateToHome = true
+                        wf.workoutFinished = true
                         accessorySessionManager.writeState(state: 4)
-                        wf.navigateToSetBreak = true
+                        stopTimer()
+                        currentSet = 0
                     }
                     else {
-                        c.counter += 1
                         accessorySessionManager.writeState(state: 4)
-                        wf.navigateToRePlace = true
+                        wf.navigateToSetBreak = true
                     }
                 }
             }
@@ -270,16 +279,7 @@ struct WorkoutActiveView: View {
             // Add calories burnt calculation here.
             
             // Add code to update reps and sets
-            if currentRep == totalRepsPerSet * totalExercises {
-                currentRep = 0
-                currentSet += 1
-                if currentSet > totalSets {
-                    wf.navigateToHome = true
-                    wf.workoutFinished = true
-                    accessorySessionManager.writeState(state: 4)
-                    stopTimer()
-                }
-            }
+            currentRep = Int(accessorySessionManager.repCount ?? 0)
         }
     }
     
@@ -297,7 +297,8 @@ struct WorkoutActiveView: View {
 
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutActiveView(workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: "Upper Body", exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
+        WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: "Upper Body", exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
             .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+            .environmentObject(Counter(counter: 0))
     }
 }

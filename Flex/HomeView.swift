@@ -403,7 +403,7 @@ struct MinutesGoals: View {
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
             
-            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
                 HStack {
                     Image(systemName: "sparkles")
                         .resizable()
@@ -465,7 +465,7 @@ struct WorkoutsView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
+                NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
                     HStack {
                         Image(systemName: "sparkles")
                             .resizable()
@@ -507,17 +507,17 @@ struct WorkoutsView: View {
                 ScrollView {
                     VStack {
                         if selectedTab == "Upper-Body" {
-                            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Upper Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps Pull-Down", "Bicep Curls", "Seated Row", "Chest Press", "Shoulder Press", "Arm Raises"]))) {
+                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 6, workout: Workout(title: "Upper Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps Pull-Down", "Bicep Curls", "Seated Row", "Chest Press", "Shoulder Press", "Arm Raises"]))) {
                                 WorkoutRow(title: "Upper Body - Intense", description: "Description goes here, it's a bit longer.", icon: "figure.strengthtraining.traditional")
                             }
-                            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Upper Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps - Pull Down", "Seated Row", "Chest Press"]))) {
+                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps - Pull Down", "Seated Row", "Chest Press"]))) {
                                 WorkoutRow(title: "Upper Body - Relaxed", description: "Description goes here, it's a bit longer.", icon: "figure.highintensity.intervaltraining")
                             }
                         } else {
-                            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Lower Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))) {
+                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 4, workout: Workout(title: "Lower Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))) {
                                 WorkoutRow(title: "Lower Body - Intense", description: "Description goes here, it's a bit longer.", icon: "figure.core.training")
                             }
-                            NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Lower Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension"]))) {
+                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Lower Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension"]))) {
                                 WorkoutRow(title: "Lower Body - Relaxed", description: "Description goes here, it's a bit longer.", icon: "figure.cross.training")
                             }
                         }

@@ -60,7 +60,11 @@ class AccessorySessionManager: NSObject, ObservableObject {
             case .touchedASurface, .activatingPump:
                 if(!wf.initialPickUp) {
                     self.viewState = .pickUp
-                    wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout
+                    wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout - Done
+                }
+                else if(wf.workoutFinished) { // 7) Review whether this condition should be here - shouldnt it also stay on home if workout finished but its on a surface?
+                    wf.initialPickUp = false
+                    self.viewState = .home
                 }
                 else {
                     self.viewState = .hold
@@ -68,7 +72,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
             case .transitioningSuccessfully:
                 if oldValue == .activatingPump {
                     self.viewState = .confirmation
-                } else if self.previousViewStates.contains(.confirmation) {
+                } else if self.previousViewStates.contains(.confirmation) { // 6) maybe change this to if view state is currently confirmation???
                     self.viewState = .activeWorkout
                 }
             case .home:
@@ -103,6 +107,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
     @Published var motorPower: Float? = nil
     @Published var peripheralConnected = false
     @Published var pickerDismissed = true
+    @Published var repCount: UInt8? = nil
 
     private var currentAccessory: ASAccessory?
     private var session = ASAccessorySession()
@@ -112,11 +117,13 @@ class AccessorySessionManager: NSObject, ObservableObject {
     private var r_w_globalStateCharacteristic: CBCharacteristic?
     private var r_batteryVoltageCharacteristic: CBCharacteristic?
     private var r_motorPowerCharacteristic: CBCharacteristic?
+    private var r_repCountCharacteristic: CBCharacteristic?
 
     private static let w_motorTorqueSetpointCharacteristicUUID = "0xFF3F"
     private static let r_w_globalStateCharacteristicUUID = "0xFF40"
     private static let r_batteryVoltageCharacteristicUUID = "0xFF41"
     private static let r_motorPowerCharacteristicUUID = "0xFF42"
+    private static let r_repCountCharacteristicUUID = "0xFF43"
     
     //private let sequence: [ViewState]
     private var counterSeq = 0
@@ -258,6 +265,15 @@ class AccessorySessionManager: NSObject, ObservableObject {
             }
         }
     }
+    
+    /*func writeRep(rep: UInt8) {
+        Task {
+            if let repCountCharacteristic = r_repCountCharacteristic {
+                let data = Data([rep])
+                peripheral?.writeValue(data, )
+            }
+        }
+    }*/
 }
 
 // MARK: - CBCentralManagerDelegate
@@ -307,7 +323,7 @@ extension AccessorySessionManager: CBPeripheralDelegate {
         }
 
         for service in services {
-            peripheral.discoverCharacteristics([CBUUID(string: Self.w_motorTorqueSetpointCharacteristicUUID), CBUUID(string: Self.r_w_globalStateCharacteristicUUID), CBUUID(string: Self.r_batteryVoltageCharacteristicUUID), CBUUID(string: Self.r_motorPowerCharacteristicUUID)], for: service)
+            peripheral.discoverCharacteristics([CBUUID(string: Self.w_motorTorqueSetpointCharacteristicUUID), CBUUID(string: Self.r_w_globalStateCharacteristicUUID), CBUUID(string: Self.r_batteryVoltageCharacteristicUUID), CBUUID(string: Self.r_motorPowerCharacteristicUUID), CBUUID(string: Self.r_repCountCharacteristicUUID)], for: service)
         }
     }
 
@@ -327,6 +343,11 @@ extension AccessorySessionManager: CBPeripheralDelegate {
             }
             if characteristic.uuid == CBUUID(string: Self.r_motorPowerCharacteristicUUID) {
                 r_motorPowerCharacteristic = characteristic
+                peripheral.setNotifyValue(true, for: characteristic)
+                peripheral.readValue(for: characteristic)
+            }
+            if characteristic.uuid == CBUUID(string: Self.r_repCountCharacteristicUUID) {
+                r_repCountCharacteristic = characteristic
                 peripheral.setNotifyValue(true, for: characteristic)
                 peripheral.readValue(for: characteristic)
             }
@@ -350,6 +371,16 @@ extension AccessorySessionManager: CBPeripheralDelegate {
             DispatchQueue.main.async {
                 withAnimation {
                     self.motorPower = motorPower
+                }
+            }
+        }
+        
+        if characteristic.uuid == CBUUID(string: Self.r_repCountCharacteristicUUID) {
+            let repCount = data.withUnsafeBytes { $0.load(as: UInt8.self) }
+            print("New rep received: \(repCount)")
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.repCount = repCount
                 }
             }
         }

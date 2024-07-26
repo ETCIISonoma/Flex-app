@@ -9,8 +9,10 @@ import SwiftUI
 
 struct PlacementConfirmationView: View {
     
+    var totalExercises: Int
+    var workout: Workout
     @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
-    //@State private var navigateToWorkoutActiveView = false
+    @State private var navigateToWorkoutActiveView = false
     //@EnvironmentObject var wf: workoutFlag
     
     var body: some View {
@@ -22,14 +24,14 @@ struct PlacementConfirmationView: View {
                         .foregroundColor(.pink)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                //navigateToWorkoutActiveView = true
+                                navigateToWorkoutActiveView = true
                                 //wf.success = true
                             }
                         }
                     
-                    /*.navigationDestination(isPresented: $navigateToWorkoutActiveView) {
-                        WorkoutActiveView(accessorySessionManager: accessorySessionManager)
-                    }*/
+                    .navigationDestination(isPresented: $navigateToWorkoutActiveView) {
+                        WorkoutActiveView(totalExercises: totalExercises, workout: workout, accessorySessionManager: accessorySessionManager)
+                    }
                 }
                 
                 else if(accessorySessionManager.globalState.rawValue == 6) {
@@ -75,5 +77,5 @@ struct PlacementConfirmationView: View {
 }
 
 #Preview {
-    PlacementConfirmationView(accessorySessionManager: AccessorySessionManager.shared)
+    PlacementConfirmationView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]), accessorySessionManager: AccessorySessionManager.shared)
 }

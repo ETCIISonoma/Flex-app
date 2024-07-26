@@ -48,6 +48,7 @@ class workoutFlag: ObservableObject {
 }
 
 struct PreWorkoutSummaryView: View {
+    var totalExercises: Int
     var workout: Workout
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var environmentStore:  TargetAreaStore
@@ -83,9 +84,9 @@ struct PreWorkoutSummaryView: View {
                 case .hold:
                     PlacementHoldView()
                 case .confirmation:
-                    PlacementConfirmationView()
+                    PlacementConfirmationView(totalExercises: totalExercises, workout: workout)
                 case .activeWorkout:
-                    WorkoutActiveView(workout: workout)
+                WorkoutActiveView(totalExercises: totalExercises, workout: workout)
                 case .home:
                     HomeView()
                 case .tryAgain:
@@ -245,7 +246,7 @@ struct ExerciseRowView: View {
 
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        PreWorkoutSummaryView(workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))
+        PreWorkoutSummaryView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))
             .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low", "High"]))
             .environmentObject(numSets(selectedSets: 3))
             .environmentObject(Counter(counter: 0))
