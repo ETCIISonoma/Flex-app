@@ -54,11 +54,7 @@ struct WorkoutActiveView: View {
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text("Vaughn's F1")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Text("84%")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                        BatteryPercentageView(percentage: 84)
                     }
                 }
                 .padding()
@@ -66,17 +62,21 @@ struct WorkoutActiveView: View {
                 Spacer()
                 
                 HStack {
-                    Text(timeString(time: secondsElapsed))
+                    Text(timeString(time: secondsElapsed) ?? "")
+                        .contentTransition(.numericText())
+                        .monospacedDigit()
                         .font(.largeTitle)
                         .foregroundColor(.white)
                     
-                    Spacer()
+                    Divider()
+                        .frame(maxHeight: 40)
+                        .padding([.horizontal], 7)
                     
                     HStack(spacing: 10) {
                         Image(systemName: "flame.fill")
                             .resizable()
                             .frame(width: 24, height: 34)
-                            .foregroundColor(.pink)
+                            .foregroundColor(.accentColor)
                         Text("\(caloriesBurnt) cal")
                             .font(.title2)
                             .foregroundColor(.white)
@@ -92,11 +92,12 @@ struct WorkoutActiveView: View {
                             stopTimer()
                         }
                     }) {
-                        Image(systemName: timerRunning ? "pause.circle.fill" : "play.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.pink)
+                        Image(systemName: timerRunning ? "pause.fill" : "play")
                     }
+                    .buttonStyle(.bordered)
+                    .controlSize(.extraLarge)
+                    .buttonBorderShape(.circle)
+                    .tint(.accentColor)
                 }
                 .padding()
                 .background(.gray.opacity(0.25))
@@ -275,7 +276,9 @@ struct WorkoutActiveView: View {
     
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            secondsElapsed += 1
+            withAnimation {
+                secondsElapsed += 1
+            }
             // Add calories burnt calculation here.
             
             // Add code to update reps and sets
@@ -288,10 +291,36 @@ struct WorkoutActiveView: View {
         timer = nil
     }
     
-    func timeString(time: Int) -> String {
+    func timeString(time: Int) -> String? {
         let minutes = time / 60
         let seconds = time % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+struct BatteryPercentageView: View {
+    let percentage: UInt8
+    
+    var body: some View {
+        HStack(spacing: 2) {
+            Text("\(percentage)%")
+                .font(.callout)
+                .contentTransition(.numericText(value: Double(percentage)))
+            
+            Image(systemName: symbol)
+        }
+        .foregroundColor(percentage > 20 ? .gray : .red)
+    }
+    
+    private var symbol: String {
+        switch percentage {
+            case 0: "battery.0percent"
+            case 1...37: "battery.25percent"
+            case 38...62: "battery.50percent"
+            case 63...99: "battery.75percent"
+            case 100...: "battery.100percent"
+            default: "battery.0percent"
+        }
     }
 }
 
