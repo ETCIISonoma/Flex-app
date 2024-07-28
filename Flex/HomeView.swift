@@ -219,12 +219,26 @@ import SwiftUI
 //    }
 //}
 //
+enum WorkoutCategory: String, CaseIterable {
+    case upperBody
+    case lowerBody
+    case fullBody
+    
+    var name: String {
+        switch self {
+            case .upperBody: "Upper Body"
+            case .lowerBody: "Lower Body"
+            case .fullBody: "Full Body"
+        }
+    }
+}
+
 struct Workout: Identifiable {
     var id = UUID()
     var title: String
     var description: String
     var iconName: String
-    var category: String
+    var category: WorkoutCategory
     var exercises: [String]
 }
 //
@@ -403,7 +417,7 @@ struct MinutesGoals: View {
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
             
-            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: .fullBody, exercises: []))) {
                 HStack {
                     Image(systemName: "sparkles")
                         .resizable()
@@ -458,107 +472,59 @@ struct CaloriesGoal: View {
 
 
 struct WorkoutsView: View {
-    @State private var selectedTab: String = "Upper-Body"
+    @State private var selectedCategory: WorkoutCategory?
     @State private var searchText = ""
-    private let categories = ["Upper-Body", "Lower-Body"]
+    @State private var isSearching = false
     
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
-                    HStack {
-                        Image(systemName: "sparkles")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.pink)
-                        VStack(alignment: .leading) {
-                            Text("Flex Workout of the Day")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                            Text("Get Started With Ease")
-                                .foregroundColor(.pink)
-                                .font(.subheadline)
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.pink)
-                    }
-                    .padding()
-                    .background(Color.pink.opacity(0.15))
-                    .cornerRadius(12)
-                }
-                .padding(.bottom, 10)
-                .padding(.horizontal, 13)
                 
-                TextField("Search", text: .constant(""))
-                    .padding(10)
-                    .background(Color(UIColor.tertiarySystemFill))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
                 
-                Picker("Category", selection: $selectedTab) {
-                    ForEach(categories, id: \.self) {
-                        Text($0)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                
-                ScrollView {
-                    VStack {
-                        if selectedTab == "Upper-Body" {
-                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 6, workout: Workout(title: "Upper Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps Pull-Down", "Bicep Curls", "Seated Row", "Chest Press", "Shoulder Press", "Arm Raises"]))) {
-                                WorkoutRow(title: "Upper Body - Intense", description: "Description goes here, it's a bit longer.", icon: "figure.strengthtraining.traditional")
-                            }
-                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Upper Body", exercises: ["Triceps - Pull Down", "Seated Row", "Chest Press"]))) {
-                                WorkoutRow(title: "Upper Body - Relaxed", description: "Description goes here, it's a bit longer.", icon: "figure.highintensity.intervaltraining")
-                            }
-                        } else {
-                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 4, workout: Workout(title: "Lower Body - Intense", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))) {
-                                WorkoutRow(title: "Lower Body - Intense", description: "Description goes here, it's a bit longer.", icon: "figure.core.training")
-                            }
-                            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Lower Body - Relaxed", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Lower Body", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension"]))) {
-                                WorkoutRow(title: "Lower Body - Relaxed", description: "Description goes here, it's a bit longer.", icon: "figure.cross.training")
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
+                List(workouts.filter({ selectedCategory == nil || $0.category == selectedCategory })) {
+                    WorkoutRow(workout: $0)
                 }
             }
             .navigationTitle("Workouts")
             .navigationBarTitleDisplayMode(.large)
+            .searchable(text: $searchText, isPresented: $isSearching)
+            .searchScopes($selectedCategory) {
+                Text("Upper Body").tag(WorkoutCategory.upperBody)
+                Text("Lower Body").tag(WorkoutCategory.lowerBody)
+                Text("Full Body").tag(WorkoutCategory.fullBody)
+            }
+            .onChange(of: isSearching) {
+                print(isSearching)
+                if !isSearching {
+                    selectedCategory = nil
+                }
+            }
         }
     }
 }
 
 struct WorkoutRow: View {
-    let title: String
-    let description: String
-    let icon: String
+    let workout: Workout
     
     var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .resizable()
-                .frame(width: 60, height: 40)
-                .padding(.trailing, 10)
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.body)
-                    .foregroundColor(.white)
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
+        NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
+            HStack {
+                Image(systemName: workout.iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 30)
+                    .foregroundColor(.accentColor)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(workout.title)
+                        .foregroundColor(.primary)
+                        .font(.headline)
+                    Text(workout.description)
+                       .foregroundColor(.secondary)
+                       .font(.subheadline)
+                       .lineLimit(1)
+                }
             }
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(.white)
         }
-        .padding()
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(12)
-        .padding(.vertical, 5)
     }
 }
 

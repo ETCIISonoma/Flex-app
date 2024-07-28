@@ -326,7 +326,7 @@ struct BatteryPercentageView: View {
 
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: "Upper Body", exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
+        WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: .upperBody, exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
             .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
             .environmentObject(Counter(counter: 0))
     }

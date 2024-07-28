@@ -77,5 +77,5 @@ struct PlacementConfirmationView: View {
 }
 
 #Preview {
-    PlacementConfirmationView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]), accessorySessionManager: AccessorySessionManager.shared)
+    PlacementConfirmationView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: .fullBody, exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]), accessorySessionManager: AccessorySessionManager.shared)
 }

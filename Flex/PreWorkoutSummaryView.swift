@@ -128,7 +128,7 @@ struct PreWorkoutSummaryView: View {
                                     }
                                     HStack {
                                         Image(systemName: "rectangle.portrait.rotate").foregroundColor(.white)
-                                        Text(workout.category)
+                                        Text(workout.category.name)
                                             .foregroundColor(.white)
                                     }
                                 }
@@ -246,7 +246,7 @@ struct ExerciseRowView: View {
 
 struct PreWorkoutSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        PreWorkoutSummaryView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: "Wall", exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))
+        PreWorkoutSummaryView(totalExercises: 4, workout: Workout(title: "Full Body & Core - Intense", description: "Description goes here, it’s a bit \nlonger.", iconName: "flame.fill", category: .fullBody, exercises: ["Squat", "Seated Leg Curl", "Seated Leg Extension", "Crunches"]))
             .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low", "High"]))
             .environmentObject(numSets(selectedSets: 3))
             .environmentObject(Counter(counter: 0))
