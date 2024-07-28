@@ -471,60 +471,125 @@ struct CaloriesGoal: View {
 }
 
 
+//struct WorkoutsView: View {
+//    @State private var selectedCategory: WorkoutCategory?
+//    @State private var searchText = ""
+//    @State private var isSearching = false
+//    
+//    var body: some View {
+//        NavigationStack {
+//            VStack {
+//                List(workouts.filter({ selectedCategory == nil || $0.category == selectedCategory })) {
+//                    WorkoutRow(workout: $0)
+//                }
+//            }
+//            .navigationTitle("Workouts")
+//            .navigationBarTitleDisplayMode(.large)
+//            .searchable(text: $searchText, isPresented: $isSearching)
+//            .searchScopes($selectedCategory) {
+//                Text("Upper Body").tag(WorkoutCategory.upperBody)
+//                Text("Lower Body").tag(WorkoutCategory.lowerBody)
+//                Text("Full Body").tag(WorkoutCategory.fullBody)
+//            }
+//            .onChange(of: isSearching) {
+//                print(isSearching)
+//                if !isSearching {
+//                    selectedCategory = nil
+//                }
+//            }
+//        }
+//    }
+//}
+
+//struct WorkoutRow: View {
+//    let workout: Workout
+//    
+//    var body: some View {
+//        NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
+//            HStack {
+//                Image(systemName: workout.iconName)
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 40, height: 30)
+//                    .foregroundColor(.accentColor)
+//                VStack(alignment: .leading, spacing: 3) {
+//                    Text(workout.title)
+//                        .foregroundColor(.primary)
+//                        .font(.headline)
+//                    Text(workout.description)
+//                       .foregroundColor(.secondary)
+//                       .font(.subheadline)
+//                       .lineLimit(1)
+//                }
+//            }
+//        }
+//    }
+//}
+
 struct WorkoutsView: View {
-    @State private var selectedCategory: WorkoutCategory?
-    @State private var searchText = ""
-    @State private var isSearching = false
-    
     var body: some View {
         NavigationStack {
-            VStack {
-                
-                
-                List(workouts.filter({ selectedCategory == nil || $0.category == selectedCategory })) {
-                    WorkoutRow(workout: $0)
-                }
+            ScrollView {
+                WorkoutCategoryView(category: .fullBody)
+                WorkoutCategoryView(category: .upperBody)
+                WorkoutCategoryView(category: .lowerBody)
             }
             .navigationTitle("Workouts")
             .navigationBarTitleDisplayMode(.large)
-            .searchable(text: $searchText, isPresented: $isSearching)
-            .searchScopes($selectedCategory) {
-                Text("Upper Body").tag(WorkoutCategory.upperBody)
-                Text("Lower Body").tag(WorkoutCategory.lowerBody)
-                Text("Full Body").tag(WorkoutCategory.fullBody)
-            }
-            .onChange(of: isSearching) {
-                print(isSearching)
-                if !isSearching {
-                    selectedCategory = nil
-                }
-            }
         }
     }
 }
 
-struct WorkoutRow: View {
+struct WorkoutCategoryView: View {
+    let category: WorkoutCategory
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(category.name)
+                .font(.title2.bold())
+                .padding(.horizontal)
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(workouts.filter({ $0.category == category })) {
+                        WorkoutTile(workout: $0)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .safeAreaPadding(.horizontal)
+            .scrollTargetBehavior(.viewAligned)
+        }
+    }
+}
+
+struct WorkoutTile: View {
     let workout: Workout
     
     var body: some View {
         NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
-            HStack {
+            VStack {
                 Image(systemName: workout.iconName)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 30)
-                    .foregroundColor(.accentColor)
-                VStack(alignment: .leading, spacing: 3) {
+                    .padding()
+                    .frame(width: 150, height: 100)
+                    .backgroundStyle(Color.init(uiColor: .tertiarySystemBackground))
+                
+                VStack(alignment: .leading) {
                     Text(workout.title)
                         .foregroundColor(.primary)
                         .font(.headline)
                     Text(workout.description)
-                       .foregroundColor(.secondary)
-                       .font(.subheadline)
-                       .lineLimit(1)
+                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                        .lineLimit(2)
                 }
+                .padding()
             }
-        }
+            .frame(maxWidth: 150)
+            .background(Color(UIColor.secondarySystemBackground))
+            .cornerRadius(12)
+        }.buttonStyle(.plain)
     }
 }
 
