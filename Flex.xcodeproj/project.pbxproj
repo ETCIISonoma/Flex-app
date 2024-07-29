@@ -27,6 +27,7 @@
 		F08D37E62C3EF0D500633F53 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D37E52C3EF0D300633F53 /* HomeView.swift */; };
 		F09102562C4EEA8900F76A56 /* RemoveFromSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09102552C4EEA7700F76A56 /* RemoveFromSurfaceView.swift */; };
 		F091025A2C5071F100F76A56 /* PickUpFromSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09102592C5071E600F76A56 /* PickUpFromSurfaceView.swift */; };
+		F09345FE2C583FC900D0CA98 /* Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09345FD2C583FC900D0CA98 /* Workouts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		F08D37E52C3EF0D300633F53 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F09102552C4EEA7700F76A56 /* RemoveFromSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFromSurfaceView.swift; sourceTree = "<group>"; };
 		F09102592C5071E600F76A56 /* PickUpFromSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickUpFromSurfaceView.swift; sourceTree = "<group>"; };
+		F09345FD2C583FC900D0CA98 /* Workouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workouts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -114,6 +116,7 @@
 				F08D371F2C38AD1000633F53 /* PlacementHoldView.swift */,
 				BBD59F672C3F364D00549B22 /* PreWorkoutSummaryView.swift */,
 				BBD59F692C3F36A000549B22 /* WorkoutActiveView.swift */,
+				F09345FD2C583FC900D0CA98 /* Workouts.swift */,
 				BBD59F6D2C3F36C400549B22 /* WorkoutRePlaceView.swift */,
 				F09102592C5071E600F76A56 /* PickUpFromSurfaceView.swift */,
 				F09102552C4EEA7700F76A56 /* RemoveFromSurfaceView.swift */,
@@ -215,6 +218,7 @@
 				6F378A0F2C376CD900A7D898 /* AccessorySessionManager.swift in Sources */,
 				F08D37912C3DE32C00633F53 /* SignInView.swift in Sources */,
 				6F2360732C361E4900AFC164 /* BLEPairingView.swift in Sources */,
+				F09345FE2C583FC900D0CA98 /* Workouts.swift in Sources */,
 				6F2360712C361E4900AFC164 /* FlexApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
