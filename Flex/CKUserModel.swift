@@ -75,6 +75,7 @@ class UserViewModel: ObservableObject {
     init() {
         getiCloudStatus()
         setCurrentUserID()
+        getCurrentUserName()
     }
     
     private func getiCloudStatus() {
