@@ -136,25 +136,48 @@ struct WorkoutActiveView: View {
                 
                 HStack {
                     VStack {
-                        Image(systemName: "minus.circle")
-                            .foregroundColor(.white)
+                        Button(action: {
+                            intensity = max(intensity - 10, 0)
+                        }) {
+                            Image(systemName: "minus.circle")
+                                .foregroundColor(.pink)
+                        }
                         Text("0")
-                            .foregroundColor(.gray)
-                            .font(.subheadline)
-                    }
-                    .padding(.horizontal, 10)
-                    .offset(y: 8)
-                    Slider(value: $intensity, in: 0...100)
-                        .accentColor(.pink)
-                    VStack {
-                        Image(systemName: "plus.circle")
                             .foregroundColor(.white)
-                        Text("100")
-                            .foregroundColor(.gray)
                             .font(.subheadline)
                     }
                     .padding(.horizontal, 10)
-                    .offset(y: 8)
+                    .offset(y: 6)
+                    
+                    VStack {
+                        Slider(value: $intensity, in: 0...100)
+                            .accentColor(.pink)
+                        
+                        HStack {
+                            ForEach(0..<6) { index in
+                                Rectangle()
+                                    .fill(Color.gray)
+                                    .frame(width: 2, height: 10)
+                                if index < 5 {
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .padding(.top, -22)
+                    }
+                    VStack {
+                        Button(action: {
+                            intensity = min(intensity + 10, 100) 
+                        }) {
+                            Image(systemName: "plus.circle")
+                                .foregroundColor(.pink)
+                        }
+                        Text("100")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                    }
+                    .padding(.horizontal, 10)
+                    .offset(y: 6)
                 }
                 .padding(.horizontal)
                 .onChange(of: intensity) {
