@@ -13,33 +13,73 @@ import Combine
 
 struct WorkoutDataModelNames {
 //    static let userName = "userName"
-    static let workoutType = "workoutType"
+    static let workoutCategory = "workoutCategory"
     static let date = "date"
+    static let workout1Type = "workout1type"
+    static let workout1Intensity = "workout1intensity"
+    static let workout2Type = "workout2type"
+    static let workout2Intensity = "workout2intensity"
+    static let workout3Type = "workout3type"
+    static let workout3Intensity = "workout3intensity"
+    
+    
 }
 
 struct WorkoutDataModel: Hashable, CloudKitableProtocol {
 //    let userName: String// var userName: String? {
     //    return record[workoutDataModelNames.userName]
     //}
-    let workoutType: String
+    let workoutCategory: String
     let date: Date
+    let workout1Type: String
+    let workout1Intensity: Int
+    let workout2Type: String
+    let workout2Intensity: Int
+    let workout3Type: String
+    let workout3Intensity: Int
     let record: CKRecord
     
     init?(record: CKRecord) {
 //        guard let userName = record[workoutDataModelNames.userName] as? String else { return nil }
 //        self.userName = userName
-        guard let workoutType = record[WorkoutDataModelNames.workoutType] as? String else { return nil }
-        self.workoutType = workoutType
+        guard let workoutCategory = record[WorkoutDataModelNames.workoutCategory] as? String else { return nil }
+        self.workoutCategory = workoutCategory
         let date = Date()
         self.date = date
+        
+        guard let workout1Type = record[WorkoutDataModelNames.workout1Type] as? String else { return nil }
+        self.workout1Type = workout1Type
+       
+        let workout1Intensity = record[WorkoutDataModelNames.workout1Intensity] as? Int
+        self.workout1Intensity = workout1Intensity ?? 0
+        
+        guard let workout2Type = record[WorkoutDataModelNames.workout2Type] as? String else { return nil }
+        self.workout2Type = workout2Type
+       
+        let workout2Intensity = record[WorkoutDataModelNames.workout2Intensity] as? Int
+        self.workout2Intensity = workout2Intensity ?? 0
+        
+        guard let workout3Type = record[WorkoutDataModelNames.workout3Type] as? String else { return nil }
+        self.workout3Type = workout3Type
+       
+        let workout3Intensity = record[WorkoutDataModelNames.workout3Intensity] as? Int
+        self.workout3Intensity = workout3Intensity ?? 0
+        
+        
         self.record = record
     }
     
-    init?(workoutType: String?) {
-        let record = CKRecord(recordType: "WorkoutData")
+    init?(workoutCategory: String?) {
+        let record = CKRecord(recordType: "WorkoutCategory")
         // FUTURE task: if let applied to all integer fields for type safety
-        record[WorkoutDataModelNames.workoutType] = workoutType
+        record[WorkoutDataModelNames.workoutCategory] = workoutCategory
         record[WorkoutDataModelNames.date] = Date()
+        record[WorkoutDataModelNames.workout1Type] = "Cable Pull-Down, 10 reps"
+        record[WorkoutDataModelNames.workout1Intensity] = 40
+        record[WorkoutDataModelNames.workout1Type] = "Side Bend, 10 reps"
+        record[WorkoutDataModelNames.workout1Intensity] = 30
+        record[WorkoutDataModelNames.workout1Type] = "Cable Squat, 10 reps"
+        record[WorkoutDataModelNames.workout1Intensity] = 45
         
         self.init(record: record)
     }
@@ -75,16 +115,16 @@ class WorkoutDataViewModel: ObservableObject {
        fetchItems()
     }
     
-    func addItem(workoutType: String) {
+    func addItem(workoutCategory: String) {
         print("beginning addItem")
         print("attempting data write")
         do {
-            guard let newWorkout = WorkoutDataModel(workoutType: workoutType) else { return }
+            guard let newWorkout = WorkoutDataModel(workoutCategory: workoutCategory) else { return }
             CloudKitUtility.add(item: newWorkout) { result in
                 
             }
             
-            print("finishing addItem, checking workouts: \(pastWorkouts)")
+            print("finishing addItem (workout), checking workouts: \(pastWorkouts)")
         }
     }
     
@@ -101,6 +141,22 @@ class WorkoutDataViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    func fetchUserIDItems() {
+        let reference = CKRecord.Reference(recordID: CloudKitUtility.personalUserID!, action: .none)
+        let predicate = NSPredicate(format: "creatorUserRecordID == %@", reference)
+        let recordType = "UserData"
+        CloudKitUtility.fetch(predicate: predicate, recordType: recordType)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                
+            } receiveValue: { [weak self] returnedItems in
+                // FUTURE: Include handling of not retrieving workouts after a certain date
+                self?.pastWorkouts = returnedItems
+            }
+            .store(in: &cancellables)
+    }
+    
     
    /*
     func deleteItem(indexSet: IndexSet) {

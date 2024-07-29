@@ -360,6 +360,7 @@ struct HomeView: View {
             
             Tab("History", systemImage: "trophy") {
                 HistoryView(vm: vm)
+                    .onAppear(perform: vm.fetchItems)
             }
             
         }
@@ -439,31 +440,49 @@ struct HistoryView: View {
     var body: some View {
         VStack {
             Text("Recent Workouts")
-                .font(.headline)
+                .font(.title3.bold())
+                
             
             
-            
-            List {
-                ForEach(vm.pastWorkouts, id: \.self) { workout in
-                    HStack {
-                        Text(workout.workoutType)
-                        
-                        // Code for optional image parsing to represent workouts
-                        
-                 /*       if let url = workout.imageURL, let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                        } */
+            NavigationStack {
+                List {
+                    ForEach(vm.pastWorkouts, id: \.self) { workout in
+                        NavigationLink(destination: PreWorkoutSummaryView(workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: "Full Body", exercises: []))) {
+                            VStack(alignment: .leading) {
+                                Text(workout.workoutCategory)
+                                    .font(.headline)
+                                    .foregroundColor(.pink)
+                                Text("\(workout.date)")
+                                    .font(.caption)
+                                
+                                    .padding(.bottom, 10)
+                                Divider()
+                            }
+
+                            // Code for optional image parsing to represent workouts
+                            
+                            /*       if let url = workout.imageURL, let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                             Image(uiImage: image)
+                             .resizable()
+                             .frame(width: 50, height: 50)
+                             } */
+                        }
+                        .listRowSeparator(.hidden)
+                //        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 0)
+                        .onTapGesture {
+                            // Insert any more detailed subviews of workouts
+                        }
                     }
-                    .onTapGesture {
-                        // Insert any more detailed subviews of workouts
-                    }
+                    // Can be enabled if you want to delete recent workouts
+                    //                .onDelete(perform: vm.deleteItem)
                 }
-// Can be enabled if you want to delete recent workouts
-//                .onDelete(perform: vm.deleteItem)
+                .listStyle(.inset)
+                .background(.pink)
+                
+                
             }
-            .listStyle(PlainListStyle())
             
             
         }

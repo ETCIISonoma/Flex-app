@@ -224,7 +224,7 @@ struct WorkoutActiveView: View {
                     // End workout action
                     stopTimer()
                     // CloudKit: add item to workout history
-                    vm.addItem(workoutType: selectedExerciseCategory)
+                    vm.addItem(workoutCategory: selectedExerciseCategory)
                     // State machine
                     wf.navigateToHome = true
                     wf.workoutFinished = true

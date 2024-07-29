@@ -17,11 +17,19 @@ struct FlexApp: App {
     
     var body: some Scene {
         WindowGroup {
+            SignInView()
+                .environmentObject(counter)
+                .environmentObject(targetAreas)
+                .environmentObject(selectedSets)
+                .environmentObject(wf)
+            
+            /*
             BLEPairingView()
                 .environmentObject(counter)
                 .environmentObject(targetAreas)
                 .environmentObject(selectedSets)
                 .environmentObject(wf)
+             */
         }
     }
 }

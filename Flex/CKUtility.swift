@@ -17,6 +17,10 @@ protocol CloudKitableProtocol {
 
 class CloudKitUtility {
     
+    static let shared = CloudKitUtility()
+    
+    static var personalUserID: CKRecord.ID? = nil
+    
     enum CloudKitError: String, LocalizedError {
         case iCloudAccountNotFound
         case iCloudAccountNotDetermined
@@ -76,9 +80,10 @@ extension CloudKitUtility {
         }
     }
     
-    static private func fetchUserRecordID(completion: @escaping (Result<CKRecord.ID, Error>) -> ()) {
+    static func fetchUserRecordID(completion: @escaping (Result<CKRecord.ID, Error>) -> ()) {
         CKContainer.default().fetchUserRecordID { returnedID, returnedError in
             if let id = returnedID {
+                self.personalUserID = returnedID
                 completion(.success(id))
             } else if let error = returnedError {
                 completion(.failure(error))
@@ -123,6 +128,38 @@ extension CloudKitUtility {
 // MARK: CRUD FUNCTIONS
 
 extension CloudKitUtility {
+    /*
+    static func fetchFromUser<T:CloudKitableProtocol>(
+        recordType: CKRecord.RecordType,
+        sortDescriptions: [NSSortDescriptor]? = nil,
+        resultsLimit: Int? = nil
+    ) -> Future<[T], Error> {
+        Future { promise in
+            let reference = CKRecord.Reference(recordID: userID, action: .none)
+            let predicate = NSPredicate(format: "creatorUserRecordID == %@", reference)
+            
+            CloudKitUtility.fetch(predicate: predicate, recordType: recordType, sortDescriptions: sortDescriptions, resultsLimit: resultsLimit) { (items: [T]) in
+                promise(.success(items))
+            }
+        }
+    }
+    
+    private static func fetchFromUser<T:CloudKitableProtocol>(
+        userID: CKRecord.ID,
+        recordType: CKRecord.RecordType,
+        sortDescriptions: [NSSortDescriptor]? = nil,
+        resultsLimit: Int? = nil
+    ) -> Future<[T], Error> {
+        Future { promise in
+            let reference = CKRecord.Reference(recordID: userID, action: .none)
+            let predicate = NSPredicate(format: "creatorUserRecordID == %@", reference)
+            
+            CloudKitUtility.fetch(predicate: predicate, recordType: recordType, sortDescriptions: sortDescriptions, resultsLimit: resultsLimit) { (items: [T]) in
+                promise(.success(items))
+            }
+        }
+    }
+*/
     
     static func fetch<T:CloudKitableProtocol>(
         predicate: NSPredicate,
