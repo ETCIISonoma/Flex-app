@@ -15,7 +15,7 @@ struct WorkoutSetBreakView: View {
     
     @EnvironmentObject var targetAreas: TargetAreaStore
     @EnvironmentObject var c: Counter
-    @EnvironmentObject var wf: workoutFlag
+    //@EnvironmentObject var wf: workoutFlag
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
 
@@ -55,11 +55,11 @@ struct WorkoutSetBreakView: View {
                 Spacer()
 
                 Button(action: {
-                    wf.navigateToHome = true
-                    wf.workoutFinished = true
-                    wf.navigateToRePlace = false
-                    wf.navigateToSetBreak = false
-                    wf.setBreakFinished = false
+                    accessorySessionManager.wf.navigateToHome = true
+                    accessorySessionManager.wf.workoutFinished = true
+                    accessorySessionManager.wf.navigateToRePlace = false
+                    accessorySessionManager.wf.navigateToSetBreak = false
+                    accessorySessionManager.wf.setBreakFinished = false
                     accessorySessionManager.writeState(state: 4)
                 }) {
                     Text("End Workout")
@@ -95,7 +95,7 @@ struct WorkoutSetBreakView: View {
                 timeRemaining -= 1
             } else {
                 timer?.invalidate()
-                wf.setBreakFinished = true
+                accessorySessionManager.wf.setBreakFinished = true
             }
         }
     }

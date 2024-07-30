@@ -12,7 +12,7 @@ struct RemoveFromSurfaceView: View {
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
-    @EnvironmentObject var wf: workoutFlag
+    //@EnvironmentObject var wf: workoutFlag
     
     var body: some View {
         VStack {

@@ -91,7 +91,17 @@ struct PairedView: View {
                     }
                 }
             
-            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: .fullBody, exercises: []))) {
+            NavigationLink(destination: HomeView()) {
+                Text("Go to Pre-Workout Confirmation")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            
+            /*NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: .fullBody, exercises: []))) {
                                 Text("Go to Pre-Workout Confirmation")
                                     .font(.headline)
                                     .padding()
@@ -100,7 +110,7 @@ struct PairedView: View {
                                     .foregroundColor(.white)
                                     .cornerRadius(8)
                             }
-                            .padding()
+                            .padding()*/
                             
                             Button {
                                 accessorySessionManager.removeAccessory()

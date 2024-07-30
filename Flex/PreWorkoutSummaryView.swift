@@ -53,7 +53,6 @@ struct PreWorkoutSummaryView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var environmentStore:  TargetAreaStore
     @EnvironmentObject private var sets: numSets
-    @EnvironmentObject var wf: workoutFlag
     @ObservedObject var coutner: Counter = .init(counter: 0)
     
     @State private var totalTime = 20.0
@@ -178,7 +177,7 @@ struct PreWorkoutSummaryView: View {
                     
                     Button(action: {
                         //navigate = true
-                        wf.workoutFinished = false
+                        accessorySessionManager.wf.workoutFinished = false
                         // Begin workout action
                     }) {
                         Text("Begin Workout")

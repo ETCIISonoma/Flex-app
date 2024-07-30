@@ -417,7 +417,7 @@ struct MinutesGoals: View {
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
             
-            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: .fullBody, exercises: []))) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: .fullBody, exercises: ["Seated Row", "Crunches", "Bicep Curls"]))) {
                 HStack {
                     Image(systemName: "sparkles")
                         .resizable()

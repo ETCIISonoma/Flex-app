@@ -23,7 +23,7 @@ struct WorkoutActiveView: View {
     @State private var intensity: Double = 50
     
     @EnvironmentObject var c: Counter
-    @EnvironmentObject var wf: workoutFlag
+    //@EnvironmentObject var wf: workoutFlag
     
     let totalSets = 3 //change later to take into account numSets
     let totalRepsPerExercise = 10
@@ -181,7 +181,8 @@ struct WorkoutActiveView: View {
                 }
                 .padding(.horizontal)
                 .onChange(of: intensity) {
-                    accessorySessionManager.writeTorque(torque: UInt8(intensity))
+                    print(intensity/100*40)
+                    accessorySessionManager.writeTorque(torque: UInt8((intensity/100)*40))
                 }
                 
                 Text("Circuit")
@@ -242,11 +243,11 @@ struct WorkoutActiveView: View {
                 Button(action: {
                     // End workout action
                     stopTimer()
-                    wf.navigateToHome = true
-                    wf.workoutFinished = true
-                    wf.navigateToRePlace = false
-                    wf.navigateToSetBreak = false
-                    wf.setBreakFinished = false
+                    accessorySessionManager.wf.navigateToHome = true
+                    accessorySessionManager.wf.workoutFinished = true
+                    accessorySessionManager.wf.navigateToRePlace = false
+                    accessorySessionManager.wf.navigateToSetBreak = false
+                    accessorySessionManager.wf.setBreakFinished = false
                     accessorySessionManager.writeState(state: 4)
                 }) {
                     Text("End Workout")
@@ -265,23 +266,27 @@ struct WorkoutActiveView: View {
             }
             .onChange(of: currentRep) {
                 if(currentRep == 10 && c.counter != totalExercises-1) {
+                    print(c.counter)
                     c.counter += 1
+                    print(c.counter)
                     accessorySessionManager.writeState(state: 4)
-                    wf.navigateToRePlace = true
+                    accessorySessionManager.wf.navigateToRePlace = true
+                    print("got to replace")
+                    print(accessorySessionManager.wf.navigateToRePlace)
                 }
                 else if (currentRep == 10 && c.counter == totalExercises-1) {
                     c.counter = 0
                     currentSet += 1
                     if currentSet > totalSets {
-                        wf.navigateToHome = true
-                        wf.workoutFinished = true
+                        accessorySessionManager.wf.navigateToHome = true
+                        accessorySessionManager.wf.workoutFinished = true
                         accessorySessionManager.writeState(state: 4)
                         stopTimer()
                         currentSet = 0
                     }
                     else {
                         accessorySessionManager.writeState(state: 4)
-                        wf.navigateToSetBreak = true
+                        accessorySessionManager.wf.navigateToSetBreak = true
                     }
                 }
             }

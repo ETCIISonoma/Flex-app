@@ -25,6 +25,7 @@ struct PlacementConfirmationView: View {
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 navigateToWorkoutActiveView = true
+                                accessorySessionManager.viewState = .activeWorkout
                                 //wf.success = true
                             }
                         }

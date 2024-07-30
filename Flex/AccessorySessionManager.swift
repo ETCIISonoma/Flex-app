@@ -58,30 +58,48 @@ class AccessorySessionManager: NSObject, ObservableObject {
                 wf.navigateToSetBreak = false
                 wf.setBreakFinished = false
             case .touchedASurface, .activatingPump:
+                print(wf.initialPickUp)
+                print(wf.workoutFinished)
+                /*if(wf.workoutFinished) { // 7) Review whether this condition should be here - shouldnt it also stay on home if workout finished but its on a surface?
+                    wf.initialPickUp = false
+                    self.viewState = .home
+                    //self.viewState = .notStarted
+                }*/
                 if(!wf.initialPickUp) {
                     self.viewState = .pickUp
                     wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout - Done
                 }
-                else if(wf.workoutFinished) { // 7) Review whether this condition should be here - shouldnt it also stay on home if workout finished but its on a surface?
-                    wf.initialPickUp = false
-                    self.viewState = .home
-                }
-                else {
+                else if(!wf.workoutFinished) {
                     self.viewState = .hold
                 }
             case .transitioningSuccessfully:
                 if oldValue == .activatingPump {
                     self.viewState = .confirmation
+                    print("got to confirm")
                 } else if self.previousViewStates.contains(.confirmation) { // 6) maybe change this to if view state is currently confirmation???
+                //else if self.viewState == .confirmation {
+                    print("got to active")
                     self.viewState = .activeWorkout
                 }
             case .home:
+                print("got home")
+                print(self.viewState)
+                print(wf.navigateToRePlace)
+                print(wf.navigateToSetBreak)
+                print(wf.navigateToHome)
                 if wf.navigateToRePlace || wf.setBreakFinished {
+                    print("case1")
                     self.viewState = .replace
                 } else if wf.navigateToSetBreak {
                     self.viewState = .setBreak
                 } else if wf.navigateToHome { // 2) Need to add condition also for workout is over and also ensure it stays on home till new workout started.
                     self.viewState = .remove
+                }
+                else {
+                    print("got here")
+                    print(wf.navigateToRePlace)
+                    print(wf.navigateToSetBreak)
+                    print(wf.navigateToHome)
                 }
             case .tryAgain:
                 self.viewState = .tryAgain
