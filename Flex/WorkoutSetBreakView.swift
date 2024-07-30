@@ -53,6 +53,21 @@ struct WorkoutSetBreakView: View {
                 }
 
                 Spacer()
+                
+                Button(action: {
+                    accessorySessionManager.wf.navigateToSetBreak = false
+                    accessorySessionManager.wf.setBreakFinished = true
+                    accessorySessionManager.writeState(state: 4)
+                    timer?.invalidate()
+                }) {
+                    Text("Skip")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.pink)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal, 50)
 
                 Button(action: {
                     accessorySessionManager.wf.navigateToHome = true
@@ -94,8 +109,9 @@ struct WorkoutSetBreakView: View {
             if timeRemaining > 0 {
                 timeRemaining -= 1
             } else {
-                timer?.invalidate()
                 accessorySessionManager.wf.setBreakFinished = true
+                accessorySessionManager.wf.navigateToSetBreak = false
+                timer?.invalidate()
             }
         }
     }
@@ -106,6 +122,6 @@ struct WorkoutSetBreakView_Previews: PreviewProvider {
         WorkoutSetBreakView()
             .environmentObject(TargetAreaStore(targetAreas: ["High", "Low", "Mid"]))
             .environmentObject(Counter(counter: 0))
-            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
     }
 }

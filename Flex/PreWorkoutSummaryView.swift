@@ -35,15 +35,17 @@ class workoutFlag: ObservableObject {
     @Published var setBreakFinished: Bool
     @Published var initialPickUp: Bool
     @Published var workoutFinished: Bool
+    @Published var currentSet: Int
     //@Published var success: Bool
     
-    init(navigateToRePlace: Bool, navigateToSetBreak: Bool, navigateToHome: Bool, setBreakFinished: Bool, initialPickUp: Bool, workoutFinished: Bool) {
+    init(navigateToRePlace: Bool, navigateToSetBreak: Bool, navigateToHome: Bool, setBreakFinished: Bool, initialPickUp: Bool, workoutFinished: Bool, currentSet: Int) {
         self.navigateToRePlace = navigateToRePlace
         self.navigateToSetBreak = navigateToSetBreak
         self.navigateToHome = navigateToHome
         self.setBreakFinished = setBreakFinished
         self.initialPickUp = initialPickUp
         self.workoutFinished = workoutFinished
+        self.currentSet = currentSet
     }
 }
 
@@ -249,7 +251,7 @@ struct PreWorkoutSummaryView_Previews: PreviewProvider {
             .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low", "High"]))
             .environmentObject(numSets(selectedSets: 3))
             .environmentObject(Counter(counter: 0))
-            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
     }
 }
 

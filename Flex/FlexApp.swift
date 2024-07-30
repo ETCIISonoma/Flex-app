@@ -13,7 +13,7 @@ struct FlexApp: App {
     let counter = Counter(counter: 0)
     let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest"]) // change later.
     let selectedSets = numSets(selectedSets: 3)
-    let wf = workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: true)
+    let wf = workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: true, currentSet: 1)
     
     var body: some Scene {
         WindowGroup {

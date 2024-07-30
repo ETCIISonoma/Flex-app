@@ -12,7 +12,7 @@ struct WorkoutActiveView: View {
     @State private var timerRunning = true
     @State private var secondsElapsed = 0
     @State private var caloriesBurnt = 0
-    @State private var currentSet = 1
+    //@State private var currentSet = 1
     @State private var currentRep = 0
     @State private var timer: Timer?
     @State private var showInfo = false
@@ -107,7 +107,7 @@ struct WorkoutActiveView: View {
                 HStack {
                     ForEach(0..<totalSets, id: \.self) { index in
                         Rectangle()
-                            .fill(index < currentSet-1 ? Color.pink : Color.gray.opacity(0.40))
+                            .fill(index < (accessorySessionManager.wf.currentSet-1) ? Color.pink : Color.gray.opacity(0.40))
                             .frame(height: 10)
                             .cornerRadius(5)
                     }
@@ -265,7 +265,7 @@ struct WorkoutActiveView: View {
                 startTimer()
             }
             .onChange(of: currentRep) {
-                if(currentRep == 10 && c.counter != totalExercises-1) {
+                if(currentRep == 10 && c.counter < totalExercises-1) {
                     print(c.counter)
                     c.counter += 1
                     print(c.counter)
@@ -274,15 +274,15 @@ struct WorkoutActiveView: View {
                     print("got to replace")
                     print(accessorySessionManager.wf.navigateToRePlace)
                 }
-                else if (currentRep == 10 && c.counter == totalExercises-1) {
+                else if (currentRep == 10 && c.counter >= totalExercises-1) {
                     c.counter = 0
-                    currentSet += 1
-                    if currentSet > totalSets {
+                    accessorySessionManager.wf.currentSet += 1
+                    if accessorySessionManager.wf.currentSet > totalSets {
                         accessorySessionManager.wf.navigateToHome = true
                         accessorySessionManager.wf.workoutFinished = true
                         accessorySessionManager.writeState(state: 4)
                         stopTimer()
-                        currentSet = 0
+                        accessorySessionManager.wf.currentSet = 0
                     }
                     else {
                         accessorySessionManager.writeState(state: 4)
@@ -355,7 +355,7 @@ struct BatteryPercentageView: View {
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: .upperBody, exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
-            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+            .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
             .environmentObject(Counter(counter: 0))
     }
 }

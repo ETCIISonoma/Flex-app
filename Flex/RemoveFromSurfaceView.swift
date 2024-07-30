@@ -29,7 +29,7 @@ struct RemoveFromSurfaceView: View {
                     .font(.system(size: 40))
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)
-                Text("Press and hold the red button until \nall pressure is released")
+                Text("Press and hold the silver bar until \nall pressure is released")
                     .font(.body)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
@@ -46,5 +46,5 @@ struct RemoveFromSurfaceView: View {
 
 #Preview {
     RemoveFromSurfaceView(accessorySessionManager: AccessorySessionManager.shared)
-        .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+        .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
 }

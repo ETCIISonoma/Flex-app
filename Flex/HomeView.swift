@@ -600,5 +600,5 @@ struct WorkoutTile: View {
         .environmentObject(TargetAreaStore(targetAreas: ["Chest", "High", "Low"]))
         .environmentObject(numSets(selectedSets: 3))
         .environmentObject(Counter(counter: 0))
-        .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false))
+        .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
 }

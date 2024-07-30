@@ -117,7 +117,7 @@ struct WorkoutRePlaceView: View {
                         .font(.title)
                         .multilineTextAlignment(.center)
 
-                    Text("Press the red button to release \nF1. Then tap continue.")
+                    Text("Press the silver bar to release the F1.\n Then lift it.")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
@@ -126,7 +126,7 @@ struct WorkoutRePlaceView: View {
                 Spacer()
 
                 VStack(spacing: 20) {
-                    NavigationLink(
+                    /*NavigationLink(
                         destination: PlacementInstructionView(accessorySessionManager: accessorySessionManager) .environmentObject(targetAreas)
                             .environmentObject(c)
                     )
@@ -139,7 +139,7 @@ struct WorkoutRePlaceView: View {
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
-                    .padding(.horizontal, 50)
+                    .padding(.horizontal, 50)*/
 
                     Button(action: {
                         accessorySessionManager.wf.navigateToHome = true

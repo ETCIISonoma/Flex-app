@@ -168,7 +168,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
         viewState = .notStarted
         previousViewStates = []
         
-        self.wf = .init(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false)
+        self.wf = .init(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1)
         
         //self.sequence = [.pickUp, .instruction, .hold, .confirmation, .notStarted]
         super.init()
