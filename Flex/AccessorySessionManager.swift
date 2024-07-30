@@ -65,7 +65,11 @@ class AccessorySessionManager: NSObject, ObservableObject {
                     self.viewState = .home
                     //self.viewState = .notStarted
                 }*/
-                if(!wf.initialPickUp) {
+                if(wf.workoutFinished) {
+                    wf.initialPickUp = false
+                    self.viewState = .home
+                }
+                else if(!wf.initialPickUp) {
                     self.viewState = .pickUp
                     wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout - Done
                 }

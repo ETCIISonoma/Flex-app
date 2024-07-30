@@ -564,6 +564,7 @@ struct WorkoutCategoryView: View {
 
 struct WorkoutTile: View {
     let workout: Workout
+    @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     var body: some View {
         NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
@@ -589,7 +590,8 @@ struct WorkoutTile: View {
             .frame(maxWidth: 150)
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
-        }.buttonStyle(.plain)
+        }
+        .buttonStyle(.plain)
     }
 }
 
