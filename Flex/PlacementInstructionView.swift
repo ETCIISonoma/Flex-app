@@ -110,14 +110,16 @@ import Foundation
 
 struct PlacementInstructionView: View {
     @EnvironmentObject var es: TargetAreaStore
-    @EnvironmentObject var c: Counter
+    //@EnvironmentObject var c: Counter
     @ObservedObject var accessorySessionManager: AccessorySessionManager = .shared
 
     var body: some View {
+        //Text(" \(accessorySessionManager.c.counter)")
+        //Text(es.targetAreas[accessorySessionManager.c.counter])
         GeometryReader { geometry in
             VStack {
                 // Option 1: High on the wall
-                if es.targetAreas[c.counter] == "High" {
+                if es.targetAreas[accessorySessionManager.c.counter] == "High" {
                     Group {
                         Text("Place your ")
                             .font(.largeTitle)
@@ -152,7 +154,7 @@ struct PlacementInstructionView: View {
                 }
                 
                 // Option 2: Low on the Wall
-                else if es.targetAreas[c.counter] == "Low" {
+                else if es.targetAreas[accessorySessionManager.c.counter] == "Low" {
                     Group {
                         Text("Place your ")
                             .font(.largeTitle)
@@ -187,7 +189,7 @@ struct PlacementInstructionView: View {
                 }
                 
                 // Option 3: Middle (at chest height)
-                else if es.targetAreas[c.counter] == "Chest" {
+                else if es.targetAreas[accessorySessionManager.c.counter] == "Chest" {
                     Group {
                         Text("Place your ")
                             .font(.largeTitle)

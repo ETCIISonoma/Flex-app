@@ -96,7 +96,7 @@ struct WorkoutRePlaceView: View {
     @State private var showPlacementInstruction = false
     @State private var showHomeView = false
     @EnvironmentObject var targetAreas: TargetAreaStore
-    @EnvironmentObject var c: Counter
+    //@EnvironmentObject var c: Counter
     //@EnvironmentObject var wf: workoutFlag
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared

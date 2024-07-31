@@ -15,7 +15,7 @@ struct WorkoutSetBreakView: View {
     //@State private var navigateToHomeView = false
     
     @EnvironmentObject var targetAreas: TargetAreaStore
-    @EnvironmentObject var c: Counter
+    //@EnvironmentObject var c: Counter
     //@EnvironmentObject var wf: workoutFlag
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared

@@ -570,6 +570,7 @@ struct WorkoutTile: View {
         Button(action: {
             // Set the flag to false when the button is clicked
             accessorySessionManager.wf.workoutFinished = false
+            print("set flag in home view")
         }) {
             NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
                 VStack {

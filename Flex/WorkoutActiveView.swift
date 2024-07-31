@@ -22,7 +22,7 @@ struct WorkoutActiveView: View {
     @State private var navigateToRePlace = false*/
     @State private var intensity: Double = 50
     
-    @EnvironmentObject var c: Counter
+    //@EnvironmentObject var c: Counter
     //@EnvironmentObject var wf: workoutFlag
     
     let totalSets = 3 //change later to take into account numSets
@@ -267,17 +267,17 @@ struct WorkoutActiveView: View {
                 startTimer()
             }
             .onChange(of: currentRep) {
-                if(currentRep == 10 && c.counter < totalExercises-1) {
-                    print(c.counter)
-                    c.counter += 1
-                    print(c.counter)
+                if(currentRep == 10 && accessorySessionManager.c.counter < totalExercises-1) {
+                    print(accessorySessionManager.c.counter)
+                    accessorySessionManager.c.counter += 1
+                    print(accessorySessionManager.c.counter)
                     accessorySessionManager.writeState(state: 4)
                     accessorySessionManager.wf.navigateToRePlace = true
                     print("got to replace")
                     print(accessorySessionManager.wf.navigateToRePlace)
                 }
-                else if (currentRep == 10 && c.counter >= totalExercises-1) {
-                    c.counter = 0
+                else if (currentRep == 10 && accessorySessionManager.c.counter >= totalExercises-1) {
+                    accessorySessionManager.c.counter = 0
                     accessorySessionManager.wf.currentSet += 1
                     if accessorySessionManager.wf.currentSet > totalSets {
                         accessorySessionManager.wf.navigateToHome = true

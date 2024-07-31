@@ -10,13 +10,15 @@ import SwiftUI
 
 struct PlacementHoldView: View {
     @EnvironmentObject var es: TargetAreaStore
-    @EnvironmentObject var c: Counter
+    //@EnvironmentObject var c: Counter
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     @State private var navigateToConfirmation = false
     @State private var backgroundColor = Color.black
 
     var body: some View {
+        //Text(" \(accessorySessionManager.c.counter)")
+        //Text(es.targetAreas[accessorySessionManager.c.counter])
         NavigationStack {
             /* TEST if(accessorySessionManager.globalState == 3 || accessorySessionManager.globalState == 6) {
                 //backgroundColor = Color.pink
@@ -24,7 +26,7 @@ struct PlacementHoldView: View {
             }*/
             // TEST else {
                 VStack {
-                    if(es.targetAreas[c.counter] == "High") {
+                    if(es.targetAreas[accessorySessionManager.c.counter] == "High") {
                         Spacer()
                         
                         Image("high_wall_placed")
@@ -58,7 +60,7 @@ struct PlacementHoldView: View {
                     }
                     
                     // Option 2: Low on the Wall
-                    else if(es.targetAreas[c.counter] == "Low") {
+                    else if(es.targetAreas[accessorySessionManager.c.counter] == "Low") {
                         Spacer()
                         
                         Image("low_wall_placed")
@@ -92,7 +94,7 @@ struct PlacementHoldView: View {
                     }
                     
                     // Option 3: Middle (at chest height)
-                    else if(es.targetAreas[c.counter] == "Chest") {
+                    else if(es.targetAreas[accessorySessionManager.c.counter] == "Chest") {
                         Spacer()
                         
                         Image("mid_wall_placed")

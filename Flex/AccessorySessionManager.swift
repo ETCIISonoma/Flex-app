@@ -32,6 +32,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
     
     static let shared = AccessorySessionManager()
     @Published var wf: workoutFlag
+    @Published var c: Counter
     
     @Published var accessoryModel: AccessoryModel?
     {
@@ -68,13 +69,16 @@ class AccessorySessionManager: NSObject, ObservableObject {
                 if(wf.workoutFinished) {
                     wf.initialPickUp = false
                     self.viewState = .home
+                    print("second try case 1")
                 }
                 else if(!wf.initialPickUp) {
                     self.viewState = .pickUp
                     wf.initialPickUp = true // 5) Need to be able to set this to false at end of the workout - Done
+                    print("second try case 2")
                 }
                 else if(!wf.workoutFinished) {
                     self.viewState = .hold
+                    print("second try case 3")
                 }
             case .transitioningSuccessfully:
                 if oldValue == .activatingPump {
@@ -169,6 +173,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
         previousViewStates = []
         
         self.wf = .init(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1)
+        self.c = .init(counter: 0)
         
         //self.sequence = [.pickUp, .instruction, .hold, .confirmation, .notStarted]
         super.init()

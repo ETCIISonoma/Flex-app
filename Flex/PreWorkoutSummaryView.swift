@@ -55,7 +55,7 @@ struct PreWorkoutSummaryView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var environmentStore:  TargetAreaStore
     @EnvironmentObject private var sets: numSets
-    @ObservedObject var coutner: Counter = .init(counter: 0)
+    //@ObservedObject var coutner: Counter = .init(counter: 0)
     
     @State private var totalTime = 20.0
     //@State var navigate: Bool = false
@@ -81,7 +81,7 @@ struct PreWorkoutSummaryView: View {
                 case .instruction:
                     PlacementInstructionView()
                         .environmentObject(environmentStore)
-                        .environmentObject(coutner)
+                        //.environmentObject()
                 case .hold:
                     PlacementHoldView()
                 case .confirmation:
