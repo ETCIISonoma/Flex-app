@@ -11,6 +11,7 @@ import SwiftUI
 struct WorkoutSetBreakView: View {
     @State private var timeRemaining: Int = 30
     @State private var timer: Timer?
+    //var workout: Workout
     //@State private var navigateToHomeView = false
     
     @EnvironmentObject var targetAreas: TargetAreaStore
@@ -55,10 +56,19 @@ struct WorkoutSetBreakView: View {
                 Spacer()
                 
                 Button(action: {
-                    accessorySessionManager.wf.navigateToSetBreak = false
-                    accessorySessionManager.wf.setBreakFinished = true
-                    accessorySessionManager.writeState(state: 4)
-                    timer?.invalidate()
+                    if(accessorySessionManager.wf.currentSet < 4) {
+                        accessorySessionManager.wf.navigateToSetBreak = false
+                        accessorySessionManager.wf.setBreakFinished = true
+                        accessorySessionManager.writeState(state: 4)
+                        timer?.invalidate()
+                    }
+                    else {
+                        accessorySessionManager.wf.navigateToSetBreak = false
+                        accessorySessionManager.wf.setBreakFinished = false
+                        accessorySessionManager.wf.navigateToHome = true
+                        accessorySessionManager.writeState(state: 4)
+                        timer?.invalidate()
+                    }
                 }) {
                     Text("Skip")
                         .frame(maxWidth: .infinity)

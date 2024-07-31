@@ -216,6 +216,8 @@ struct WorkoutActiveView: View {
                                 Button(action: {
                                     selectedExerciseInfo = "\(workout.exercises[index]): \(workout.exercises[index])"
                                     showInfo.toggle()
+                                    stopTimer()
+                                    
                                 }) {
                                     Image(systemName: "info.circle")
                                         .foregroundColor(.pink)
@@ -354,7 +356,7 @@ struct BatteryPercentageView: View {
 
 struct WorkoutActiveView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: .upperBody, exercises: ["Cable Pull-Down", "Side Bend", "Cable Squat"]))
+        WorkoutActiveView(totalExercises: 3, workout: Workout(title: "Upper Body - Relaxed", description: "insert description", iconName: "lol", category: .upperBody, exercises: ["Triceps - Pull Down", "Side Bend", "Squat"]))
             .environmentObject(workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: false, currentSet: 1))
             .environmentObject(Counter(counter: 0))
     }

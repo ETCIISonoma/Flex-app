@@ -567,7 +567,38 @@ struct WorkoutTile: View {
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     var body: some View {
-        NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
+        Button(action: {
+            // Set the flag to false when the button is clicked
+            accessorySessionManager.wf.workoutFinished = false
+        }) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
+                VStack {
+                    Image(systemName: workout.iconName)
+                        .resizable()
+                        .scaledToFit()
+                        .padding()
+                        .frame(width: 150, height: 100)
+                        .backgroundStyle(Color.init(uiColor: .tertiarySystemBackground))
+                        .foregroundColor(.white)
+                    
+                    VStack(alignment: .leading) {
+                        Text(workout.title)
+                            .foregroundColor(.primary)
+                            .font(.headline)
+                        Text(workout.description)
+                            .foregroundColor(.secondary)
+                            .font(.subheadline)
+                            .lineLimit(2)
+                    }
+                    .padding()
+                }
+                .frame(maxWidth: 150)
+                .background(Color(UIColor.secondarySystemBackground))
+                .cornerRadius(12)
+            }
+        }
+        .buttonStyle(.plain)
+        /*NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
             VStack {
                 Image(systemName: workout.iconName)
                     .resizable()
@@ -591,7 +622,7 @@ struct WorkoutTile: View {
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.plain)*/
     }
 }
 
