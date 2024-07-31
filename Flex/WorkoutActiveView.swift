@@ -21,6 +21,7 @@ struct WorkoutActiveView: View {
     @State private var navigateToSetBreak = false
     @State private var navigateToRePlace = false*/
     @State private var intensity: Double = 50
+    @State private var battery: Float = 100
     
     //@EnvironmentObject var c: Counter
     //@EnvironmentObject var wf: workoutFlag
@@ -44,17 +45,17 @@ struct WorkoutActiveView: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Full Body & Core")
+                        Text(workout.description)
                             .font(.headline)
                             .foregroundColor(.white)
-                        Text("20 min - Floor")
+                        Text("20 min - 3 sets")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text("Vaughn's F1")
-                        BatteryPercentageView(percentage: 84)
+                        BatteryPercentageView(percentage: UInt8(battery))
                     }
                 }
                 .padding()
@@ -318,12 +319,36 @@ struct WorkoutActiveView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             withAnimation {
                 secondsElapsed += 1
+                let rawBattery = (accessorySessionManager.batteryVoltage ?? 0) + ((accessorySessionManager.motorPower ?? 0)/(accessorySessionManager.batteryVoltage ?? 0))*0.2
+                battery = batteryPercentage(for: rawBattery)
             }
             // Add calories burnt calculation here.
             
             // Add code to update reps and sets
             currentRep = Int(accessorySessionManager.repCount ?? 0)
         }
+    }
+    
+    func batteryPercentage(for voltage: Float) -> Float {
+        let voltageToPercentage: [(Float, Float)] = [
+            (25.2, 100), (24.9, 95), (24.67, 90), (24.49, 85), (24.14, 80),
+            (23.9, 75), (23.72, 70), (23.48, 65), (23.25, 60), (23.13, 55),
+            (23.01, 50), (22.89, 45), (22.77, 40), (22.72, 35), (22.6, 30),
+            (22.48, 25), (22.36, 20), (22.24, 15), (22.12, 10), (21.69, 5),
+            (19.64, 0)
+        ]
+        
+        for i in 1..<voltageToPercentage.count {
+            let (v1, p1) = voltageToPercentage[i - 1]
+            let (v2, p2) = voltageToPercentage[i]
+            
+            if voltage >= v2 && voltage <= v1 {
+                let percentage = p1 + (voltage - v1) * (p2 - p1) / (v2 - v1)
+                return percentage
+            }
+        }
+        
+        return 0 // Return 0% if the voltage is below the lowest value in the map
     }
     
     func stopTimer() {
