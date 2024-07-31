@@ -73,13 +73,13 @@ struct WorkoutActiveView: View {
                         .padding([.horizontal], 7)
                     
                     HStack(spacing: 10) {
-                        Image(systemName: "flame.fill")
+                        /*Image(systemName: "flame.fill")
                             .resizable()
                             .frame(width: 24, height: 34)
                             .foregroundColor(.accentColor)
                         Text("\(caloriesBurnt) cal")
                             .font(.title2)
-                            .foregroundColor(.white)
+                            .foregroundColor(.white)*/
                     }
                     
                     Spacer()
@@ -232,7 +232,17 @@ struct WorkoutActiveView: View {
                             }
                             .frame(height: 100) // Height of the exercise box
                             .padding()
-                            .background(.gray.opacity(0.25))
+                            //.background(.gray.opacity(0.25))
+                            .background(
+                                   RoundedRectangle(cornerRadius: 10)
+                                       .stroke(
+                                           accessorySessionManager.c.counter == index ? Color.pink : Color.clear, lineWidth: 3
+                                       )
+                                       .background(
+                                           Color.gray.opacity(0.25)
+                                               .cornerRadius(10)
+                                       )
+                               )
                             .cornerRadius(10)
                             .padding(.horizontal)
                         }

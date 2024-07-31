@@ -77,7 +77,7 @@ struct WorkoutSetBreakView: View {
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
-                .padding(.horizontal, 50)
+                .padding(.horizontal, 20)
 
                 Button(action: {
                     accessorySessionManager.wf.navigateToHome = true
@@ -94,7 +94,7 @@ struct WorkoutSetBreakView: View {
                         .foregroundColor(.pink)
                         .cornerRadius(12)
                 }
-                .padding(.horizontal, 50)
+                .padding(.horizontal, 20)
             }
             .background(Color.black.edgesIgnoringSafeArea(.all))
             .foregroundColor(.white)
@@ -119,9 +119,18 @@ struct WorkoutSetBreakView: View {
             if timeRemaining > 0 {
                 timeRemaining -= 1
             } else {
-                accessorySessionManager.wf.setBreakFinished = true
-                accessorySessionManager.wf.navigateToSetBreak = false
                 timer?.invalidate()
+                DispatchQueue.main.async {
+                    accessorySessionManager.wf.setBreakFinished = true
+                    accessorySessionManager.wf.navigateToSetBreak = false
+                    
+                    if accessorySessionManager.wf.currentSet < 4 {
+                        accessorySessionManager.writeState(state: 4)
+                    } else {
+                        accessorySessionManager.wf.navigateToHome = true
+                        accessorySessionManager.writeState(state: 4)
+                    }
+                }
             }
         }
     }

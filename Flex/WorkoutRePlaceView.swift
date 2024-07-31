@@ -155,8 +155,9 @@ struct WorkoutRePlaceView: View {
                             .background(Color.pink.opacity(0.15))
                             .foregroundColor(.pink)
                             .cornerRadius(12)
+                            .padding(.horizontal)
                     }
-                    .padding(.horizontal, 50)
+                    .padding(.horizontal, 2)
                     
                     /*NavigationLink(
                         destination: HomeView()) {
