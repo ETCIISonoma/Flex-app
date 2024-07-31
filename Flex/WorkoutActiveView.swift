@@ -319,8 +319,10 @@ struct WorkoutActiveView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             withAnimation {
                 secondsElapsed += 1
-                let rawBattery = (accessorySessionManager.batteryVoltage ?? 0) + ((accessorySessionManager.motorPower ?? 0)/(accessorySessionManager.batteryVoltage ?? 0))*0.2
-                battery = batteryPercentage(for: rawBattery)
+                if(abs(accessorySessionManager.motorPower ?? 0) < 0.1) {
+                    let rawBattery = (accessorySessionManager.batteryVoltage ?? 0) + ((accessorySessionManager.motorPower ?? 0)/(accessorySessionManager.batteryVoltage ?? 0))*0.2
+                    battery = batteryPercentage(for: rawBattery)
+                }
             }
             // Add calories burnt calculation here.
             
