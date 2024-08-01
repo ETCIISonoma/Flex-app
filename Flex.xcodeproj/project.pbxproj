@@ -17,6 +17,9 @@
 		6F378A152C37C2EE00A7D898 /* PlacementInstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A142C37C2EE00A7D898 /* PlacementInstructionView.swift */; };
 		6F378A172C37C34C00A7D898 /* AccessoryPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A162C37C34600A7D898 /* AccessoryPosition.swift */; };
 		6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F378A1E2C37C84500A7D898 /* PlayerView.swift */; };
+		BB4BF6E72C5B2E86004AE705 /* CKUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4BF6E62C5B2E83004AE705 /* CKUserModel.swift */; };
+		BB4BF6E92C5B2EC7004AE705 /* CKUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4BF6E82C5B2EB0004AE705 /* CKUtility.swift */; };
+		BB4BF6EB2C5B2EF6004AE705 /* CKWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4BF6EA2C5B2EF3004AE705 /* CKWorkoutModel.swift */; };
 		BBD59F682C3F364D00549B22 /* PreWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD59F672C3F364D00549B22 /* PreWorkoutSummaryView.swift */; };
 		BBD59F6A2C3F36A000549B22 /* WorkoutActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD59F692C3F36A000549B22 /* WorkoutActiveView.swift */; };
 		BBD59F6C2C3F36B400549B22 /* WorkoutSetBreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD59F6B2C3F36B400549B22 /* WorkoutSetBreakView.swift */; };
@@ -42,6 +45,10 @@
 		6F378A162C37C34600A7D898 /* AccessoryPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryPosition.swift; sourceTree = "<group>"; };
 		6F378A1E2C37C84500A7D898 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6F647D982C3653B90083D69D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BB4BF6E62C5B2E83004AE705 /* CKUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserModel.swift; sourceTree = "<group>"; };
+		BB4BF6E82C5B2EB0004AE705 /* CKUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUtility.swift; sourceTree = "<group>"; };
+		BB4BF6EA2C5B2EF3004AE705 /* CKWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKWorkoutModel.swift; sourceTree = "<group>"; };
+		BB4BF6EC2C5B2F8B004AE705 /* Flex.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Flex.entitlements; sourceTree = "<group>"; };
 		BBD59F672C3F364D00549B22 /* PreWorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreWorkoutSummaryView.swift; sourceTree = "<group>"; };
 		BBD59F692C3F36A000549B22 /* WorkoutActiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutActiveView.swift; sourceTree = "<group>"; };
 		BBD59F6B2C3F36B400549B22 /* WorkoutSetBreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetBreakView.swift; sourceTree = "<group>"; };
@@ -100,6 +107,7 @@
 		6F23606F2C361E4900AFC164 /* Flex */ = {
 			isa = PBXGroup;
 			children = (
+				BB4BF6EC2C5B2F8B004AE705 /* Flex.entitlements */,
 				6F378A182C37C6E800A7D898 /* Resources */,
 				6F647D982C3653B90083D69D /* Info.plist */,
 				6F2360702C361E4900AFC164 /* FlexApp.swift */,
@@ -121,6 +129,9 @@
 				F09102592C5071E600F76A56 /* PickUpFromSurfaceView.swift */,
 				F09102552C4EEA7700F76A56 /* RemoveFromSurfaceView.swift */,
 				BBD59F6B2C3F36B400549B22 /* WorkoutSetBreakView.swift */,
+				BB4BF6E82C5B2EB0004AE705 /* CKUtility.swift */,
+				BB4BF6E62C5B2E83004AE705 /* CKUserModel.swift */,
+				BB4BF6EA2C5B2EF3004AE705 /* CKWorkoutModel.swift */,
 				6F2360742C361E4B00AFC164 /* Assets.xcassets */,
 			);
 			path = Flex;
@@ -203,10 +214,13 @@
 			files = (
 				6F378A1F2C37C84A00A7D898 /* PlayerView.swift in Sources */,
 				F08D37202C38AD1600633F53 /* PlacementHoldView.swift in Sources */,
+				BB4BF6E92C5B2EC7004AE705 /* CKUtility.swift in Sources */,
+				BB4BF6EB2C5B2EF6004AE705 /* CKWorkoutModel.swift in Sources */,
 				F08D37E62C3EF0D500633F53 /* HomeView.swift in Sources */,
 				6F378A112C37A35C00A7D898 /* AccessoryModel.swift in Sources */,
 				F09102562C4EEA8900F76A56 /* RemoveFromSurfaceView.swift in Sources */,
 				F08D37962C3DEF0900633F53 /* PlacementConfirmationView.swift in Sources */,
+				BB4BF6E72C5B2E86004AE705 /* CKUserModel.swift in Sources */,
 				BBD59F6E2C3F36C400549B22 /* WorkoutRePlaceView.swift in Sources */,
 				6F378A152C37C2EE00A7D898 /* PlacementInstructionView.swift in Sources */,
 				F091025A2C5071F100F76A56 /* PickUpFromSurfaceView.swift in Sources */,
@@ -350,6 +364,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Flex/Flex.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P455JX65K3;
@@ -368,7 +383,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sonoma.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sonoma.Flex-6";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -381,6 +396,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Flex/Flex.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P455JX65K3;
@@ -399,7 +415,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sonoma.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sonoma.Flex-6";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

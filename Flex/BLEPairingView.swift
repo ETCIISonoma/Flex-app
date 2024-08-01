@@ -13,8 +13,11 @@ struct BLEPairingView: View {
     var body: some View {
         if accessoryPaired {
             
+            SignInView(accessorySessionManager: accessorySessionManager)
+            //PairedView(accessorySessionManager: accessorySessionManager)
             
-            PairedView(accessorySessionManager: accessorySessionManager)
+            
+            
             //PreWorkoutSummaryView(workout: Workout(title: "lala", description: "lalala", iconName: "hehe", category: "ur mom"))
             // this is for testing, should actually proceed to the sign in page.
         } else {

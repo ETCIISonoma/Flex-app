@@ -360,29 +360,61 @@ struct Workout: Identifiable {
 //}
 
 struct HomeView: View {
+    @StateObject var vm = WorkoutDataViewModel()
+    @ObservedObject var uservm: UserViewModel = UserViewModel.shared
+    
     var body: some View {
         TabView {
             Tab("Summary", systemImage: "house") {
                 SummaryView()
+                    .onAppear {
+                        vm.addItem(workoutCategory: "Upper Body", workoutList: [
+                            "Cable Pull-Down",
+                            "Side Bend",
+                            "Cable Squat",
+                        ], intensityList: [45,35,50], timeList: [25,65,35]);
+                        vm.fetchUserIDItems();
+                        vm.workoutDateSorter();
+                    }
             }
             
             Tab("Workouts", systemImage: "figure.strengthtraining.functional") {
                 WorkoutsView()
+                    .onAppear{
+                        vm.workoutDateSorter();
+                    }
             }
             
             Tab("Leaderboard", systemImage: "trophy") {
-                Text("Leaderboard")
+                LeaderboardView()
+                    .onAppear{
+                        vm.fetchItems()
+                    }
             }
         }
     }
 }
 
 struct SummaryView: View {
+    @StateObject var vm: WorkoutDataViewModel = WorkoutDataViewModel()
+    @ObservedObject var uservm: UserViewModel = UserViewModel.shared
+
     var body: some View {
         NavigationStack {
             ScrollView {
-                MinutesGoals()
-                CaloriesGoal()
+                VStack {
+                    HStack{
+                        Text("Welcome " + uservm.userName + "!")
+                            .frame(maxWidth: .infinity)
+                            .font(.largeTitle.bold())
+                            //.underline(color: .pink)
+                        
+                        Spacer()
+                    }
+                    .padding(.bottom, 30)
+                    MinutesGoals(vm: vm)
+                    CaloriesGoal()
+                }
             }
                 .padding()
                 .navigationTitle("Summary")
@@ -402,6 +434,8 @@ struct SummaryView: View {
 }
 
 struct MinutesGoals: View {
+    var vm: WorkoutDataViewModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Your daily minutes goal")
@@ -417,7 +451,7 @@ struct MinutesGoals: View {
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
             
-            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: .fullBody, exercises: ["Seated Row", "Crunches", "Bicep Curls"]))) {
+            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: 3, workout: Workout(title: "Flex Workout of the Day", description: "Description goes here, it's a bit longer", iconName: "loll", category: .fullBody, exercises: []))) {
                 HStack {
                     Image(systemName: "sparkles")
                         .resizable()
@@ -439,6 +473,33 @@ struct MinutesGoals: View {
                 .background(Color.pink.opacity(0.15))
                 .cornerRadius(12)
             }
+            
+            NavigationLink(destination: HistoryView(vm: vm).onAppear{
+                vm.pastWorkouts = vm.workoutDateSorter()
+            }) {
+                HStack {
+                    Image(systemName: "newspaper")
+                        .resizable()
+                        .frame(width: 22, height: 25) // Set the size of the sparkles logo
+                        .foregroundColor(.pink)
+                    VStack(alignment: .leading) {
+                        Text("History")
+                            .foregroundColor(.white)
+                            .font(.headline)
+                        Text("Track Your Progress in Detail")
+                            .foregroundColor(.pink)
+                            .font(.subheadline)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.pink)
+                }
+                .padding()
+                .background(Color.pink.opacity(0.15))
+                .cornerRadius(12)
+            }
+            
+            
         }
     }
 }
@@ -467,6 +528,287 @@ struct CaloriesGoal: View {
         HStack {
             
         }
+    }
+}
+
+struct HistoryView: View {
+    var vm: WorkoutDataViewModel
+    
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(vm.workoutDateSorter(), id: \.self) { workout in
+                    if vm.isFromUser(workout: workout) {
+                        NavigationLink(destination: WorkoutDetailView(workoutTitle: workout.workoutCategory, date: workout.dateString)) {
+                            HistoryRow(workout: workout)
+                        }
+                        
+                    }
+                }
+                
+                /*
+                
+                NavigationLink(destination: WorkoutDetailView(workoutTitle: "Full Body & Core", date: "Jan 17, 2021, 4:03 PM")) {
+                    HistoryRow(title: "Full Body and Core", date: "Jan 17, 2021, 4:03 PM")
+                }
+                NavigationLink(destination: WorkoutDetailView(workoutTitle: "Upper Body", date: "Jan 17, 2021, 4:03 PM")) {
+                    HistoryRow(title: "Upper Body", date: "Jan 17, 2021, 4:03 PM")
+                }
+                NavigationLink(destination: WorkoutDetailView(workoutTitle: "Lower Body", date: "Jan 17, 2021, 4:03 PM")) {
+                    HistoryRow(title: "Lower Body", date: "Jan 17, 2021, 4:03 PM")
+                }
+                
+                */
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitle("History", displayMode: .large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Image(systemName: "person.crop.circle")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                }
+            }
+        }
+    }
+}
+
+struct HistoryRow: View {
+    var workout: WorkoutDataModel
+    //var title: String
+    //    var difficulty: String
+    //var date: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: workoutImageIcon(workout: workout.workoutCategory))
+            VStack(alignment: .leading) {
+                Text(workout.workoutCategory)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Text("Date: \(workout.date)")
+                    .font(.subheadline)
+                    .foregroundColor(.pink)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundColor(.pink)
+        }
+        .padding()
+        .background(Color(UIColor.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+}
+
+func workoutImageIcon(workout: String) -> String {
+    print(workout)
+//    let workoutE: WorkoutCategory = WorkoutCategory(rawValue: workout) ?? .fullBody
+    
+//    print("\(workoutE)")
+    switch workout {
+    case "Full Body & Core":
+        return "figure.core.training"
+    case "Upper Body":
+        return "figure.cooldown"
+    case "Lower Body":
+        return "figure.cross.training"
+    default:
+        return "figure.core.training"
+    }
+}
+
+struct WorkoutDetailView: View {
+    var workoutTitle: String
+    var date: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("History")
+                    .foregroundColor(.pink)
+                    .onTapGesture {
+                        // Handle back navigation or similar
+                    }
+                Spacer()
+            }
+            .padding(.top, 10)
+            
+            Text(workoutTitle)
+                .font(.largeTitle)
+                .bold()
+            
+            VStack {
+                HStack {
+                    Text(date)
+                    Spacer()
+                    Text("Final Time: 17:49")
+                }
+                HStack{
+                    Text("Workout: Complete")
+                    Spacer()
+                    Text("Orientation: Wall")
+                }
+            }
+            .font(.subheadline)
+            .foregroundColor(.gray)
+            
+            Text("Circuit")
+                .font(.headline)
+                .padding(.top, 10)
+            
+            Text("3 sets")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            
+            // Exercise Rows
+            List {
+                ExerciseRow(imageName: "Cable Pull-Down", exerciseName: "Chest Press", details: "10 reps | Chest", intensity: 40)
+                ExerciseRow(imageName: "Cable Squat", exerciseName: "Upward Woodchop", details: "10 reps | High", intensity: 35)
+                ExerciseRow(imageName: "Side Bend", exerciseName: "Downward Woodchop", details: "10 reps | Low", intensity: 45)
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                // Handle restart workout action
+            }) {
+                Text("Restart Workout")
+                    .bold()
+                    .frame(maxWidth: .infinity, minHeight: 50)
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding()
+            }
+        }
+        .padding()
+    }
+}
+
+struct ExerciseRow: View {
+    var imageName: String
+    var exerciseName: String
+    var details: String
+    var intensity: Int
+
+    var body: some View {
+        HStack {
+            Image(imageName)
+                .resizable()
+                .frame(width: 100, height: 100)
+                .cornerRadius(10)
+            
+            VStack(alignment: .leading) {
+                Text(exerciseName)
+                    .font(.headline)
+                Text(details)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                Text("Avg. Intensity: \(intensity)")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+            Image(systemName: "info.circle")
+                .foregroundColor(.red)
+        }
+        .padding()
+    }
+}
+
+struct LeaderboardView: View {
+    @StateObject var vm: WorkoutDataViewModel = WorkoutDataViewModel()
+    @State private var selectedTab = 0
+    private var iterator = 0
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                HStack {
+                    Text("Leaderboard")
+                        .font(.largeTitle)
+                        .bold()
+                    Spacer()
+                    Image(systemName: "person.crop.circle")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                }
+                .padding()
+
+                Picker("", selection: $selectedTab) {
+                    Text("By Streak").tag(0)
+                    Text("By Active Minutes").tag(1)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+
+                List {
+                    
+                    ForEach(Array(vm.pastWorkouts.enumerated()), id: \.element) { index, workout in
+                        if vm.isFromUser(workout: workout) {
+                            LeaderboardRow(rank: index+1, name: "Hiroshi", detail: "274-day streak", highlight: false)
+                        }
+                    }
+                    
+                    LeaderboardRow(rank: 1, name: "Hiroshi", detail: "274-day streak", highlight: false)
+                    LeaderboardRow(rank: 2, name: "Amina", detail: "213-day streak", highlight: false)
+                    LeaderboardRow(rank: 3, name: "Leandro", detail: "189-day streak", highlight: true)
+                    LeaderboardRow(rank: 4, name: "Nia", detail: "157-day streak", highlight: false)
+                }
+                .listStyle(PlainListStyle())
+                .background(Color.black)
+            }
+            .navigationBarHidden(true)
+        }
+        .tabItem {
+            Image(systemName: "trophy.fill")
+            Text("Leaderboard")
+        }
+    }
+}
+
+struct LeaderboardRow: View {
+    var rank: Int
+    var name: String
+    var detail: String
+    var highlight: Bool
+
+    var body: some View {
+        HStack {
+            Text("\(rank)")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(.pink)
+                .frame(width: 35, alignment: .leading)
+            VStack(alignment: .leading) {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(name)
+                            .font(.headline)
+                        
+                        Text(detail)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    if highlight {
+                        Text("You")
+                            .font(.callout)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 5)
+                    }
+                }
+                
+            }
+            Spacer()
+        }
+        .padding()
+        .background(highlight ? Color.gray.opacity(0.2) : Color.clear)
+        .cornerRadius(10)
     }
 }
 
@@ -567,38 +909,45 @@ struct WorkoutTile: View {
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
     
     var body: some View {
-        Button(action: {
-            // Set the flag to false when the button is clicked
-            accessorySessionManager.wf.workoutFinished = false
-            print("set flag in home view")
-        }) {
-            NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
-                VStack {
-                    Image(systemName: workout.iconName)
-                        .resizable()
-                        .scaledToFit()
+        VStack {
+            Button(action: {
+                // Set the flag to false when the button is clicked
+                print("set flag in home view")
+                accessorySessionManager.wf.workoutFinished = false
+            }) {
+                NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
+                    VStack {
+                        Image(systemName: workout.iconName)
+                            .resizable()
+                            .scaledToFit()
+                            .padding()
+                            .frame(width: 150, height: 100)
+                            .backgroundStyle(Color.init(uiColor: .tertiarySystemBackground))
+                            .foregroundColor(.white)
+                        
+                        VStack(alignment: .leading) {
+                            Text(workout.title)
+                                .foregroundColor(.primary)
+                                .font(.headline)
+                            Text(workout.description)
+                                .foregroundColor(.secondary)
+                                .font(.subheadline)
+                                .lineLimit(2)
+                        }
                         .padding()
-                        .frame(width: 150, height: 100)
-                        .backgroundStyle(Color.init(uiColor: .tertiarySystemBackground))
-                        .foregroundColor(.white)
-                    
-                    VStack(alignment: .leading) {
-                        Text(workout.title)
-                            .foregroundColor(.primary)
-                            .font(.headline)
-                        Text(workout.description)
-                            .foregroundColor(.secondary)
-                            .font(.subheadline)
-                            .lineLimit(2)
                     }
-                    .padding()
+                    .frame(maxWidth: 150)
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(12)
                 }
-                .frame(maxWidth: 150)
-                .background(Color(UIColor.secondarySystemBackground))
-                .cornerRadius(12)
             }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
+        .onAppear {
+            accessorySessionManager.wf.workoutFinished = false
+            print("WorkoutTile appeared, flag set to false")
+        }
+        //.border(.red)
         /*NavigationLink(destination: PreWorkoutSummaryView(totalExercises: workout.exercises.count, workout: workout)) {
             VStack {
                 Image(systemName: workout.iconName)

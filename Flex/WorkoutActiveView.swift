@@ -15,30 +15,35 @@ struct WorkoutActiveView: View {
     //@State private var currentSet = 1
     @State private var currentRep = 0
     @State private var timer: Timer?
+    @State private var timeList: [Int] = []
     @State private var showInfo = false
     @State private var selectedExerciseInfo = ""
     /*@State private var navigateToHome = false
     @State private var navigateToSetBreak = false
     @State private var navigateToRePlace = false*/
     @State private var intensity: Double = 50
+    @State private var intensityList: [Double] = []
     @State private var battery: Float = 100
-    
+
+    @StateObject private var workvm = WorkoutDataViewModel()
     //@EnvironmentObject var c: Counter
     //@EnvironmentObject var wf: workoutFlag
-    
+
     let totalSets = 3 //change later to take into account numSets
     let totalRepsPerExercise = 10
     //let totalExercises = 3
     var totalExercises: Int
-    
-    let exercises = [
-        ("Cable Pull-Down", "10 reps"),
-        ("Side Bend", "10 reps"),
-        ("Cable Squat", "10 reps")
+
+    @State private var exerciseList: [String] = []
+    let defaultExercises = [
+        "Cable Pull-Down",
+        "Side Bend",
+        "Cable Squat",
     ]
     var workout: Workout
     
     @ObservedObject var accessorySessionManager: AccessorySessionManager = AccessorySessionManager.shared
+    @ObservedObject var uservm: UserViewModel = UserViewModel.shared
     
     var body: some View {
         NavigationStack {
@@ -262,6 +267,8 @@ struct WorkoutActiveView: View {
                     accessorySessionManager.wf.navigateToSetBreak = false
                     accessorySessionManager.wf.setBreakFinished = false
                     accessorySessionManager.writeState(state: 4)
+                    iCloudDataUpdate(workout: workout)
+                    iCloudDataSync(workout: workout)
                 }) {
                     Text("End Workout")
                         .frame(maxWidth: .infinity)
@@ -278,7 +285,7 @@ struct WorkoutActiveView: View {
                 startTimer()
             }
             .onChange(of: currentRep) {
-                if(currentRep == 10 && accessorySessionManager.c.counter < totalExercises-1) {
+                if(currentRep == totalRepsPerExercise && accessorySessionManager.c.counter < totalExercises-1) {
                     print(accessorySessionManager.c.counter)
                     accessorySessionManager.c.counter += 1
                     print(accessorySessionManager.c.counter)
@@ -287,18 +294,21 @@ struct WorkoutActiveView: View {
                     print("got to replace")
                     print(accessorySessionManager.wf.navigateToRePlace)
                 }
-                else if (currentRep == 10 && accessorySessionManager.c.counter >= totalExercises-1) {
+                else if (currentRep == totalRepsPerExercise && accessorySessionManager.c.counter >= totalExercises-1) {
                     accessorySessionManager.c.counter = 0
                     accessorySessionManager.wf.currentSet += 1
                     if accessorySessionManager.wf.currentSet > totalSets {
                         accessorySessionManager.wf.navigateToHome = true
                         accessorySessionManager.wf.workoutFinished = true
                         accessorySessionManager.writeState(state: 4)
+                        iCloudDataUpdate(workout: workout)
+                        iCloudDataSync(workout: workout)
                         stopTimer()
                         accessorySessionManager.wf.currentSet = 0
                     }
                     else {
                         accessorySessionManager.writeState(state: 4)
+                        iCloudDataUpdate(workout: workout)
                         accessorySessionManager.wf.navigateToSetBreak = true
                     }
                 }
@@ -363,6 +373,38 @@ struct WorkoutActiveView: View {
         let seconds = time % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    
+    func iCloudDataUpdate(workout: Workout) {
+            exerciseList = workout.exercises
+            intensityList.append(intensity)
+            timeList.append(secondsElapsed)
+        }
+
+    func iCloudDataSync(workout: Workout) {
+        if exerciseList == [] {
+            exerciseList = defaultExercises
+        }
+
+        var totalActiveTime: Int = 0
+        for time in timeList {
+            totalActiveTime += time
+        }
+
+        workvm.addItem(workoutCategory: workout.category.rawValue, workoutList: exerciseList, intensityList: intensityList, timeList: timeList)
+
+        for user in uservm.users {
+            if user.userID == uservm.IDString {
+                var newWorkoutCount = user.workoutCount + 1
+                var newMinutesWorked = user.minutesWorked + totalActiveTime
+                guard let updatedUser = user.update(newWorkoutCount: newWorkoutCount, newMinutesWorked: newMinutesWorked) else {return}
+
+                CloudKitUtility.update(item: updatedUser) { result in
+                    print("User updated")
+                }
+            }
+        }
+    }
+
 }
 
 struct BatteryPercentageView: View {

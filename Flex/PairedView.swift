@@ -91,7 +91,7 @@ struct PairedView: View {
                     }
                 }
             
-            NavigationLink(destination: HomeView()) {
+            NavigationLink(destination: SignInView()) {
                 Text("Go to Pre-Workout Confirmation")
                     .font(.headline)
                     .padding()

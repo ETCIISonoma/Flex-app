@@ -11,7 +11,7 @@ struct FlexApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
     let counter = Counter(counter: 0)
-    let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest"]) // change later.
+    let targetAreas = TargetAreaStore(targetAreas: ["High", "Low", "Chest", "High", "Low", "Chest"]) // change later.
     let selectedSets = numSets(selectedSets: 3)
     let wf = workoutFlag(navigateToRePlace: false, navigateToSetBreak: false, navigateToHome: false, setBreakFinished: false, initialPickUp: false, workoutFinished: true, currentSet: 1)
     
@@ -22,6 +22,8 @@ struct FlexApp: App {
                 .environmentObject(targetAreas)
                 .environmentObject(selectedSets)
                 .environmentObject(wf)
+
+                
         }
     }
 }

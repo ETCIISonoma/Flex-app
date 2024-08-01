@@ -34,6 +34,8 @@ class AccessorySessionManager: NSObject, ObservableObject {
     @Published var wf: workoutFlag
     @Published var c: Counter
     
+    private var timer: Timer?
+    
     @Published var accessoryModel: AccessoryModel?
     {
         didSet {
@@ -49,6 +51,7 @@ class AccessorySessionManager: NSObject, ObservableObject {
             switch newValue {
             case .notAttached:
                 if(wf.workoutFinished) {
+                    print("workout has been finished")
                     wf.initialPickUp = false
                     self.viewState = .home
                 } else {
@@ -66,7 +69,10 @@ class AccessorySessionManager: NSObject, ObservableObject {
                     self.viewState = .home
                     //self.viewState = .notStarted
                 }*/
+                print("IMPORTANT PRINT FOLLOWS")
+                print(wf.workoutFinished)
                 if(wf.workoutFinished) {
+                    print("went home \(wf.workoutFinished)")
                     wf.initialPickUp = false
                     self.viewState = .home
                     print("second try case 1")
@@ -179,6 +185,10 @@ class AccessorySessionManager: NSObject, ObservableObject {
         super.init()
 
         self.session.activate(on: DispatchQueue.main, eventHandler: handleSessionEvent(event:))
+        
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            print("workoutFinished: \(self.wf.workoutFinished)")
+        }
         
         /*let timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             self.viewState = self.sequence[self.counterSeq]
